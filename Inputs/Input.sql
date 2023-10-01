@@ -37,3 +37,6 @@ ALTER TABLE Clientes
 RENAME TO Empleados;
 
 DROP TABLE Clientes;
+
+INSERT INTO Empleados (CUI, CorreoElectronico)
+VALUES ('159', 'pkg@email.com');

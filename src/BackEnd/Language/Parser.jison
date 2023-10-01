@@ -127,7 +127,6 @@ los números como si fuera de un solo dígito, para evitar ambigüedades y demá
 %left 'TK_plus' 'TK_minus'
 %left 'TK_mult' 'TK_div' 'TK_mod'
 %right TK_uminus
-%left 'TOK_incr' 'TOK_decr'
 
 // gramática
 
@@ -150,12 +149,14 @@ INSTRUCTION :
     CREATETABLE TK_semicolon |
     ALTERTAB TK_semicolon    |
     DROPTAB TK_semicolon     |
+    INSERTREG TK_semicolon   |
+    UPDATETAB TK_semicolon   |
     error {console.log(`Error SINTÁCTICO: ${yytext}. ${this._$.first_line}:${this._$.first_column + 1}`)} ;
 
 // Declaración de variables
 DECLAREID :
     RW_declare DECLIDS |
-    RW_declare TK_id TYPE RW_default VALUE ;
+    RW_declare TK_id TYPE RW_default EXP ;
 
 DECLIDS :
     DECLIDS TK_comma DECLID |
@@ -166,10 +167,11 @@ DECLID :
 
 // Asignación de variables
 ASIGNID :
-    RW_set TK_id TK_equal VALUE ;
+    RW_set TK_id TK_equal EXP ;
 
 // Mostrar valor de variables
 SELECT :
+    RW_select TK_id RW_as TK_id |
     RW_select TK_id ;
 
 // Creación de tablas
@@ -197,13 +199,68 @@ ACTION :
 DROPTAB :
     RW_drop RW_table TK_id ;
 
-VALUE :
-    TK_id     |
-    TK_str    |
-    TK_int    |
-    TK_double |
-    RW_true   |
-    RW_false ;
+// Insertar registros
+INSERTREG :
+    RW_insert RW_into TK_id TK_lpar LIST_IDS TK_rpar RW_values TK_lpar LIST_EXPS TK_rpar ;
+
+// Obtener valores de tabla
+SELECTREG :
+    RW_select LIST_IDS RW_from TK_id RW_where EXP |
+    RW_select LIST_IDS RW_from TK_id              |
+    RW_select TK_mult RW_from TK_id ;
+
+// Actualizar tabla
+// 20
+UPDATETAB :
+    RW_update TK_id VALUESTAB RW_where TK_id TK_equal EXP ;
+
+VALUESTAB :
+    VALUESTAB TK_comma VALUETAB |
+    VALUETAB ;
+
+VALUETAB :
+    TK_id TK_equal EXP ;
+
+LIST_IDS :
+    LIST_IDS TK_comma TK_id |
+    TK_id ;
+
+LIST_EXPS :
+    LIST_EXPS TK_comma EXP|
+    EXP ;
+
+EXP :
+    ARITHMETICS |
+    RELATIONALS |
+    LOGICS      |
+    TK_id       |
+    TK_str      |
+    TK_int      |
+    TK_double   |
+    RW_true     |
+    RW_false    |
+    TK_lpar EXP TK_rpar ;
+
+ARITHMETICS :
+    EXP TK_plus EXP  |
+    EXP TK_minus EXP |
+    EXP TK_mult EXP  |
+    EXP TK_div EXP   |
+    EXP TK_mod EXP   |
+    TK_minus EXP %prec TK_uminus ;
+
+RELATIONALS :
+    EXP TK_equalequal EXP |
+    EXP TK_notequal EXP   |
+    EXP TK_lessequal EXP  |
+    EXP TK_greatequal EXP |
+    EXP TK_less EXP       |
+    EXP TK_great EXP ;
+
+LOGICS :
+    EXP RW_and EXP |
+    EXP RW_or EXP  |
+    RW_not EXP ;
 
 TYPE :
     RW_int     |
