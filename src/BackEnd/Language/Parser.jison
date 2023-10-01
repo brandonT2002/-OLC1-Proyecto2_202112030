@@ -9,8 +9,7 @@
 UNUSED      [ \r\t]+
 CONTENT     ([^\n\"\\]|\\.)
 ID          \@?(\_)*[a-zA-Z][a-zA-Z0-9\_]*
-STRING      \"({CONTENT}*)\"
-CHAR        \'({CONTENT})\'
+STRING      (\"({CONTENT}*)\"|\'({CONTENT}*)\')
 INTEGER     [0-9]+\b
 DOUBLE      [0-9]+\.[0-9]+\b
 COMMENTS    \-\-([^\r\n]*)?
@@ -18,6 +17,10 @@ COMMENTM    [/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]
 
 %%
 
+\n              {}
+{COMMENTS}      {}
+{COMMENTM}      {}
+{UNUSED}        {}
 // tokens
 // EJECUCION DDL
 'BEGIN'         {return 'RW_begin'}
@@ -68,11 +71,13 @@ COMMENTM    [/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]
 'FLOAT'         {return 'RW_float'}
 'DATE'          {return 'RW_date'}
 'VARCHAR'       {return 'RW_varchar'}
+'BOOLEAN'       {return 'RW_boolean'}
 'TRUE'          {return 'RW_true'}
 'FALSE'         {return 'RW_false'}
 'NULL'          {return 'RW_null'}
 //EXPRESIONES
 {ID}            {return 'TK_id'}
+{STRING}        {return 'TK_str'}
 {INTEGER}       {return 'TK_int'}
 {DOUBLE}        {return 'TK_double'}
 // OPERADORES LOGICOS
@@ -82,21 +87,24 @@ COMMENTM    [/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]
 // SIGNOS DE AGRUPACION Y FINALIZACION
 '('             {return 'TK_lpar'}
 ')'             {return 'TK_rpar'}
-';'             {return 'RW_semicolon'}
-','             {return 'TOK_comma'}
+';'             {return 'TK_semicolon'}
+','             {return 'TK_comma'}
 // OPERADORES ARITMETICOS
 '+'             {return 'TK_plus'}
 '-'             {return 'TK_minus'}
 '*'             {return 'TK_mult'}
 '/'             {return 'TK_div'}
-// OPERADORES RELACIONALES
 '%'             {return 'TK_mod'}
+// OPERADORES RELACIONALES
+'=='            {return 'TK_equalequal'}
 '='             {return 'TK_equal'}
 '!='            {return 'TK_notequal'}
-'<'             {return 'TK_less'}
 '<='            {return 'TK_lessequal'}
-'>'             {return 'TK_more'}
-'>='            {return 'TK_moreequal'}
+'>='            {return 'TK_greatequal'}
+'<'             {return 'TK_less'}
+'>'             {return 'TK_great'}
+//
+.               {console.log(`Error Lexico: ${yytext}`)}
 <<EOF>>         {return 'EOF'}
 
 /lex
@@ -111,6 +119,15 @@ los números como si fuera de un solo dígito, para evitar ambigüedades y demá
 %}
 
 // precedencia de operadores
+%left 'RW_or'
+%left 'RW_and'
+%right 'RW_not'
+%left 'TK_equalequal' 'TK_notequal'
+%left 'TK_less' 'TK_lessequal' 'TK_great' 'TK_greatequal'
+%left 'TK_plus' 'TK_minus'
+%left 'TK_mult' 'TK_div' 'TK_mod'
+%right TK_uminus
+%left 'TOK_incr' 'TOK_decr'
 
 // gramática
 
@@ -119,4 +136,53 @@ los números como si fuera de un solo dígito, para evitar ambigüedades y demá
 %%
 
 INIT :
+    INSTRUCTIONS EOF    |
     EOF ;
+
+INSTRUCTIONS :
+    INSTRUCTIONS INSTRUCTION |
+    INSTRUCTION ;
+
+INSTRUCTION :
+    DECLAREID TK_semicolon   |
+    ASIGNID TK_semicolon     |
+    CREATETABLE TK_semicolon |
+    error {console.log(`Error SINTÁCTICO: ${yytext}. ${this._$.first_line}:${this._$.first_column + 1}`)} ;
+
+DECLAREID :
+    RW_declare DECLIDS |
+    RW_declare TK_id TYPE RW_default VALUE ;
+
+DECLIDS :
+    DECLIDS TK_comma DECLID |
+    DECLID ;
+
+DECLID :
+    TK_id TYPE ;
+
+ASIGNID :
+    RW_set TK_id TK_equal VALUE ;
+
+CREATETABLE :
+    RW_create RW_table TK_id TK_lpar ATTRIBUTES TK_rpar ;
+
+ATTRIBUTES :
+    ATTRIBUTES TK_comma ATTRIBUTE |
+    ATTRIBUTE ;
+
+ATTRIBUTE :
+    TK_id TYPE ;
+
+VALUE :
+    TK_str    |
+    TK_int    |
+    TK_double |
+    RW_true   |
+    RW_false ;
+
+TYPE :
+    RW_int     |
+    RW_float   |
+    RW_date    |
+    RW_varchar |
+    RW_boolean ;
