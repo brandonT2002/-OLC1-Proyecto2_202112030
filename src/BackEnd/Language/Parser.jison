@@ -78,8 +78,8 @@ COMMENTM    [/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]
 //EXPRESIONES
 {ID}            {return 'TK_id'}
 {STRING}        {return 'TK_str'}
-{INTEGER}       {return 'TK_int'}
 {DOUBLE}        {return 'TK_double'}
+{INTEGER}       {return 'TK_int'}
 // OPERADORES LOGICOS
 'AND'           {return 'RW_and'}
 'OR'            {return 'RW_or'}
@@ -151,6 +151,8 @@ INSTRUCTION :
     DROPTAB TK_semicolon     |
     INSERTREG TK_semicolon   |
     UPDATETAB TK_semicolon   |
+    TRUNCATETAB TK_semicolon |
+    DELETETAB TK_semicolon   |
     error {console.log(`Error SINTÁCTICO: ${yytext}. ${this._$.first_line}:${this._$.first_column + 1}`)} ;
 
 // Declaración de variables
@@ -171,6 +173,7 @@ ASIGNID :
 
 // Mostrar valor de variables
 SELECT :
+    RW_select LIST_IDS RW_from TK_id RW_where TK_id TK_equal EXP |
     RW_select TK_id RW_as TK_id |
     RW_select TK_id ;
 
@@ -210,9 +213,8 @@ SELECTREG :
     RW_select TK_mult RW_from TK_id ;
 
 // Actualizar tabla
-// 20
 UPDATETAB :
-    RW_update TK_id VALUESTAB RW_where TK_id TK_equal EXP ;
+    RW_update TK_id RW_set VALUESTAB RW_where TK_id TK_equal EXP ;
 
 VALUESTAB :
     VALUESTAB TK_comma VALUETAB |
@@ -220,6 +222,14 @@ VALUESTAB :
 
 VALUETAB :
     TK_id TK_equal EXP ;
+
+// Truncate
+TRUNCATETAB :
+    RW_truncate RW_table TK_id ;
+
+// Eliminar Registros
+DELETETAB :
+    RW_delete RW_from TK_id RW_where TK_id TK_equal EXP ;
 
 LIST_IDS :
     LIST_IDS TK_comma TK_id |

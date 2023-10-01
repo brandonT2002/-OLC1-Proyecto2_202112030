@@ -40,3 +40,25 @@ DROP TABLE Clientes;
 
 INSERT INTO Empleados (CUI, CorreoElectronico)
 VALUES ('159', 'pkg@email.com');
+
+SELECT Nombre, edad
+FROM Empleados
+WHERE Departamento = 'Ventas';
+
+DECLARE @precio1 INT;
+SET @precio1 = 50.00;
+
+SELECT Nombre, precio
+FROM Productos
+WHERE Precio = @precio1;
+
+SELECT @precio1 AS valor_precio;
+
+UPDATE Empleados
+SET Salario = 55000
+WHERE Departamento = 'Ventas';
+
+TRUNCATE TABLE Empleados;
+
+DELETE FROM Clientes
+WHERE Estado = 'Inactivo';
