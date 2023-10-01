@@ -72,24 +72,24 @@
   }
 */
 var Parser = (function(){
-var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,8],$V1=[1,9],$V2=[1,10],$V3=[1,11],$V4=[2,5,11,19,21],$V5=[1,24],$V6=[1,25],$V7=[1,26],$V8=[1,27],$V9=[1,28],$Va=[8,17],$Vb=[2,13],$Vc=[8,15,17,25],$Vd=[1,35],$Ve=[1,36],$Vf=[1,37],$Vg=[1,38],$Vh=[1,39],$Vi=[1,45],$Vj=[17,25];
+var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,11],$V1=[1,12],$V2=[1,13],$V3=[1,14],$V4=[1,15],$V5=[1,16],$V6=[1,17],$V7=[2,5,14,22,24,25,31,34],$V8=[1,36],$V9=[1,37],$Va=[1,38],$Vb=[1,39],$Vc=[1,40],$Vd=[8,20],$Ve=[2,16],$Vf=[8,18,20,29],$Vg=[1,49],$Vh=[1,50],$Vi=[1,51],$Vj=[1,52],$Vk=[1,53],$Vl=[1,54],$Vm=[1,64],$Vn=[20,29];
 var parser = {trace: function trace () { },
 yy: {},
-symbols_: {"error":2,"INIT":3,"INSTRUCTIONS":4,"EOF":5,"INSTRUCTION":6,"DECLAREID":7,"TK_semicolon":8,"ASIGNID":9,"CREATETABLE":10,"RW_declare":11,"DECLIDS":12,"TK_id":13,"TYPE":14,"RW_default":15,"VALUE":16,"TK_comma":17,"DECLID":18,"RW_set":19,"TK_equal":20,"RW_create":21,"RW_table":22,"TK_lpar":23,"ATTRIBUTES":24,"TK_rpar":25,"ATTRIBUTE":26,"TK_str":27,"TK_int":28,"TK_double":29,"RW_true":30,"RW_false":31,"RW_int":32,"RW_float":33,"RW_date":34,"RW_varchar":35,"RW_boolean":36,"$accept":0,"$end":1},
-terminals_: {2:"error",5:"EOF",8:"TK_semicolon",11:"RW_declare",13:"TK_id",15:"RW_default",17:"TK_comma",19:"RW_set",20:"TK_equal",21:"RW_create",22:"RW_table",23:"TK_lpar",25:"TK_rpar",27:"TK_str",28:"TK_int",29:"TK_double",30:"RW_true",31:"RW_false",32:"RW_int",33:"RW_float",34:"RW_date",35:"RW_varchar",36:"RW_boolean"},
-productions_: [0,[3,2],[3,1],[4,2],[4,1],[6,2],[6,2],[6,2],[6,1],[7,2],[7,5],[12,3],[12,1],[18,2],[9,4],[10,6],[24,3],[24,1],[26,2],[16,1],[16,1],[16,1],[16,1],[16,1],[14,1],[14,1],[14,1],[14,1],[14,1]],
+symbols_: {"error":2,"INIT":3,"INSTRUCTIONS":4,"EOF":5,"INSTRUCTION":6,"DECLAREID":7,"TK_semicolon":8,"ASIGNID":9,"SELECT":10,"CREATETABLE":11,"ALTERTAB":12,"DROPTAB":13,"RW_declare":14,"DECLIDS":15,"TK_id":16,"TYPE":17,"RW_default":18,"VALUE":19,"TK_comma":20,"DECLID":21,"RW_set":22,"TK_equal":23,"RW_select":24,"RW_create":25,"RW_table":26,"TK_lpar":27,"ATTRIBUTES":28,"TK_rpar":29,"ATTRIBUTE":30,"RW_alter":31,"ACTION":32,"RW_add":33,"RW_drop":34,"RW_column":35,"RW_rename":36,"RW_to":37,"TK_str":38,"TK_int":39,"TK_double":40,"RW_true":41,"RW_false":42,"RW_int":43,"RW_float":44,"RW_date":45,"RW_varchar":46,"RW_boolean":47,"$accept":0,"$end":1},
+terminals_: {2:"error",5:"EOF",8:"TK_semicolon",14:"RW_declare",16:"TK_id",18:"RW_default",20:"TK_comma",22:"RW_set",23:"TK_equal",24:"RW_select",25:"RW_create",26:"RW_table",27:"TK_lpar",29:"TK_rpar",31:"RW_alter",33:"RW_add",34:"RW_drop",35:"RW_column",36:"RW_rename",37:"RW_to",38:"TK_str",39:"TK_int",40:"TK_double",41:"RW_true",42:"RW_false",43:"RW_int",44:"RW_float",45:"RW_date",46:"RW_varchar",47:"RW_boolean"},
+productions_: [0,[3,2],[3,1],[4,2],[4,1],[6,2],[6,2],[6,2],[6,2],[6,2],[6,2],[6,1],[7,2],[7,5],[15,3],[15,1],[21,2],[9,4],[10,2],[11,6],[28,3],[28,1],[30,2],[12,4],[32,3],[32,3],[32,3],[32,5],[13,3],[19,1],[19,1],[19,1],[19,1],[19,1],[19,1],[17,1],[17,1],[17,1],[17,1],[17,1]],
 performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
 /* this == yyval */
 
 var $0 = $$.length - 1;
 switch (yystate) {
-case 8:
+case 11:
 console.log(`Error SINTÁCTICO: ${yytext}. ${this._$.first_line}:${this._$.first_column + 1}`)
 break;
 }
 },
-table: [{2:$V0,3:1,4:2,5:[1,3],6:4,7:5,9:6,10:7,11:$V1,19:$V2,21:$V3},{1:[3]},{2:$V0,5:[1,12],6:13,7:5,9:6,10:7,11:$V1,19:$V2,21:$V3},{1:[2,2]},o($V4,[2,4]),{8:[1,14]},{8:[1,15]},{8:[1,16]},o($V4,[2,8]),{12:17,13:[1,18],18:19},{13:[1,20]},{22:[1,21]},{1:[2,1]},o($V4,[2,3]),o($V4,[2,5]),o($V4,[2,6]),o($V4,[2,7]),{8:[2,9],17:[1,22]},{14:23,32:$V5,33:$V6,34:$V7,35:$V8,36:$V9},o($Va,[2,12]),{20:[1,29]},{13:[1,30]},{13:[1,32],18:31},o($Va,$Vb,{15:[1,33]}),o($Vc,[2,24]),o($Vc,[2,25]),o($Vc,[2,26]),o($Vc,[2,27]),o($Vc,[2,28]),{16:34,27:$Vd,28:$Ve,29:$Vf,30:$Vg,31:$Vh},{23:[1,40]},o($Va,[2,11]),{14:41,32:$V5,33:$V6,34:$V7,35:$V8,36:$V9},{16:42,27:$Vd,28:$Ve,29:$Vf,30:$Vg,31:$Vh},{8:[2,14]},{8:[2,19]},{8:[2,20]},{8:[2,21]},{8:[2,22]},{8:[2,23]},{13:$Vi,24:43,26:44},o($Va,$Vb),{8:[2,10]},{17:[1,47],25:[1,46]},o($Vj,[2,17]),{14:48,32:$V5,33:$V6,34:$V7,35:$V8,36:$V9},{8:[2,15]},{13:$Vi,26:49},o($Vj,[2,18]),o($Vj,[2,16])],
-defaultActions: {3:[2,2],12:[2,1],34:[2,14],35:[2,19],36:[2,20],37:[2,21],38:[2,22],39:[2,23],42:[2,10],46:[2,15]},
+table: [{2:$V0,3:1,4:2,5:[1,3],6:4,7:5,9:6,10:7,11:8,12:9,13:10,14:$V1,22:$V2,24:$V3,25:$V4,31:$V5,34:$V6},{1:[3]},{2:$V0,5:[1,18],6:19,7:5,9:6,10:7,11:8,12:9,13:10,14:$V1,22:$V2,24:$V3,25:$V4,31:$V5,34:$V6},{1:[2,2]},o($V7,[2,4]),{8:[1,20]},{8:[1,21]},{8:[1,22]},{8:[1,23]},{8:[1,24]},{8:[1,25]},o($V7,[2,11]),{15:26,16:[1,27],21:28},{16:[1,29]},{16:[1,30]},{26:[1,31]},{26:[1,32]},{26:[1,33]},{1:[2,1]},o($V7,[2,3]),o($V7,[2,5]),o($V7,[2,6]),o($V7,[2,7]),o($V7,[2,8]),o($V7,[2,9]),o($V7,[2,10]),{8:[2,12],20:[1,34]},{17:35,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc},o($Vd,[2,15]),{23:[1,41]},{8:[2,18]},{16:[1,42]},{16:[1,43]},{16:[1,44]},{16:[1,46],21:45},o($Vd,$Ve,{18:[1,47]}),o($Vf,[2,35]),o($Vf,[2,36]),o($Vf,[2,37]),o($Vf,[2,38]),o($Vf,[2,39]),{16:$Vg,19:48,38:$Vh,39:$Vi,40:$Vj,41:$Vk,42:$Vl},{27:[1,55]},{32:56,33:[1,57],34:[1,58],36:[1,59]},{8:[2,28]},o($Vd,[2,14]),{17:60,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc},{16:$Vg,19:61,38:$Vh,39:$Vi,40:$Vj,41:$Vk,42:$Vl},{8:[2,17]},{8:[2,29]},{8:[2,30]},{8:[2,31]},{8:[2,32]},{8:[2,33]},{8:[2,34]},{16:$Vm,28:62,30:63},{8:[2,23]},{16:[1,65]},{35:[1,66]},{35:[1,68],37:[1,67]},o($Vd,$Ve),{8:[2,13]},{20:[1,70],29:[1,69]},o($Vn,[2,21]),{17:71,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc},{17:72,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc},{16:[1,73]},{16:[1,74]},{16:[1,75]},{8:[2,19]},{16:$Vm,30:76},o($Vn,[2,22]),{8:[2,24]},{8:[2,25]},{8:[2,26]},{37:[1,77]},o($Vn,[2,20]),{16:[1,78]},{8:[2,27]}],
+defaultActions: {3:[2,2],18:[2,1],30:[2,18],44:[2,28],48:[2,17],49:[2,29],50:[2,30],51:[2,31],52:[2,32],53:[2,33],54:[2,34],56:[2,23],61:[2,13],69:[2,19],72:[2,24],73:[2,25],74:[2,26],78:[2,27]},
 parseError: function parseError (str, hash) {
     if (hash.recoverable) {
         this.trace(str);
@@ -681,33 +681,33 @@ case 4:return 'RW_begin'
 break;
 case 5:return 'RW_end'
 break;
-case 6:return 'RW_select'
+case 6:return 24
 break;
 case 7:return 'RW_from'
 break;
 case 8:return 'RW_where'
 break;
-case 9:return 11
+case 9:return 14
 break;
-case 10:return 15
+case 10:return 18
 break;
-case 11:return 19
+case 11:return 22
 break;
-case 12:return 21
+case 12:return 25
 break;
-case 13:return 22
+case 13:return 26
 break;
-case 14:return 'RW_alter'
+case 14:return 31
 break;
-case 15:return 'RW_add'
+case 15:return 33
 break;
-case 16:return 'RW_drop'
+case 16:return 34
 break;
-case 17:return 'RW_column'
+case 17:return 35
 break;
-case 18:return 'RW_rename'
+case 18:return 36
 break;
-case 19:return 'RW_to'
+case 19:return 37
 break;
 case 20:return 'RW_insert'
 break;
@@ -761,29 +761,29 @@ case 44:return 'RW_truncate'
 break;
 case 45:return 'RW_typeof'
 break;
-case 46:return 32
+case 46:return 43
 break;
-case 47:return 33
+case 47:return 44
 break;
-case 48:return 34
+case 48:return 45
 break;
-case 49:return 35
+case 49:return 46
 break;
-case 50:return 36
+case 50:return 47
 break;
-case 51:return 30
+case 51:return 41
 break;
-case 52:return 31
+case 52:return 42
 break;
 case 53:return 'RW_null'
 break;
-case 54:return 13
+case 54:return 16
 break;
-case 55:return 27
+case 55:return 38
 break;
-case 56:return 28
+case 56:return 39
 break;
-case 57:return 29
+case 57:return 40
 break;
 case 58:return 'RW_and'
 break;
@@ -791,13 +791,13 @@ case 59:return 'RW_or'
 break;
 case 60:return 'RW_not'
 break;
-case 61:return 23
+case 61:return 27
 break;
-case 62:return 25
+case 62:return 29
 break;
 case 63:return 8
 break;
-case 64:return 17
+case 64:return 20
 break;
 case 65:return 'TK_plus'
 break;
@@ -811,7 +811,7 @@ case 69:return 'TK_mod'
 break;
 case 70:return 'TK_equalequal'
 break;
-case 71:return 20
+case 71:return 23
 break;
 case 72:return 'TK_notequal'
 break;

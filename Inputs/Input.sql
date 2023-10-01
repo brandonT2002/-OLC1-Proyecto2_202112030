@@ -1,5 +1,5 @@
 -- Este es un comentario de una línea
-SELECT * FROM users WHERE name = 'John Doe';
+-- SELECT * FROM users WHERE name = 'John Doe';
 
 /*
 Este es un comentario
@@ -12,7 +12,7 @@ DECLARE @nombre VARCHAR;
 -- Declara una variable de tipo `INT` con un valor predeterminado de 10
 DECLARE @edad INT DEFAULT 10;
 -- Asigna el valor 'Juan Pérez' a la variable @nombre
-SET @nombre = 'Juan Pérez';
+SET @nombre = 'Juan Perez';
 -- Asigna el valor 25 a la variable @edad
 SET @edad = 25;
 -- Imprime el valor de la variable @nombre
@@ -28,7 +28,12 @@ CorreoElectronico VARCHAR
 );
 
 ALTER TABLE Clientes
-ADD CUI STRING;
+ADD CUI VARCHAR;
 
 ALTER TABLE Clientes
-DROP COLUMN Clientes;
+DROP COLUMN Nombre;
+
+ALTER TABLE Clientes
+RENAME TO Empleados;
+
+DROP TABLE Clientes;

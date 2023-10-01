@@ -146,9 +146,13 @@ INSTRUCTIONS :
 INSTRUCTION :
     DECLAREID TK_semicolon   |
     ASIGNID TK_semicolon     |
+    SELECT TK_semicolon      |
     CREATETABLE TK_semicolon |
+    ALTERTAB TK_semicolon    |
+    DROPTAB TK_semicolon     |
     error {console.log(`Error SINTÁCTICO: ${yytext}. ${this._$.first_line}:${this._$.first_column + 1}`)} ;
 
+// Declaración de variables
 DECLAREID :
     RW_declare DECLIDS |
     RW_declare TK_id TYPE RW_default VALUE ;
@@ -160,9 +164,15 @@ DECLIDS :
 DECLID :
     TK_id TYPE ;
 
+// Asignación de variables
 ASIGNID :
     RW_set TK_id TK_equal VALUE ;
 
+// Mostrar valor de variables
+SELECT :
+    RW_select TK_id ;
+
+// Creación de tablas
 CREATETABLE :
     RW_create RW_table TK_id TK_lpar ATTRIBUTES TK_rpar ;
 
@@ -173,7 +183,22 @@ ATTRIBUTES :
 ATTRIBUTE :
     TK_id TYPE ;
 
+// Alter table
+ALTERTAB :
+    RW_alter RW_table TK_id ACTION ;
+
+ACTION :
+    RW_add TK_id TYPE       |
+    RW_drop RW_column TK_id |
+    RW_rename RW_to TK_id   |
+    RW_rename RW_column TK_id RW_to TK_id ;
+
+// Elimnar tabla
+DROPTAB :
+    RW_drop RW_table TK_id ;
+
 VALUE :
+    TK_id     |
     TK_str    |
     TK_int    |
     TK_double |
