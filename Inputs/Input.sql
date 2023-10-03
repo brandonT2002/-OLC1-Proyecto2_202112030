@@ -62,3 +62,5 @@ TRUNCATE TABLE Empleados;
 
 DELETE FROM Clientes
 WHERE Estado = 'Inactivo';
+
+SELECT CAST(Salario AS VARCHAR) FROM Empleados;

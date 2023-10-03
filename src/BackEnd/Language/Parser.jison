@@ -96,7 +96,6 @@ COMMENTM    [/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]
 '/'             {return 'TK_div'}
 '%'             {return 'TK_mod'}
 // OPERADORES RELACIONALES
-'=='            {return 'TK_equalequal'}
 '='             {return 'TK_equal'}
 '!='            {return 'TK_notequal'}
 '<='            {return 'TK_lessequal'}
@@ -122,7 +121,7 @@ los números como si fuera de un solo dígito, para evitar ambigüedades y demá
 %left 'RW_or'
 %left 'RW_and'
 %right 'RW_not'
-%left 'TK_equalequal' 'TK_notequal'
+%left 'TK_equal' 'TK_notequal'
 %left 'TK_less' 'TK_lessequal' 'TK_great' 'TK_greatequal'
 %left 'TK_plus' 'TK_minus'
 %left 'TK_mult' 'TK_div' 'TK_mod'
@@ -173,9 +172,10 @@ ASIGNID :
 
 // Mostrar valor de variables
 SELECT :
-    RW_select LIST_IDS RW_from TK_id RW_where TK_id TK_equal EXP |
-    RW_select TK_id RW_as TK_id |
-    RW_select TK_id ;
+    RW_select LIST_EXPS RW_from TK_id RW_where EXP |
+    RW_select LIST_EXPS RW_from TK_id |
+    RW_select LIST_EXPS RW_as TK_id |
+    RW_select LIST_EXPS ;
 
 // Creación de tablas
 CREATETABLE :
@@ -243,6 +243,7 @@ EXP :
     ARITHMETICS |
     RELATIONALS |
     LOGICS      |
+    CAST        |
     TK_id       |
     TK_str      |
     TK_int      |
@@ -260,7 +261,7 @@ ARITHMETICS :
     TK_minus EXP %prec TK_uminus ;
 
 RELATIONALS :
-    EXP TK_equalequal EXP |
+    EXP TK_equal EXP |
     EXP TK_notequal EXP   |
     EXP TK_lessequal EXP  |
     EXP TK_greatequal EXP |
@@ -271,6 +272,9 @@ LOGICS :
     EXP RW_and EXP |
     EXP RW_or EXP  |
     RW_not EXP ;
+
+CAST :
+    RW_cast TK_lpar EXP RW_as TYPE TK_rpar ;
 
 TYPE :
     RW_int     |
