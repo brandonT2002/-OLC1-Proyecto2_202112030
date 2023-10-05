@@ -100,3 +100,24 @@ FOR contador IN 1..10
 BEGIN
     PRINT 'Contador: ' + CAST(contador AS VARCHAR);
 END LOOP;
+
+-- ========== BREAK Y CONTINUE ==========
+DECLARE @contador INT = 1;
+
+WHILE @contador <= 10
+BEGIN
+    IF @contador = 5 THEN
+        BREAK;
+    END IF;
+
+    IF @contador = 3 THEN
+        SET @contador = @contador + 1;
+        CONTINUE;
+    END IF;
+
+    PRINT 'Contador: ' + CAST(@contador AS VARCHAR);
+    SET @contador = @contador + 1;
+END;
+
+-- ========== BREAK Y CONTINUE ==========
+CREATE FUNCTION CalcularAreaCirctulo(@pi FLOAT, )

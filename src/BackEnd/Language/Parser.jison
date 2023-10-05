@@ -162,6 +162,8 @@ INSTRUCTION :
     FORSTRUCT TK_semicolon    |
     ENCAP TK_semicolon        |
     PRINT TK_semicolon        |
+    RW_break TK_semicolon     |
+    RW_continue TK_semicolon  |
     error {console.log(`Error SINTÁCTICO: ${yytext}. ${this._$.first_line}:${this._$.first_column + 1}`)} ;
 
 // Declaración de variables
