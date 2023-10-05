@@ -64,3 +64,21 @@ DELETE FROM Clientes
 WHERE Estado = 'Inactivo';
 
 SELECT CAST(Salario AS VARCHAR) FROM Empleados;
+
+DECLARE @nota INT;
+SET @nota = 70;
+
+IF @nota >= 61 THEN
+    PRINT 'Ganó el laboratorio';
+ELSE
+    PRINT 'Perdió el laboratorio';
+END IF;
+
+DECLARE @nota INT;
+SET @nota = 70;
+
+CASE nota
+    WHEN nota > 85 THEN 'Excelente'
+    WHEN nota >= 61 AND nota <= 85 THEN 'Aprobado'
+    ELSE 'No aprobado'
+END AS resultado;

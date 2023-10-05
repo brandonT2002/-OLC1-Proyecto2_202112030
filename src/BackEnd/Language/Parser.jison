@@ -47,6 +47,8 @@ COMMENTM    [/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]
 'TRUNCATE'      {return 'RW_truncate'}
 'DELETE'        {return 'RW_delete'}
 'CAST'          {return 'RW_cast'}
+'THEN'          {return 'RW_then'}
+'WHEN'          {return 'RW_when'}
 // EJECUCION DML
 'IF'            {return 'RW_if'}
 'ELSE'          {return 'RW_else'}
@@ -75,15 +77,15 @@ COMMENTM    [/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]
 'TRUE'          {return 'RW_true'}
 'FALSE'         {return 'RW_false'}
 'NULL'          {return 'RW_null'}
+// OPERADORES LOGICOS
+'AND'           {return 'RW_and'}
+'OR'            {return 'RW_or'}
+'NOT'           {return 'RW_not'}
 //EXPRESIONES
 {ID}            {return 'TK_id'}
 {STRING}        {return 'TK_str'}
 {DOUBLE}        {return 'TK_double'}
 {INTEGER}       {return 'TK_int'}
-// OPERADORES LOGICOS
-'AND'           {return 'RW_and'}
-'OR'            {return 'RW_or'}
-'NOT'           {return 'RW_not'}
 // SIGNOS DE AGRUPACION Y FINALIZACION
 '('             {return 'TK_lpar'}
 ')'             {return 'TK_rpar'}
@@ -142,16 +144,19 @@ INSTRUCTIONS :
     INSTRUCTION ;
 
 INSTRUCTION :
-    DECLAREID TK_semicolon   |
-    ASIGNID TK_semicolon     |
-    SELECT TK_semicolon      |
-    CREATETABLE TK_semicolon |
-    ALTERTAB TK_semicolon    |
-    DROPTAB TK_semicolon     |
-    INSERTREG TK_semicolon   |
-    UPDATETAB TK_semicolon   |
-    TRUNCATETAB TK_semicolon |
-    DELETETAB TK_semicolon   |
+    DECLAREID TK_semicolon    |
+    ASIGNID TK_semicolon      |
+    SELECT TK_semicolon       |
+    CREATETABLE TK_semicolon  |
+    ALTERTAB TK_semicolon     |
+    DROPTAB TK_semicolon      |
+    INSERTREG TK_semicolon    |
+    UPDATETAB TK_semicolon    |
+    TRUNCATETAB TK_semicolon  |
+    DELETETAB TK_semicolon    |
+    IFSTRUCT TK_semicolon     |
+    CASESTRUCT_S TK_semicolon |
+    PRINT TK_semicolon        |
     error {console.log(`Error SINTÁCTICO: ${yytext}. ${this._$.first_line}:${this._$.first_column + 1}`)} ;
 
 // Declaración de variables
@@ -172,10 +177,9 @@ ASIGNID :
 
 // Mostrar valor de variables
 SELECT :
-    RW_select LIST_EXPS RW_from TK_id RW_where EXP |
-    RW_select LIST_EXPS RW_from TK_id |
-    RW_select LIST_EXPS RW_as TK_id |
-    RW_select LIST_EXPS ;
+    RW_select LIST_IDS RW_from TK_id RW_where EXP |
+    RW_select LIST_IDS RW_from TK_id |
+    RW_select LIST_IDS ;
 
 // Creación de tablas
 CREATETABLE :
@@ -232,12 +236,37 @@ DELETETAB :
     RW_delete RW_from TK_id RW_where TK_id TK_equal EXP ;
 
 LIST_IDS :
-    LIST_IDS TK_comma TK_id |
-    TK_id ;
+    LIST_IDS TK_comma IDS |
+    IDS                   ;
+
+IDS :
+    EXP RW_as TK_id |
+    EXP             ;
 
 LIST_EXPS :
     LIST_EXPS TK_comma EXP|
     EXP ;
+
+// Estructura IF
+IFSTRUCT :
+    RW_if EXP RW_then INSTRUCTIONS RW_else INSTRUCTIONS RW_end RW_if |
+    RW_if EXP RW_then INSTRUCTIONS RW_end RW_if ;
+
+// Estructura CASE simple
+CASESTRUCT_S :
+    RW_case TK_id ENVCASE_S RW_end RW_as TK_id |
+    RW_case ENVCASE_S RW_end RW_as TK_id       |
+    RW_case TK_id ENVCASE_S RW_end             |
+    RW_case ENVCASE_S RW_end ;
+
+ENVCASE_S :
+    RW_when EXP RW_then EXP ENVCASE_S |
+    RW_when EXP RW_then EXP           |
+    RW_else EXP                       ;
+
+// PRINT
+PRINT :
+    RW_print TK_str ;
 
 EXP :
     ARITHMETICS |
