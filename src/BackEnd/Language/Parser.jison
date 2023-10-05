@@ -56,6 +56,7 @@ COMMENTM    [/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]
 'WHILE'         {return 'RW_while'}
 'FOR'           {return 'RW_for'}
 'IN'            {return 'RW_in'}
+'LOOP'          {return 'RW_loop'}
 'BREAK'         {return 'RW_break'}
 'CONTINUE'      {return 'RW_continue'}
 'FUNCTION'      {return 'RW_function'}
@@ -91,6 +92,7 @@ COMMENTM    [/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]
 ')'             {return 'TK_rpar'}
 ';'             {return 'TK_semicolon'}
 ','             {return 'TK_comma'}
+'..'            {return 'TK_dot'}
 // OPERADORES ARITMETICOS
 '+'             {return 'TK_plus'}
 '-'             {return 'TK_minus'}
@@ -156,12 +158,16 @@ INSTRUCTION :
     DELETETAB TK_semicolon    |
     IFSTRUCT TK_semicolon     |
     CASESTRUCT_S TK_semicolon |
+    WHILESTRUCT TK_semicolon  |
+    FORSTRUCT TK_semicolon    |
+    ENCAP TK_semicolon        |
     PRINT TK_semicolon        |
     error {console.log(`Error SINTÁCTICO: ${yytext}. ${this._$.first_line}:${this._$.first_column + 1}`)} ;
 
 // Declaración de variables
 DECLAREID :
-    RW_declare DECLIDS |
+    RW_declare DECLIDS                   |
+    RW_declare TK_id TYPE TK_equal EXP   |
     RW_declare TK_id TYPE RW_default EXP ;
 
 DECLIDS :
@@ -266,7 +272,19 @@ ENVCASE_S :
 
 // PRINT
 PRINT :
-    RW_print TK_str ;
+    RW_print EXP ;
+
+// Estructura WHILE
+WHILESTRUCT :
+    RW_while EXP ENCAP ;
+
+// Estructura FOR
+FORSTRUCT :
+    RW_for EXP RW_in TK_int TK_dot TK_int ENCAP RW_loop;
+
+// Encapsulamiento de Sentencias
+ENCAP :
+    RW_begin INSTRUCTIONS RW_end ;
 
 EXP :
     ARITHMETICS |

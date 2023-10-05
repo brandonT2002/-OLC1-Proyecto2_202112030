@@ -63,8 +63,10 @@ TRUNCATE TABLE Empleados;
 DELETE FROM Clientes
 WHERE Estado = 'Inactivo';
 
+-- ========== CASTEOS ==========
 SELECT CAST(Salario AS VARCHAR) FROM Empleados;
 
+-- ========== ESTRUCTURA IF ==========
 DECLARE @nota INT;
 SET @nota = 70;
 
@@ -74,6 +76,7 @@ ELSE
     PRINT 'Perdió el laboratorio';
 END IF;
 
+-- ========== ESTRUCTURA CASE ==========
 DECLARE @nota INT;
 SET @nota = 70;
 
@@ -82,3 +85,18 @@ CASE nota
     WHEN nota >= 61 AND nota <= 85 THEN 'Aprobado'
     ELSE 'No aprobado'
 END AS resultado;
+
+-- ========== ESTRUCTURA WHILE ==========
+DECLARE @contador INT = 0;
+
+WHILE @contador < 10
+BEGIN
+    PRINT 'Contador: ' + CAST(@contador AS VARCHAR);
+    SET @contador = @contador + 1;
+END;
+
+-- ========== ESTRUCTURA FOR ==========
+FOR contador IN 1..10
+BEGIN
+    PRINT 'Contador: ' + CAST(contador AS VARCHAR);
+END LOOP;
