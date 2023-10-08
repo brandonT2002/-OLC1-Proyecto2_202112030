@@ -8,7 +8,7 @@ de varias líneas
 
 SET @variable_name = value;
 -- Declara una variable de tipo `VARCHAR`
-DECLARE @nombre VARCHAR;
+DECLARE @nombre VARCHAR, @edad INT;
 -- Declara una variable de tipo `INT` con un valor predeterminado de 10
 DECLARE @edad INT DEFAULT 10;
 -- Asigna el valor 'Juan Pérez' a la variable @nombre
@@ -119,5 +119,31 @@ BEGIN
     SET @contador = @contador + 1;
 END;
 
--- ========== BREAK Y CONTINUE ==========
-CREATE FUNCTION CalcularAreaCirctulo(@pi FLOAT, )
+-- ========== FUNCIONES ==========
+CREATE FUNCTION CalcularAreaCirctulo(@pi FLOAT, @radio FLOAT)
+RETURNS FLOAT
+BEGIN
+    DECLARE @area FLOAT;
+    SET @area = @pi * @radio * @radio;
+    RETURN @area;
+END;
+
+-- ========== FUNCIONES ==========
+CREATE PROCEDURE SumarNumeros
+    @numero1 INT,
+    @numero2 INT,
+    @resultado INT
+AS
+BEGIN
+    SET @resultado = @numero1 + @numero2;
+    PRINT 'La suma es: ' + CAST(@resultado AS VARCHAR);
+END;
+
+-- ========== LLAMDAS FUNC ==========
+DECLARE @radioCirculo FLOAT = 5.0;
+DECLARE @pi FLOAT = 3.14159265359;
+DECLARE @areaCirculo FLOAT;
+
+SET @areaCirculo = CalcularAreaCirctulo(@pi, @radioCirculo);
+
+PRINT 'eL ÁREA DEL CÍRCULO CON RADIO ' + CAST(@radioCirculo AS VARCHAR) + ' es ' + CAST(@areaCirculo AS VARCHAR);

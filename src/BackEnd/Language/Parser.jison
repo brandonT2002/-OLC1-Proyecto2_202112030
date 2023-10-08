@@ -60,6 +60,7 @@ COMMENTM    [/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]
 'BREAK'         {return 'RW_break'}
 'CONTINUE'      {return 'RW_continue'}
 'FUNCTION'      {return 'RW_function'}
+'RETURNS'        {return 'RW_returns'}
 'RETURN'        {return 'RW_return'}
 'PROCEDURE'     {return 'RW_procedure'}
 'PRINT'         {return 'RW_print'}
@@ -146,24 +147,28 @@ INSTRUCTIONS :
     INSTRUCTION ;
 
 INSTRUCTION :
-    DECLAREID TK_semicolon    |
-    ASIGNID TK_semicolon      |
-    SELECT TK_semicolon       |
-    CREATETABLE TK_semicolon  |
-    ALTERTAB TK_semicolon     |
-    DROPTAB TK_semicolon      |
-    INSERTREG TK_semicolon    |
-    UPDATETAB TK_semicolon    |
-    TRUNCATETAB TK_semicolon  |
-    DELETETAB TK_semicolon    |
-    IFSTRUCT TK_semicolon     |
-    CASESTRUCT_S TK_semicolon |
-    WHILESTRUCT TK_semicolon  |
-    FORSTRUCT TK_semicolon    |
-    ENCAP TK_semicolon        |
-    PRINT TK_semicolon        |
-    RW_break TK_semicolon     |
-    RW_continue TK_semicolon  |
+    DECLAREID TK_semicolon     |
+    ASIGNID TK_semicolon       |
+    SELECT TK_semicolon        |
+    CREATETABLE TK_semicolon   |
+    ALTERTAB TK_semicolon      |
+    DROPTAB TK_semicolon       |
+    INSERTREG TK_semicolon     |
+    UPDATETAB TK_semicolon     |
+    TRUNCATETAB TK_semicolon   |
+    DELETETAB TK_semicolon     |
+    IFSTRUCT TK_semicolon      |
+    CASESTRUCT_S TK_semicolon  |
+    WHILESTRUCT TK_semicolon   |
+    FORSTRUCT TK_semicolon     |
+    FUNCDEC TK_semicolon       |
+    METODDEC TK_semicolon      |
+    ENCAP TK_semicolon         |
+    CALLFUNC TK_semicolon      |
+    PRINT TK_semicolon         |
+    RW_break TK_semicolon      |
+    RW_continue TK_semicolon   |
+    RW_return EXP TK_semicolon |
     error {console.log(`Error SINTÁCTICO: ${yytext}. ${this._$.first_line}:${this._$.first_column + 1}`)} ;
 
 // Declaración de variables
@@ -284,9 +289,23 @@ WHILESTRUCT :
 FORSTRUCT :
     RW_for EXP RW_in TK_int TK_dot TK_int ENCAP RW_loop;
 
+// Funciones
+FUNCDEC :
+    RW_create RW_function TK_id TK_lpar DECLIDS TK_rpar RW_returns TYPE ENCAP ;
+
+// Metodos
+METODDEC :
+    RW_create RW_procedure TK_id DECLIDS RW_as ENCAP |
+    RW_create RW_procedure TK_id DECLIDS ENCAP ;
+
 // Encapsulamiento de Sentencias
 ENCAP :
     RW_begin INSTRUCTIONS RW_end ;
+
+// Llamada a funciones y métodos
+CALLFUNC :
+    SELECT TK_id TK_lpar LIST_IDS TK_rpar |
+    RW_set TK_id TK_equal TK_id TK_lpar LIST_IDS TK_rpar ;
 
 EXP :
     ARITHMETICS |
