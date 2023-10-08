@@ -191,8 +191,9 @@ ASIGNID :
 // Mostrar valor de variables
 SELECT :
     RW_select LIST_IDS RW_from TK_id RW_where EXP |
-    RW_select LIST_IDS RW_from TK_id |
-    RW_select LIST_IDS ;
+    RW_select LIST_IDS RW_from TK_id              |
+    RW_select LIST_IDS                            |
+    RW_select NATIVEFUC                           ;
 
 // Creación de tablas
 CREATETABLE :
@@ -306,6 +307,15 @@ ENCAP :
 CALLFUNC :
     SELECT TK_id TK_lpar LIST_IDS TK_rpar |
     RW_set TK_id TK_equal TK_id TK_lpar LIST_IDS TK_rpar ;
+
+// Funciones Nativas
+NATIVEFUC :
+    RW_lower TK_lpar EXP TK_rpar                 |
+    RW_upper TK_lpar EXP TK_rpar                 |
+    RW_round TK_lpar EXP TK_comma EXP TK_rpar    |
+    LEN TK_lpar EXP TK_rpar                      |
+    RW_truncate TK_lpar EXP TK_comma EXP TK_rpar |
+    RW_typeof TK_lpar EXP TK_rpar                ;
 
 EXP :
     ARITHMETICS |

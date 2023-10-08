@@ -147,3 +147,12 @@ DECLARE @areaCirculo FLOAT;
 SET @areaCirculo = CalcularAreaCirctulo(@pi, @radioCirculo);
 
 PRINT 'eL ÁREA DEL CÍRCULO CON RADIO ' + CAST(@radioCirculo AS VARCHAR) + ' es ' + CAST(@areaCirculo AS VARCHAR);
+
+-- ========== FUNCIONES NATIVAS ==========
+PRINT 'Hola mundo :)';
+SELECT LOWER('HOLA MUNDO');
+SELECT UPPER('hola mundo');
+SELECT ROUND(5.678, 2);
+SELECT LEN('Hola mundo');
+SELECT TRUNCATE(8.945, 1);
+SELECT TYPEOF(123);
