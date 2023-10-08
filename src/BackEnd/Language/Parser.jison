@@ -192,7 +192,7 @@ ASIGNID :
 SELECT :
     RW_select FIELDS RW_from TK_id RW_where EXP |
     RW_select FIELDS RW_from TK_id              |
-    RW_select FIELDS                            ;
+    RW_select LIST_IDS                            ;
 
 FIELDS :
     LIST_IDS |
