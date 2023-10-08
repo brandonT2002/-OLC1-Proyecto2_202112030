@@ -190,10 +190,13 @@ ASIGNID :
 
 // Mostrar valor de variables
 SELECT :
-    RW_select LIST_IDS RW_from TK_id RW_where EXP |
-    RW_select LIST_IDS RW_from TK_id              |
-    RW_select LIST_IDS                            |
-    RW_select NATIVEFUC                           ;
+    RW_select FIELDS RW_from TK_id RW_where EXP |
+    RW_select FIELDS RW_from TK_id              |
+    RW_select FIELDS                            ;
+
+FIELDS :
+    LIST_IDS |
+    TK_mult  ;
 
 // Creación de tablas
 CREATETABLE :
@@ -322,6 +325,7 @@ EXP :
     RELATIONALS |
     LOGICS      |
     CAST        |
+    NATIVEFUC   |
     TK_id       |
     TK_str      |
     TK_int      |

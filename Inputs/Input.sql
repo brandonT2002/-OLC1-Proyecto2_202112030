@@ -1,5 +1,5 @@
 -- Este es un comentario de una línea
--- SELECT * FROM users WHERE name = 'John Doe';
+SELECT * FROM users WHERE name = 'John Doe';
 
 /*
 Este es un comentario
