@@ -313,7 +313,7 @@ NATIVEFUC :
     RW_lower TK_lpar EXP TK_rpar                 |
     RW_upper TK_lpar EXP TK_rpar                 |
     RW_round TK_lpar EXP TK_comma EXP TK_rpar    |
-    LEN TK_lpar EXP TK_rpar                      |
+    RW_len TK_lpar EXP TK_rpar                      |
     RW_truncate TK_lpar EXP TK_comma EXP TK_rpar |
     RW_typeof TK_lpar EXP TK_rpar                ;
 
