@@ -85,7 +85,7 @@ COMMENTM    [/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]
 'NOT'           {return 'RW_not'}
 //EXPRESIONES
 {ID}            {return 'TK_id'}
-{STRING}        {return 'TK_str'}
+{STRING}        {return 'TK_varchar'}
 {DOUBLE}        {return 'TK_double'}
 {INTEGER}       {return 'TK_int'}
 // SIGNOS DE AGRUPACION Y FINALIZACION
@@ -327,7 +327,7 @@ EXP :
     CAST        |
     NATIVEFUC   |
     TK_id       |
-    TK_str      |
+    TK_varchar      |
     TK_int      |
     TK_double   |
     RW_true     |
