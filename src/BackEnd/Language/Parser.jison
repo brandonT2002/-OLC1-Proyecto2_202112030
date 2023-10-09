@@ -12,6 +12,7 @@ ID          \@?(\_)*[a-zA-Z][a-zA-Z0-9\_]*
 STRING      (\"({CONTENT}*)\"|\'({CONTENT}*)\')
 INTEGER     [0-9]+\b
 DOUBLE      [0-9]+\.[0-9]+\b
+DATE        (\d\d\d\d)\-(\d\d)-(\d\d)
 COMMENTS    \-\-([^\r\n]*)?
 COMMENTM    [/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]
 
@@ -88,6 +89,7 @@ COMMENTM    [/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]
 {STRING}        {return 'TK_varchar'}
 {DOUBLE}        {return 'TK_double'}
 {INTEGER}       {return 'TK_int'}
+{DATE}          {return 'TK_date'}
 // SIGNOS DE AGRUPACION Y FINALIZACION
 '('             {return 'TK_lpar'}
 ')'             {return 'TK_rpar'}
@@ -327,9 +329,10 @@ EXP :
     CAST        |
     NATIVEFUC   |
     TK_id       |
-    TK_varchar      |
+    TK_varchar  |
     TK_int      |
     TK_double   |
+    TK_date     |
     RW_true     |
     RW_false    |
     TK_lpar EXP TK_rpar ;
