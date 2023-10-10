@@ -1,5 +1,6 @@
 export enum TypeInst {
     PRINT         = "PRINT",
+    SELECT        = "SELECT",
     INIT_ID       = "INIT_ID",
     ASIGN_ID      = "ASIGN_ID",
     BLOCK_INST    = "BLOCK_INST",

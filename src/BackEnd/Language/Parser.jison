@@ -1,5 +1,8 @@
 %{
     // imports
+    let { errors } = require ('../Classes/Utils/Outs')
+    const { Error } = require ('../Classes/Utils/Error')
+    const { TypeError } = require ('../Classes/Utils/TypeError')
 %}
 
 // análisis léxico
@@ -11,7 +14,7 @@ CONTENT     ([^\n\"\\]|\\.)
 ID          \@?(\_)*[a-zA-Z][a-zA-Z0-9\_]*
 STRING      (\"({CONTENT}*)\"|\'({CONTENT}*)\')
 INTEGER     [0-9]+\b
-DOUBLE      [0-9]+\.[0-9]+\b
+DOUBLE       [0-9]+\.[0-9]+\b
 DATE        (\d\d\d\d)\-(\d\d)-(\d\d)
 COMMENTS    \-\-([^\r\n]*)?
 COMMENTM    [/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]
@@ -61,7 +64,7 @@ COMMENTM    [/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]
 'BREAK'         {return 'RW_break'}
 'CONTINUE'      {return 'RW_continue'}
 'FUNCTION'      {return 'RW_function'}
-'RETURNS'        {return 'RW_returns'}
+'RETURNS'       {return 'RW_returns'}
 'RETURN'        {return 'RW_return'}
 'PROCEDURE'     {return 'RW_procedure'}
 'PRINT'         {return 'RW_print'}
@@ -73,7 +76,7 @@ COMMENTM    [/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]
 'TYPEOF'        {return 'RW_typeof'}
 // TIPOS DE DATOS
 'INT'           {return 'RW_int'}
-'FLOAT'         {return 'RW_float'}
+'DOUBLE'        {return 'RW_double'}
 'DATE'          {return 'RW_date'}
 'VARCHAR'       {return 'RW_varchar'}
 'BOOLEAN'       {return 'RW_boolean'}
@@ -86,7 +89,7 @@ COMMENTM    [/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]
 'NOT'           {return 'RW_not'}
 //EXPRESIONES
 {ID}            {return 'TK_id'}
-{STRING}        {return 'TK_varchar'}
+{STRING}        {yytext = yytext.substr(1,yyleng - 2); return 'TK_varchar'}
 {DOUBLE}        {return 'TK_double'}
 {INTEGER}       {return 'TK_int'}
 {DATE}          {return 'TK_date'}
@@ -110,7 +113,7 @@ COMMENTM    [/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]
 '<'             {return 'TK_less'}
 '>'             {return 'TK_great'}
 //
-.               {console.log(`Error Lexico: ${yytext}`)}
+.               {errors.push(new Error(yylloc.first_line, yylloc.first_column, TypeError.LEXICAL, `Caracter no reconocido. «${yytext}»`))}
 <<EOF>>         {return 'EOF'}
 
 /lex
@@ -122,6 +125,12 @@ los números como si fuera de un solo dígito, para evitar ambigüedades y demá
 
 %{
     // imports
+    // Tipos
+    const { Type } = require('../Classes/Utils/Type')
+    // Instrucciones
+    const { Print } = require('../Classes/Instructions/Print')
+    // Expresiones
+    const { Primitive } = require('../Classes/Expressions/Primitive')
 %}
 
 // precedencia de operadores
@@ -141,16 +150,16 @@ los números como si fuera de un solo dígito, para evitar ambigüedades y demá
 %%
 
 INIT :
-    INSTRUCTIONS EOF    |
-    EOF ;
+    INSTRUCTIONS EOF {return $1} |
+    EOF              {return []} ;
 
 INSTRUCTIONS :
-    INSTRUCTIONS INSTRUCTION |
-    INSTRUCTION ;
+    INSTRUCTIONS INSTRUCTION {$$.push($2)} |
+    INSTRUCTION              {$$ = [$1]  } ;
 
 INSTRUCTION :
-    DECLAREID TK_semicolon     |
-    ASIGNID TK_semicolon       |
+    DECLAREID TK_semicolon     {$$ = $1} |
+    ASIGNID TK_semicolon       {/*$$ = $1*/} |
     SELECT TK_semicolon        |
     CREATETABLE TK_semicolon   |
     ALTERTAB TK_semicolon      |
@@ -167,17 +176,17 @@ INSTRUCTION :
     METODDEC TK_semicolon      |
     ENCAP TK_semicolon         |
     CALLFUNC TK_semicolon      |
-    PRINT TK_semicolon         |
+    PRINT TK_semicolon         {$$ = $1} |
     RW_break TK_semicolon      |
     RW_continue TK_semicolon   |
     RW_return EXP TK_semicolon |
-    error {console.log(`Error SINTÁCTICO: ${yytext}. ${this._$.first_line}:${this._$.first_column + 1}`)} ;
+    error {errors.push(new Error(this._$.first_line, this._$.first_column + 1, TypeError.SYNTAX, `No se esperaba «${yytext}».`))} ;
 
 // Declaración de variables
 DECLAREID :
-    RW_declare DECLIDS                   |
-    RW_declare TK_id TYPE TK_equal EXP   |
-    RW_declare TK_id TYPE RW_default EXP ;
+    RW_declare DECLIDS                   {} |
+    RW_declare TK_id TYPE TK_equal EXP   {/*$$ = new InitID(@1.first_line, @1.first_column, $3, $5)*/} |
+    RW_declare TK_id TYPE RW_default EXP {/*$$ = new InitID(@1.first_line, @1.first_column, $3, $5)*/} ;
 
 DECLIDS :
     DECLIDS TK_comma DECLID |
@@ -188,7 +197,7 @@ DECLID :
 
 // Asignación de variables
 ASIGNID :
-    RW_set TK_id TK_equal EXP ;
+    RW_set TK_id TK_equal EXP {/*$$ = new AsignID(@1.first_line, @first_column, $2, $4)*/} ;
 
 // Mostrar valor de variables
 SELECT :
@@ -285,7 +294,7 @@ ENVCASE_S :
 
 // PRINT
 PRINT :
-    RW_print EXP ;
+    RW_print EXP {$$ = new Print(@1.first_line, @1.first_column, $2)} ;
 
 // Estructura WHILE
 WHILESTRUCT :
@@ -329,13 +338,13 @@ EXP :
     CAST        |
     NATIVEFUC   |
     TK_id       |
-    TK_varchar  |
-    TK_int      |
-    TK_double   |
-    TK_date     |
-    RW_true     |
-    RW_false    |
-    TK_lpar EXP TK_rpar ;
+    TK_varchar  {$$ = new Primitive(@1.first_line, @1.first_column, $1, Type.VARCHAR)} |
+    TK_int      {$$ = new Primitive(@1.first_line, @1.first_column, $1, Type.INT)    } |
+    TK_double   {$$ = new Primitive(@1.first_line, @1.first_column, $1, Type.DOUBLE)  } |
+    TK_date     {$$ = new Primitive(@1.first_line, @1.first_column, $1, Type.DATE)   } |
+    RW_true     {$$ = new Primitive(@1.first_line, @1.first_column, $1, Type.BOOLEAN)} |
+    RW_false    {$$ = new Primitive(@1.first_line, @1.first_column, $1, Type.BOOLEAN)} |
+    TK_lpar EXP TK_rpar {$$ = $2} ;
 
 ARITHMETICS :
     EXP TK_plus EXP  |
@@ -362,8 +371,9 @@ CAST :
     RW_cast TK_lpar EXP RW_as TYPE TK_rpar ;
 
 TYPE :
-    RW_int     |
-    RW_float   |
-    RW_date    |
-    RW_varchar |
-    RW_boolean ;
+    RW_int     {$$ = Type.INT    } |
+    RW_double  {$$ = Type.DOUBLE } |
+    RW_date    {$$ = Type.DATE   } |
+    RW_varchar {$$ = Type.VARCHAR} |
+    RW_boolean {$$ = Type.BOOLEAN} ;
+    // RW_BOOLEAN :bool {: RESULT = bool :}

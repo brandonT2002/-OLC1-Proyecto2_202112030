@@ -6,4 +6,4 @@ export enum Type {
     BOOLEAN,
     NULL
 }
-export type ReturnType = {value: any,type: Type}
+export type ReturnType = {value: any, type: Type}
