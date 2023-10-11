@@ -27,3 +27,8 @@ export function getStringOuts(): string {
 	}
     return out
 }
+
+export function resetOuts() {
+	printConsole.splice(0, printConsole.length)
+	errors.splice(0, errors.length)
+}

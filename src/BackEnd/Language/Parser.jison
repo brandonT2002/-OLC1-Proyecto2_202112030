@@ -129,8 +129,11 @@ los números como si fuera de un solo dígito, para evitar ambigüedades y demá
     const { Type } = require('../Classes/Utils/Type')
     // Instrucciones
     const { Print } = require('../Classes/Instructions/Print')
+    const { InitID } = require('../Classes/Instructions/InitID')
+    const { AsignID } = require('../Classes/Instructions/AsignID')
     // Expresiones
     const { Primitive } = require('../Classes/Expressions/Primitive')
+    const { AccessID } = require('../Classes/Expressions/AccessID')
 %}
 
 // precedencia de operadores
@@ -159,7 +162,7 @@ INSTRUCTIONS :
 
 INSTRUCTION :
     DECLAREID TK_semicolon     {$$ = $1} |
-    ASIGNID TK_semicolon       {/*$$ = $1*/} |
+    ASIGNID TK_semicolon       {$$ = $1} |
     SELECT TK_semicolon        |
     CREATETABLE TK_semicolon   |
     ALTERTAB TK_semicolon      |
@@ -184,20 +187,20 @@ INSTRUCTION :
 
 // Declaración de variables
 DECLAREID :
-    RW_declare DECLIDS                   {} |
-    RW_declare TK_id TYPE TK_equal EXP   {/*$$ = new InitID(@1.first_line, @1.first_column, $3, $5)*/} |
-    RW_declare TK_id TYPE RW_default EXP {/*$$ = new InitID(@1.first_line, @1.first_column, $3, $5)*/} ;
+    RW_declare DECLIDS                   {$$ = new InitID(@1.first_line, @1.first_column, $2[0], $2[1], undefined)} |
+    RW_declare TK_id TYPE TK_equal EXP   {$$ = new InitID(@1.first_line, @1.first_column, $2, $3, $5)             } |
+    RW_declare TK_id TYPE RW_default EXP {$$ = new InitID(@1.first_line, @1.first_column, $2, $3, $5)             } ;
 
 DECLIDS :
-    DECLIDS TK_comma DECLID |
-    DECLID ;
+    DECLIDS TK_comma DECLID {$$[0].push($3[0]); $$[1].push($3[1])} |
+    DECLID                  {$$ = [[$1[0]], [$1[1]]]             } ;
 
 DECLID :
-    TK_id TYPE ;
+    TK_id TYPE {$$ = [$1, $2]} ;
 
 // Asignación de variables
 ASIGNID :
-    RW_set TK_id TK_equal EXP {/*$$ = new AsignID(@1.first_line, @first_column, $2, $4)*/} ;
+    RW_set TK_id TK_equal EXP {$$ = new AsignID(@1.first_line, @1.first_column, $2, $4)} ;
 
 // Mostrar valor de variables
 SELECT :
@@ -331,16 +334,16 @@ NATIVEFUC :
     RW_truncate TK_lpar EXP TK_comma EXP TK_rpar |
     RW_typeof TK_lpar EXP TK_rpar                ;
 
-EXP :
+EXP : 
     ARITHMETICS |
     RELATIONALS |
     LOGICS      |
     CAST        |
     NATIVEFUC   |
-    TK_id       |
+    TK_id       {$$ = new AccessID(@1.first_line, @1.first_column, $1)} |
     TK_varchar  {$$ = new Primitive(@1.first_line, @1.first_column, $1, Type.VARCHAR)} |
     TK_int      {$$ = new Primitive(@1.first_line, @1.first_column, $1, Type.INT)    } |
-    TK_double   {$$ = new Primitive(@1.first_line, @1.first_column, $1, Type.DOUBLE)  } |
+    TK_double   {$$ = new Primitive(@1.first_line, @1.first_column, $1, Type.DOUBLE) } |
     TK_date     {$$ = new Primitive(@1.first_line, @1.first_column, $1, Type.DATE)   } |
     RW_true     {$$ = new Primitive(@1.first_line, @1.first_column, $1, Type.BOOLEAN)} |
     RW_false    {$$ = new Primitive(@1.first_line, @1.first_column, $1, Type.BOOLEAN)} |
@@ -376,4 +379,3 @@ TYPE :
     RW_date    {$$ = Type.DATE   } |
     RW_varchar {$$ = Type.VARCHAR} |
     RW_boolean {$$ = Type.BOOLEAN} ;
-    // RW_BOOLEAN :bool {: RESULT = bool :}

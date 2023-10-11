@@ -10,7 +10,7 @@ export class SymTab {
     }
 
     public toString(): string {
-        return `Identificador: ${this.id}, Tipo: ${this.getType(this.type)}, Entorno: ${this.nameEnv}. ${this.line}:${this.column}`
+        return '║ ' + `${this.id}`.padEnd(20) + ' ║ ' + `${this.getType(this.type)}`.padEnd(10) + ' ║ ' + `${this.nameEnv}`.padEnd(15) + ' ║ ' + `${this.line}`.padEnd(5) + ' ║ ' + `${this.column}`.padEnd(7) + ' ║ ' 
     }
 
     public hash(): string {
@@ -42,6 +42,8 @@ export class SymTab {
                 return "VARCHAR"
             case Type.BOOLEAN:
                 return "BOOLEAN"
+            case Type.DATE:
+                return "DATE"
             default:
                 return "NULL"
         }

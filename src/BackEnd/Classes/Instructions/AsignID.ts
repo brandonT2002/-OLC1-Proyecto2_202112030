@@ -9,6 +9,6 @@ export class AsignID extends Instruction {
     }
     public execute(env: Env) {
         let value = this.value.execute(env)
-        env.reasignID(this.id, value)
+        env.reasignID(this.id, value, this.line, this.column)
     }
 }

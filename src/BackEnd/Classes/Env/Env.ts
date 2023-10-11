@@ -17,7 +17,7 @@ export class Env {
         let env: Env = this
         if(!env.ids.has(id.toLowerCase())) {
             env.ids.set(id.toLowerCase(), new Symbol(value, id.toLowerCase(), type))
-            symTable.push(new SymTab(line, column, true, true, id.toLowerCase(), env.name, type))
+            symTable.push(new SymTab(line, column + 1, true, true, id.toLowerCase(), env.name, type))
         }
         else {
             this.setError('Redeclaración de variable existente', line, column)
@@ -35,7 +35,7 @@ export class Env {
         return null
     }
 
-    public reasignID(id: string, value: ReturnType): boolean {
+    public reasignID(id: string, value: ReturnType, line: number, column: number): boolean {
         let env: Env | null = this
         while (env) {
             if (env.ids.has(id.toLowerCase())) {
@@ -46,7 +46,7 @@ export class Env {
             }
             env = env.previous
         }
-        // printList.push(`Error, La variable "${id}" no ha sido declarada.`)
+        this.setError('Resignación de valor a variable inexistente', line, column)
         return false;
     }
 
@@ -54,7 +54,7 @@ export class Env {
         let env: Env = this
         if(!env.functions.has(id.toLowerCase())) {
             env.functions.set(id.toLowerCase(),func)
-            symTable.push(new SymTab(func.line, func.column, false, false, id.toLowerCase(), env.name, func.type))
+            symTable.push(new SymTab(func.line, func.column + 1, false, false, id.toLowerCase(), env.name, func.type))
         }
         else {
             this.setError('Redefinición de función existente', func.line, func.column)
@@ -78,6 +78,10 @@ export class Env {
             }
         }
         return false
+    }
+
+    public printSymTab() {
+        console.log(symTable.toString())
     }
 
     getTypeOf(type: Type): string {

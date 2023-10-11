@@ -30,6 +30,26 @@ class SymbolTable {
         dot += `</table>>];}`
         return dot
     }
+
+    public print() {
+        console.log('TABLA DE SÍMBOLOS')
+        for(const sym of this.symbols) {
+            console.log(sym.toString())
+        }
+    }
+
+    public toString(): string {
+        var table = '╔═' + '═'.repeat(69) + '═╗'
+        table += '\n║ ' + ' '.repeat(26) + 'TABLA DE SÍMBOLOS' + ' '.repeat(26) + ' ║' 
+        table += '\n╠═' + '═'.repeat(20) + '═╦═' + '═'.repeat(10) + '═╦═' +  '═'.repeat(15) + '═╦═' +  '═'.repeat(5) + '═╦═' +  '═'.repeat(7) + '═╣'
+        table += '\n║ ' + 'ID'.padEnd(20) + ' ║ ' + 'TIPO'.padEnd(10) + ' ║ ' + 'ENTORNO'.padEnd(15) + ' ║ ' + 'LINEA'.padEnd(5) + ' ║ ' + 'COLUMNA'.padEnd(7) + ' ║' 
+        table += '\n╠═' + '═'.repeat(20) + '═╬═' + '═'.repeat(10) + '═╬═' +  '═'.repeat(15) + '═╬═' +  '═'.repeat(5) + '═╬═' +  '═'.repeat(7) + '═╣'
+        for(const sym of this.symbols) {
+            table += '\n' + sym.toString()
+        }
+        table += '\n╚═' + '═'.repeat(20) + '═╩═' + '═'.repeat(10) + '═╩═' +  '═'.repeat(15) + '═╩═' +  '═'.repeat(5) + '═╩═' +  '═'.repeat(7) + '═╝'
+        return table
+    }
 }
 
 export var symTable: SymbolTable = new SymbolTable()
