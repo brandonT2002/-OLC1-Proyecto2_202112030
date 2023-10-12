@@ -10,7 +10,11 @@ export class InitID extends Instruction {
     public execute(env: Env): any {
         if(typeof this.id === 'string' && typeof this.type === 'number' && this.value) {
             const value: ReturnType = this.value.execute(env)
-            env.saveID(this.id, value.value, this.type, this.line, this.column)
+            if (value.type === this.type || this.type === Type.DOUBLE && value.type === Type.INT) {
+                env.saveID(this.id, value.value, this.type, this.line, this.column)
+            } else {
+                env.setError("Los tipos no coinciden en la declaración", this.line, this.column)
+            }
         }
         else if(typeof this.id === 'object' && typeof this.type === 'object' && !this.value) {
             for(var i = 0; i < this.id.length; i ++) {

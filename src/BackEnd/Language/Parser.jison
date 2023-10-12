@@ -134,6 +134,7 @@ los números como si fuera de un solo dígito, para evitar ambigüedades y demá
     // Expresiones
     const { Primitive } = require('../Classes/Expressions/Primitive')
     const { AccessID } = require('../Classes/Expressions/AccessID')
+    const { Arithmetic } = require('../Classes/Expressions/Arithmetic')
 %}
 
 // precedencia de operadores
@@ -335,7 +336,7 @@ NATIVEFUC :
     RW_typeof TK_lpar EXP TK_rpar                ;
 
 EXP : 
-    ARITHMETICS |
+    ARITHMETICS {$$ = $1} |
     RELATIONALS |
     LOGICS      |
     CAST        |
@@ -350,12 +351,12 @@ EXP :
     TK_lpar EXP TK_rpar {$$ = $2} ;
 
 ARITHMETICS :
-    EXP TK_plus EXP  |
-    EXP TK_minus EXP |
-    EXP TK_mult EXP  |
-    EXP TK_div EXP   |
-    EXP TK_mod EXP   |
-    TK_minus EXP %prec TK_uminus ;
+    EXP TK_plus EXP  {$$ = new Arithmetic(@1.first_line, @1.first_column, $1, $2, $3)} |
+    EXP TK_minus EXP {$$ = new Arithmetic(@1.first_line, @1.first_column, $1, $2, $3)} |
+    EXP TK_mult EXP  {$$ = new Arithmetic(@1.first_line, @1.first_column, $1, $2, $3)} |
+    EXP TK_div EXP   {$$ = new Arithmetic(@1.first_line, @1.first_column, $1, $2, $3)} |
+    EXP TK_mod EXP   {$$ = new Arithmetic(@1.first_line, @1.first_column, $1, $2, $3)} |
+    TK_minus EXP %prec TK_uminus {/*/$$ = new Arithmetic(@1.first_line, @1.first_column, $2, $1, undefined)*/} ;
 
 RELATIONALS :
     EXP TK_equal EXP |
