@@ -136,6 +136,7 @@ los números como si fuera de un solo dígito, para evitar ambigüedades y demá
     const { AccessID } = require('../Classes/Expressions/AccessID')
     const { Arithmetic } = require('../Classes/Expressions/Arithmetic')
     const { Relational } = require('../Classes/Expressions/Relational')
+    const { Logic } = require('../Classes/Expressions/Logic')
 %}
 
 // precedencia de operadores
@@ -338,8 +339,8 @@ NATIVEFUC :
 
 EXP : 
     ARITHMETICS {$$ = $1} |
-    RELATIONALS {$$ = $1}|
-    LOGICS      |
+    RELATIONALS {$$ = $1} |
+    LOGICS      {$$ = $1} |
     CAST        |
     NATIVEFUC   |
     TK_id       {$$ = new AccessID(@1.first_line, @1.first_column, $1)} |
@@ -368,9 +369,9 @@ RELATIONALS :
     EXP TK_great EXP      {$$ = new Relational(@1.first_line, @1.first_column, $1, $2, $3)} ;
 
 LOGICS :
-    EXP RW_and EXP |
-    EXP RW_or EXP  |
-    RW_not EXP ;
+    EXP RW_and EXP {$$ = new Logic(@1.first_line, @1.first_column, $1, $2, $3)} |
+    EXP RW_or EXP  {$$ = new Logic(@1.first_line, @1.first_column, $1, $2, $3)} |
+    RW_not EXP     {$$ = new Logic(@1.first_line, @1.first_column, undefined, $1, $2)} ;
 
 CAST :
     RW_cast TK_lpar EXP RW_as TYPE TK_rpar ;

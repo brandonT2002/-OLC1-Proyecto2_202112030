@@ -22,7 +22,7 @@ export class Relational extends Expression {
             case '<':
                 return this.less(env)
             default:
-                return {value: -1, type: Type.NULL}
+                return {value: 'NULL', type: Type.NULL}
         }
     }
     equal (env: Env): ReturnType {

@@ -25,7 +25,7 @@ export class Arithmetic extends Expression {
             case '%':
                 return this.mod(env)
             default:
-                return {value: -1, type: Type.NULL}
+                return {value: 'NULL', type: Type.NULL}
         }
     }
 
