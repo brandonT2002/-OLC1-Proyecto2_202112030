@@ -73,6 +73,7 @@ export class Arithmetic extends Expression {
         if (this.type === Type.INT || this.type === Type.DOUBLE) {
             return {value: -value.value, type: this.type}
         }
+        env.setError("Los tipos no son válidos para operaciones aritméticas", this.exp2.line, this.exp2.column)
         return {value: 'NULL', type: Type.NULL}
     }
 
@@ -100,6 +101,7 @@ export class Arithmetic extends Expression {
         if (this.type === Type.DOUBLE) {
             return {value: parseFloat(value1.value) / parseFloat(value2.value), type: this.type}
         }
+        env.setError("Los tipos no son válidos para operaciones aritméticas", this.exp2.line, this.exp2.column)
         return {value: 'NULL', type: this.type}
     }
 
@@ -113,6 +115,7 @@ export class Arithmetic extends Expression {
         if (this.type === Type.DOUBLE) {
             return {value: parseFloat(value1.value) % parseFloat(value2.value), type: this.type}
         }
+        env.setError("Los tipos no son válidos para operaciones aritméticas", this.exp2.line, this.exp2.column)
         return {value: 'NULL', type: this.type}
     }
 }

@@ -135,6 +135,7 @@ los números como si fuera de un solo dígito, para evitar ambigüedades y demá
     const { Primitive } = require('../Classes/Expressions/Primitive')
     const { AccessID } = require('../Classes/Expressions/AccessID')
     const { Arithmetic } = require('../Classes/Expressions/Arithmetic')
+    const { Relational } = require('../Classes/Expressions/Relational')
 %}
 
 // precedencia de operadores
@@ -337,7 +338,7 @@ NATIVEFUC :
 
 EXP : 
     ARITHMETICS {$$ = $1} |
-    RELATIONALS |
+    RELATIONALS {$$ = $1}|
     LOGICS      |
     CAST        |
     NATIVEFUC   |
@@ -356,15 +357,15 @@ ARITHMETICS :
     EXP TK_mult EXP  {$$ = new Arithmetic(@1.first_line, @1.first_column, $1, $2, $3)} |
     EXP TK_div EXP   {$$ = new Arithmetic(@1.first_line, @1.first_column, $1, $2, $3)} |
     EXP TK_mod EXP   {$$ = new Arithmetic(@1.first_line, @1.first_column, $1, $2, $3)} |
-    TK_minus EXP %prec TK_uminus {/*/$$ = new Arithmetic(@1.first_line, @1.first_column, $2, $1, undefined)*/} ;
+    TK_minus EXP %prec TK_uminus {$$ = new Arithmetic(@1.first_line, @1.first_column, undefined, $1, $2)} ;
 
 RELATIONALS :
-    EXP TK_equal EXP |
-    EXP TK_notequal EXP   |
-    EXP TK_lessequal EXP  |
-    EXP TK_greatequal EXP |
-    EXP TK_less EXP       |
-    EXP TK_great EXP ;
+    EXP TK_equal EXP      {$$ = new Relational(@1.first_line, @1.first_column, $1, $2, $3)} |
+    EXP TK_notequal EXP   {$$ = new Relational(@1.first_line, @1.first_column, $1, $2, $3)} |
+    EXP TK_lessequal EXP  {$$ = new Relational(@1.first_line, @1.first_column, $1, $2, $3)} |
+    EXP TK_greatequal EXP {$$ = new Relational(@1.first_line, @1.first_column, $1, $2, $3)} |
+    EXP TK_less EXP       {$$ = new Relational(@1.first_line, @1.first_column, $1, $2, $3)} |
+    EXP TK_great EXP      {$$ = new Relational(@1.first_line, @1.first_column, $1, $2, $3)} ;
 
 LOGICS :
     EXP RW_and EXP |
