@@ -35,7 +35,6 @@ export class Logic extends Expression {
     not (env: Env): ReturnType {
         let value: ReturnType = this.exp2.execute(env)
         this.type = Type.BOOLEAN
-        console.log(value)
         return {value: !value.value, type: this.type}
     }
 }

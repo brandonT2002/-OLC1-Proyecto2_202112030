@@ -71,6 +71,11 @@ DECLARE @nota INT;
 SET @nota = 70;
 
 IF @nota >= 61 THEN
+BEGIN
+    PRINT 'Ganó el curso'
+END;
+
+IF @nota >= 61 THEN
     PRINT 'Ganó el laboratorio';
 ELSE
     PRINT 'Perdió el laboratorio';

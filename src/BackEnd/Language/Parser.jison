@@ -131,6 +131,8 @@ los números como si fuera de un solo dígito, para evitar ambigüedades y demá
     const { Print } = require('../Classes/Instructions/Print')
     const { InitID } = require('../Classes/Instructions/InitID')
     const { AsignID } = require('../Classes/Instructions/AsignID')
+    const { If } = require('../Classes/Instructions/If')
+    const { Block } = require('../Classes/Instructions/Block')
     // Expresiones
     const { Primitive } = require('../Classes/Expressions/Primitive')
     const { AccessID } = require('../Classes/Expressions/AccessID')
@@ -174,7 +176,7 @@ INSTRUCTION :
     UPDATETAB TK_semicolon     |
     TRUNCATETAB TK_semicolon   |
     DELETETAB TK_semicolon     |
-    IFSTRUCT TK_semicolon      |
+    IFSTRUCT TK_semicolon      {$$ = $1} |
     CASESTRUCT_S TK_semicolon  |
     WHILESTRUCT TK_semicolon   |
     FORSTRUCT TK_semicolon     |
@@ -283,8 +285,9 @@ LIST_EXPS :
 
 // Estructura IF
 IFSTRUCT :
-    RW_if EXP RW_then INSTRUCTIONS RW_else INSTRUCTIONS RW_end RW_if |
-    RW_if EXP RW_then INSTRUCTIONS RW_end RW_if ;
+    RW_if EXP RW_then INSTRUCTIONS RW_else INSTRUCTIONS RW_end RW_if {$$ = new If(@1.first_line, @1.first_column, $2, new Block(@1.first_line, @1.first_column, $4), new Block(@1.first_line, @1.first_column, $6))} |
+    RW_if EXP RW_then INSTRUCTIONS RW_end RW_if                      {$$ = new If(@1.first_line, @1.first_column, $2, new Block(@1.first_line, @1.first_column, $4), undefined)} |
+    RW_if EXP RW_begin INSTRUCTIONS RW_end                           {$$ = new If(@1.first_line, @1.first_column, $2, new Block(@1.first_line, @1.first_column, $4), undefined)} ;
 
 // Estructura CASE simple
 CASESTRUCT_S :
@@ -321,7 +324,7 @@ METODDEC :
 
 // Encapsulamiento de Sentencias
 ENCAP :
-    RW_begin INSTRUCTIONS RW_end ;
+    RW_begin INSTRUCTIONS RW_end {$$ = new Block(@1.first_line, @1.first_column, $2)} ;
 
 // Llamada a funciones y métodos
 CALLFUNC :
