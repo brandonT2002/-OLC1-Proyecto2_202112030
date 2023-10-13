@@ -133,6 +133,9 @@ los números como si fuera de un solo dígito, para evitar ambigüedades y demá
     const { AsignID } = require('../Classes/Instructions/AsignID')
     const { If } = require('../Classes/Instructions/If')
     const { Block } = require('../Classes/Instructions/Block')
+    const { Break } = require('../Classes/Instructions/Break')
+    const { Continue } = require('../Classes/Instructions/Continue')
+    const { While } = require('../Classes/Instructions/While')
     // Expresiones
     const { Primitive } = require('../Classes/Expressions/Primitive')
     const { AccessID } = require('../Classes/Expressions/AccessID')
@@ -185,8 +188,8 @@ INSTRUCTION :
     ENCAP TK_semicolon         |
     CALLFUNC TK_semicolon      |
     PRINT TK_semicolon         {$$ = $1} |
-    RW_break TK_semicolon      |
-    RW_continue TK_semicolon   |
+    RW_break TK_semicolon      {$$ = new Break(@1.first_line, @1.first_column)} |
+    RW_continue TK_semicolon   {$$ = new Continue(@1.first_line, @1.first_column)} |
     RW_return EXP TK_semicolon |
     error {errors.push(new Error(this._$.first_line, this._$.first_column + 1, TypeError.SYNTAX, `No se esperaba «${yytext}».`))} ;
 
@@ -307,7 +310,7 @@ PRINT :
 
 // Estructura WHILE
 WHILESTRUCT :
-    RW_while EXP ENCAP ;
+    RW_while EXP ENCAP {$$ = new While(@1.first_line, @1.first_column, $2, $3)};
 
 // Estructura FOR
 FORSTRUCT :

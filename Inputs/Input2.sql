@@ -25,3 +25,13 @@ END;
 -- ELSE
 --     PRINT 'Perdió el laboratorio';
 -- END IF;
+
+-- ========== ESTRUCTURA WHILE ==========
+PRINT '=== ESTRUCTURA WHILE ===';
+DECLARE @contador INT = 1;
+
+WHILE @contador <= 10
+BEGIN
+    PRINT (@contador);
+    SET @contador = @contador + 1;
+END;

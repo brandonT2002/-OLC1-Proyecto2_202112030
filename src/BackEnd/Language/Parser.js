@@ -98,6 +98,12 @@ break;
 case 5: case 6: case 15: case 23: case 103:
 this.$ = $$[$0-1]
 break;
+case 24:
+this.$ = new Break(_$[$0-1].first_line, _$[$0-1].first_column)
+break;
+case 25:
+this.$ = new Continue(_$[$0-1].first_line, _$[$0-1].first_column)
+break;
 case 27:
 errors.push(new Error(this._$.first_line, this._$.first_column + 1, TypeError.SYNTAX, `No se esperaba «${yytext}».`))
 break;
@@ -130,6 +136,9 @@ this.$ = new If(_$[$0-4].first_line, _$[$0-4].first_column, $$[$0-3], new Block(
 break;
 case 76:
 this.$ = new Print(_$[$0-1].first_line, _$[$0-1].first_column, $$[$0])
+break;
+case 77:
+this.$ = new While(_$[$0-2].first_line, _$[$0-2].first_column, $$[$0-1], $$[$0])
 break;
 case 82:
 this.$ = new Block(_$[$0-2].first_line, _$[$0-2].first_column, $$[$0-1])
@@ -451,6 +460,9 @@ _handle_error:
     const { AsignID } = require('../Classes/Instructions/AsignID')
     const { If } = require('../Classes/Instructions/If')
     const { Block } = require('../Classes/Instructions/Block')
+    const { Break } = require('../Classes/Instructions/Break')
+    const { Continue } = require('../Classes/Instructions/Continue')
+    const { While } = require('../Classes/Instructions/While')
     // Expresiones
     const { Primitive } = require('../Classes/Expressions/Primitive')
     const { AccessID } = require('../Classes/Expressions/AccessID')
