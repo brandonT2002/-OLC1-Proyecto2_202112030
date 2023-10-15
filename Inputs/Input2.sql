@@ -27,11 +27,19 @@ END;
 -- END IF;
 
 -- ========== ESTRUCTURA WHILE ==========
-PRINT '=== ESTRUCTURA WHILE ===';
+/*PRINT '=== ESTRUCTURA WHILE ===';
 DECLARE @contador INT = 1;
 
 WHILE @contador <= 10
 BEGIN
     PRINT (@contador);
     SET @contador = @contador + 1;
-END;
+END;*/
+
+-- ========== ESTRUCTURA FOR ==========
+print'========== ESTRUCTURA FOR ==========';
+-- DECLARE @i INT;
+FOR @i IN 3..7
+BEGIN
+    PRINT @i;
+END LOOP;

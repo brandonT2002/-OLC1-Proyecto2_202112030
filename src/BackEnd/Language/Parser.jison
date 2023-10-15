@@ -136,6 +136,7 @@ los números como si fuera de un solo dígito, para evitar ambigüedades y demá
     const { Break } = require('../Classes/Instructions/Break')
     const { Continue } = require('../Classes/Instructions/Continue')
     const { While } = require('../Classes/Instructions/While')
+    const { For } = require('../Classes/Instructions/For')
     // Expresiones
     const { Primitive } = require('../Classes/Expressions/Primitive')
     const { AccessID } = require('../Classes/Expressions/AccessID')
@@ -314,7 +315,7 @@ WHILESTRUCT :
 
 // Estructura FOR
 FORSTRUCT :
-    RW_for EXP RW_in TK_int TK_dot TK_int ENCAP RW_loop;
+    RW_for TK_id RW_in EXP TK_dot EXP ENCAP RW_loop {$$ = new For(@1.first_line, @1.first_column, $2, $4, $6, $7)};
 
 // Funciones
 FUNCDEC :
