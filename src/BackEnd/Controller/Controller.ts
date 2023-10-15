@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { Env } from "../Classes/Env/Env";
-import { getStringOuts, resetOuts } from '../Classes/Utils/Outs';
+import { symTable } from '../Classes/Env/SymbolTable';
+import { getStringOuts, resetOuts } from '../Classes/Utils/Outs'
 
 export class Controller {
     public running(req: Request,res: Response) {
@@ -20,6 +21,7 @@ export class Controller {
             }
             else {
                 resetOuts()
+                symTable.splice()
                 let ast = parser.parse(data)
                 const global: Env = new Env(null, 'Global')
                 for(let instruction of ast) {
@@ -46,6 +48,7 @@ export class Controller {
         let parser = require('../Language/Parser')
         try {
             resetOuts()
+            symTable.splice()
             let ast = parser.parse(code)
             const global: Env = new Env(null, 'Global')
             for(let instruction of ast) {

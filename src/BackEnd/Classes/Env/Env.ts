@@ -8,7 +8,7 @@ import { Symbol } from './Symbol';
 import { SymTab } from "./SymTab";
 
 export class Env {
-    private ids: Map<string, Symbol> = new Map<string, Symbol>()
+    public ids: Map<string, Symbol> = new Map<string, Symbol>()
     private functions: Map<string, Function> = new Map<string, Function>()
     // private tables: Map<string, any> = new Map<string, any>()
     constructor(private previous: Env | null,public name: string) {}
@@ -40,9 +40,13 @@ export class Env {
         while (env) {
             if (env.ids.has(id.toLowerCase())) {
                 let symbol: Symbol = env.ids.get(id.toLowerCase())!
-                symbol.value = value.value;
-                env.ids.set(id.toLowerCase(), symbol)
-                return true
+                if (symbol.type === value.type || symbol.type === Type.DOUBLE && value.type === Type.INT) {
+                    symbol.value = value.value;
+                    env.ids.set(id.toLowerCase(), symbol)
+                    return true
+                }
+                env.setError(`Los tipos no coinciden en la asignación. Intenta asignar un "${env.getTypeOf(value.type)}" a un "${env.getTypeOf(symbol.type)}"`, line, column)
+				return false
             }
             env = env.previous
         }
@@ -66,7 +70,7 @@ export class Env {
     }
 
     public setError(errorD: string, line: number, column: number) {
-        if(this.match(errorD, line, column)) {
+        if(!this.match(errorD, line, column)) {
             errors.push(new Error(line, column, TypeError.SEMANTIC, errorD))
         }
     }

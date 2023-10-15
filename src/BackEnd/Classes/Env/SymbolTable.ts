@@ -38,6 +38,10 @@ class SymbolTable {
         }
     }
 
+    public splice() {
+        this.symbols.splice(0)
+    }
+
     public toString(): string {
         var table = '╔═' + '═'.repeat(69) + '═╗'
         table += '\n║ ' + ' '.repeat(26) + 'TABLA DE SÍMBOLOS' + ' '.repeat(26) + ' ║' 
