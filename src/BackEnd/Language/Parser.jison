@@ -9,13 +9,13 @@
 %lex
 %options case-insensitive
 
-UNUSED      [ \r\t]+
+UNUSED      [\s\r\t]+
 CONTENT     ([^\n\"\\]|\\.)
 ID          \@?(\_)*[a-zA-Z][a-zA-Z0-9\_]*
-STRING      (\"({CONTENT}*)\"|\'({CONTENT}*)\')
+STRING      \"({CONTENT}*)\"
 INTEGER     [0-9]+\b
 DOUBLE       [0-9]+\.[0-9]+\b
-DATE        (\d\d\d\d)\-(\d\d)-(\d\d)
+DATE        \'\d\d\d\d\-\d\d\-\d\d\'
 COMMENTS    \-\-([^\r\n]*)?
 COMMENTM    [/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]
 
@@ -113,7 +113,7 @@ COMMENTM    [/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]
 '<'             {return 'TK_less'}
 '>'             {return 'TK_great'}
 //
-.               {errors.push(new Error(yylloc.first_line, yylloc.first_column, TypeError.LEXICAL, `Caracter no reconocido. «${yytext}»`))}
+.               {errors.push(new Error(yylloc.first_line, yylloc.first_column + 1, TypeError.LEXICAL, `Caracter no reconocido. «${yytext}»`))}
 <<EOF>>         {return 'EOF'}
 
 /lex
@@ -137,12 +137,16 @@ los números como si fuera de un solo dígito, para evitar ambigüedades y demá
     const { Continue } = require('../Classes/Instructions/Continue')
     const { While } = require('../Classes/Instructions/While')
     const { For } = require('../Classes/Instructions/For')
+    const { When } = require('../Classes/Instructions/When')
+    const { Case } = require('../Classes/Instructions/Case')
     // Expresiones
     const { Primitive } = require('../Classes/Expressions/Primitive')
     const { AccessID } = require('../Classes/Expressions/AccessID')
     const { Arithmetic } = require('../Classes/Expressions/Arithmetic')
     const { Relational } = require('../Classes/Expressions/Relational')
     const { Logic } = require('../Classes/Expressions/Logic')
+    const { Cast } = require('../Classes/Expressions/Cast')
+    const { TypeOf } = require('../Classes/Expressions/TypeOf')
 %}
 
 // precedencia de operadores
@@ -181,7 +185,7 @@ INSTRUCTION :
     TRUNCATETAB TK_semicolon   |
     DELETETAB TK_semicolon     |
     IFSTRUCT TK_semicolon      {$$ = $1} |
-    CASESTRUCT_S TK_semicolon  |
+    CASESTRUCT_S TK_semicolon  {$$ = $1} |
     WHILESTRUCT TK_semicolon   |
     FORSTRUCT TK_semicolon     |
     FUNCDEC TK_semicolon       |
@@ -295,15 +299,14 @@ IFSTRUCT :
 
 // Estructura CASE simple
 CASESTRUCT_S :
-    RW_case TK_id ENVCASE_S RW_end RW_as TK_id |
-    RW_case ENVCASE_S RW_end RW_as TK_id       |
-    RW_case TK_id ENVCASE_S RW_end             |
-    RW_case ENVCASE_S RW_end ;
+    RW_case TK_id ENVCASE_S RW_end RW_as TK_id {$$ = new Case(@1.first_line, @1.first_column, $2, $3, undefined, $5)} |
+    RW_case TK_id ENVCASE_S RW_end             {/*$$ = new Case(@1.first_line, @1.first_column, $2, $3, undefined)*/} |
+    RW_case ENVCASE_S RW_end                   {/*$$ = new Case(@1.first_line, @1.first_column, undefined, $2, undefined)*/} ;
 
 ENVCASE_S :
-    RW_when EXP RW_then EXP ENVCASE_S |
-    RW_when EXP RW_then EXP           |
-    RW_else EXP                       ;
+    RW_when EXP RW_then INSTRUCTIONS ENVCASE_S {$$ = new When(@1.first_line, @1.first_column, $2, new Block(@1.first_line, @1.first_column, $4))} |
+    RW_when EXP RW_then INSTRUCTIONS           {$$ = new When(@1.first_line, @1.first_column, $2, new Block(@1.first_line, @1.first_column, $4))} |
+    RW_else INSTRUCTIONS                       {$$ = new Block(@1.first_line, @1.first_column, $2)} ;
 
 // PRINT
 PRINT :
@@ -335,21 +338,12 @@ CALLFUNC :
     SELECT TK_id TK_lpar LIST_IDS TK_rpar |
     RW_set TK_id TK_equal TK_id TK_lpar LIST_IDS TK_rpar ;
 
-// Funciones Nativas
-NATIVEFUC :
-    RW_lower TK_lpar EXP TK_rpar                 |
-    RW_upper TK_lpar EXP TK_rpar                 |
-    RW_round TK_lpar EXP TK_comma EXP TK_rpar    |
-    RW_len TK_lpar EXP TK_rpar                      |
-    RW_truncate TK_lpar EXP TK_comma EXP TK_rpar |
-    RW_typeof TK_lpar EXP TK_rpar                ;
-
 EXP : 
     ARITHMETICS {$$ = $1} |
     RELATIONALS {$$ = $1} |
     LOGICS      {$$ = $1} |
-    CAST        |
-    NATIVEFUC   |
+    CAST        {$$ = $1} |
+    NATIVEFUC   {$$ = $1} |
     TK_id       {$$ = new AccessID(@1.first_line, @1.first_column, $1)} |
     TK_varchar  {$$ = new Primitive(@1.first_line, @1.first_column, $1, Type.VARCHAR)} |
     TK_int      {$$ = new Primitive(@1.first_line, @1.first_column, $1, Type.INT)    } |
@@ -381,7 +375,16 @@ LOGICS :
     RW_not EXP     {$$ = new Logic(@1.first_line, @1.first_column, undefined, $1, $2)} ;
 
 CAST :
-    RW_cast TK_lpar EXP RW_as TYPE TK_rpar ;
+    RW_cast TK_lpar EXP RW_as TYPE TK_rpar {$$ = new Cast(@1.first_line, @1.first_column, $3, $5)};
+
+// Funciones Nativas
+NATIVEFUC :
+    RW_lower TK_lpar EXP TK_rpar                 {} |
+    RW_upper TK_lpar EXP TK_rpar                 {} |
+    RW_round TK_lpar EXP TK_comma EXP TK_rpar    {} |
+    RW_len TK_lpar EXP TK_rpar                   {} |
+    RW_truncate TK_lpar EXP TK_comma EXP TK_rpar {} |
+    RW_typeof TK_lpar EXP TK_rpar                {$$ = new TypeOf(@1.first_line, @1.first_column, $3)} ;
 
 TYPE :
     RW_int     {$$ = Type.INT    } |

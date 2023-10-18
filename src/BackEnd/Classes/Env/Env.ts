@@ -70,8 +70,8 @@ export class Env {
     }
 
     public setError(errorD: string, line: number, column: number) {
-        if(!this.match(errorD, line, column)) {
-            errors.push(new Error(line, column, TypeError.SEMANTIC, errorD))
+        if(!this.match(errorD, line, column + 1)) {
+            errors.push(new Error(line, column + 1, TypeError.SEMANTIC, errorD))
         }
     }
 

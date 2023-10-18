@@ -1,4 +1,4 @@
-DECLARE @nombre VARCHAR DEFAULT 'Brandon';
+DECLARE @nombre VARCHAR DEFAULT "Brandon";
 DECLARE @edad INT, @fecha DATE;
 
 SET @edad = 21;
@@ -9,15 +9,13 @@ declare @numero int default @edad + 9;
 
 print(not (@numero > @edad + 8));
 
-PRINT '';
-
-PRINT '=== ESTRUCTURA IF ===';
+PRINT "=== ESTRUCTURA IF ===";
 DECLARE @nota INT;
 SET @nota = 70;
 
 IF @nota >= 61
 BEGIN
-    PRINT 'Ganó el curso';
+    PRINT "Ganó el curso";
 END;
 
 -- IF @nota >= 61 THEN
@@ -37,9 +35,48 @@ BEGIN
 END;*/
 
 -- ========== ESTRUCTURA FOR ==========
-print'========== ESTRUCTURA FOR ==========';
+-- print'========== ESTRUCTURA FOR ==========';
 -- DECLARE @i INT;
-FOR @i IN 3..7
+-- FOR @i IN 1..10
+-- BEGIN
+--     IF @i = 5 THEN
+--         PRINT 'LO VA SALTAR';
+--         CONTINUE;
+--     END IF;
+
+--     IF @i = 8 THEN
+--         PRINT 'TERMINA EL BUCLE';
+--         BREAK;
+--     END IF;
+--     PRINT @i;
+-- END LOOP;
+
+-- print'========== ESTRUCTURA SWITCH ==========';
+-- SET @nota = 70;
+
+-- CASE @nota
+--     WHEN 70 THEN
+--         PRINT 'Excelente';
+--     WHEN 61 THEN
+--         PRINT 'Aprobado';
+--     ELSE
+--         PRINT 'No aprobado';
+-- END AS resultado;
+
+-- PRINT "========== VALUE OF ==========";
+-- DECLARE @valueINT INT = 75;
+-- DECLARE @valueDOUBLE DOUBLE = 75.5;
+-- DECLARE @valueVARCHAR VARCHAR = "Hola Mundo :)";
+-- DECLARE @valueDATE DATE = '2002-10-07';
+
+-- PRINT TYPEOF(@valueINT);
+-- PRINT TYPEOF(@valueDOUBLE + 75);
+-- PRINT TYPEOF(@valueVARCHAR);
+-- PRINT TYPEOF(@valueDATE);
+
+print "\n========== ESTRUCTURA FOR ==========";
+DECLARE @i INT;
+FOR @i IN 1..10
 BEGIN
-    PRINT @i;
+    PRINT "1 x " + CAST(@i AS VARCHAR) + " = " + CAST(@i * 10 AS VARCHAR);
 END LOOP;
