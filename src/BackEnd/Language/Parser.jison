@@ -149,6 +149,9 @@ los números como si fuera de un solo dígito, para evitar ambigüedades y demá
     const { TypeOf } = require('../Classes/Expressions/TypeOf')
     const { Lower } = require('../Classes/Expressions/Lower')
     const { Upper } = require('../Classes/Expressions/Upper')
+    const { Round } = require('../Classes/Expressions/Round')
+    const { Len } = require('../Classes/Expressions/Len')
+    const { Truncate } = require('../Classes/Expressions/Truncate')
 %}
 
 // precedencia de operadores
@@ -381,12 +384,12 @@ CAST :
 
 // Funciones Nativas
 NATIVEFUC :
-    RW_lower TK_lpar EXP TK_rpar                 {$$ = new Lower(@1.first_line, @1.first_column, $3)} |
-    RW_upper TK_lpar EXP TK_rpar                 {$$ = new Upper(@1.first_line, @1.first_column, $3)} |
-    RW_round TK_lpar EXP TK_comma EXP TK_rpar    {} |
-    RW_len TK_lpar EXP TK_rpar                   {} |
-    RW_truncate TK_lpar EXP TK_comma EXP TK_rpar {} |
-    RW_typeof TK_lpar EXP TK_rpar                {$$ = new TypeOf(@1.first_line, @1.first_column, $3)} ;
+    RW_lower TK_lpar EXP TK_rpar                 {$$ = new Lower(@1.first_line, @1.first_column, $3)}        |
+    RW_upper TK_lpar EXP TK_rpar                 {$$ = new Upper(@1.first_line, @1.first_column, $3)}        |
+    RW_round TK_lpar EXP TK_comma EXP TK_rpar    {$$ = new Round(@1.first_line, @1.first_column, $3, $5)}    |
+    RW_len TK_lpar EXP TK_rpar                   {$$ = new Len(@1.first_line, @1.first_column, $3)}          |
+    RW_truncate TK_lpar EXP TK_comma EXP TK_rpar {$$ = new Truncate(@1.first_line, @1.first_column, $3, $5)} |
+    RW_typeof TK_lpar EXP TK_rpar                {$$ = new TypeOf(@1.first_line, @1.first_column, $3)}       ;
 
 TYPE :
     RW_int     {$$ = Type.INT    } |

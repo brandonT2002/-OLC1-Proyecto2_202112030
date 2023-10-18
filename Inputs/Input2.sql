@@ -85,3 +85,6 @@ END;*/
 print "\n========== UPPER CASE / LOWER CASE ==========";
 PRINT LOWER("HOLA MUNDO");
 PRINT UPPER("hola mundo");
+PRINT LEN("Hola mundo");
+PRINT ROUND(3.141592, 4);
+PRINT TRUNCATE(3.141592, 4);
