@@ -74,9 +74,14 @@ END;*/
 -- PRINT TYPEOF(@valueVARCHAR);
 -- PRINT TYPEOF(@valueDATE);
 
-print "\n========== ESTRUCTURA FOR ==========";
-DECLARE @i INT;
-FOR @i IN 1..10
-BEGIN
-    PRINT "1 x " + CAST(@i AS VARCHAR) + " = " + CAST(@i * 10 AS VARCHAR);
-END LOOP;
+-- print "\n========== ESTRUCTURA FOR ==========";
+-- DECLARE @i INT;
+-- FOR @i IN 1..10
+-- BEGIN
+--     PRINT "1 x " + CAST(@i AS VARCHAR) + " = " + CAST(@i * 10 AS VARCHAR);
+-- END LOOP;
+
+
+print "\n========== UPPER CASE / LOWER CASE ==========";
+PRINT LOWER("HOLA MUNDO");
+PRINT UPPER("hola mundo");

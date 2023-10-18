@@ -147,6 +147,8 @@ los números como si fuera de un solo dígito, para evitar ambigüedades y demá
     const { Logic } = require('../Classes/Expressions/Logic')
     const { Cast } = require('../Classes/Expressions/Cast')
     const { TypeOf } = require('../Classes/Expressions/TypeOf')
+    const { Lower } = require('../Classes/Expressions/Lower')
+    const { Upper } = require('../Classes/Expressions/Upper')
 %}
 
 // precedencia de operadores
@@ -379,8 +381,8 @@ CAST :
 
 // Funciones Nativas
 NATIVEFUC :
-    RW_lower TK_lpar EXP TK_rpar                 {} |
-    RW_upper TK_lpar EXP TK_rpar                 {} |
+    RW_lower TK_lpar EXP TK_rpar                 {$$ = new Lower(@1.first_line, @1.first_column, $3)} |
+    RW_upper TK_lpar EXP TK_rpar                 {$$ = new Upper(@1.first_line, @1.first_column, $3)} |
     RW_round TK_lpar EXP TK_comma EXP TK_rpar    {} |
     RW_len TK_lpar EXP TK_rpar                   {} |
     RW_truncate TK_lpar EXP TK_comma EXP TK_rpar {} |
