@@ -11,7 +11,8 @@
 
 UNUSED      [\s\r\t]+
 CONTENT     ([^\n\"\\]|\\.)
-ID          \@?(\_)*[a-zA-Z][a-zA-Z0-9\_]*
+ID          \@(\_)*[a-zA-Z][a-zA-Z0-9\_]*
+FIELD       (\_)*[a-zA-Z][a-zA-Z0-9\_]*
 STRING      \"({CONTENT}*)\"
 INTEGER     [0-9]+\b
 DOUBLE       [0-9]+\.[0-9]+\b
@@ -89,6 +90,7 @@ COMMENTM    [/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]
 'NOT'           {return 'RW_not'}
 //EXPRESIONES
 {ID}            {return 'TK_id'}
+{FIELD}         {return 'TK_field'}
 {STRING}        {yytext = yytext.substr(1,yyleng - 2); return 'TK_varchar'}
 {DOUBLE}        {return 'TK_double'}
 {INTEGER}       {return 'TK_int'}
@@ -139,6 +141,10 @@ los números como si fuera de un solo dígito, para evitar ambigüedades y demá
     const { For } = require('../Classes/Instructions/For')
     const { When } = require('../Classes/Instructions/When')
     const { Case } = require('../Classes/Instructions/Case')
+    const { CreateTable } = require('../Classes/Instructions/CreateTable')
+    const { DropTable } = require('../Classes/Instructions/DropTable')
+    const { TruncateTable } = require('../Classes/Instructions/TruncateTable')
+    const { InsertTable } = require('../Classes/Instructions/InsertTable')
     // Expresiones
     const { Primitive } = require('../Classes/Expressions/Primitive')
     const { AccessID } = require('../Classes/Expressions/AccessID')
@@ -179,29 +185,29 @@ INSTRUCTIONS :
     INSTRUCTION              {$$ = [$1]  } ;
 
 INSTRUCTION :
+    CREATETABLE TK_semicolon   {$$ = $1} |
+    ALTERTAB TK_semicolon      |
+    DROPTAB TK_semicolon       {$$ = $1} |
+    INSERTREG TK_semicolon     {$$ = $1} |
+    UPDATETAB TK_semicolon     |
+    TRUNCATETAB TK_semicolon   {$$ = $1} |
+    DELETETAB TK_semicolon     |
+    SELECT TK_semicolon        |
     DECLAREID TK_semicolon     {$$ = $1} |
     ASIGNID TK_semicolon       {$$ = $1} |
-    SELECT TK_semicolon        |
-    CREATETABLE TK_semicolon   |
-    ALTERTAB TK_semicolon      |
-    DROPTAB TK_semicolon       |
-    INSERTREG TK_semicolon     |
-    UPDATETAB TK_semicolon     |
-    TRUNCATETAB TK_semicolon   |
-    DELETETAB TK_semicolon     |
     IFSTRUCT TK_semicolon      {$$ = $1} |
     CASESTRUCT_S TK_semicolon  {$$ = $1} |
-    WHILESTRUCT TK_semicolon   |
-    FORSTRUCT TK_semicolon     |
+    WHILESTRUCT TK_semicolon   {$$ = $1} |
+    FORSTRUCT TK_semicolon     {$$ = $1} |
     FUNCDEC TK_semicolon       |
     METODDEC TK_semicolon      |
-    ENCAP TK_semicolon         |
+    ENCAP TK_semicolon         {$$ = $1} |
     CALLFUNC TK_semicolon      |
     PRINT TK_semicolon         {$$ = $1} |
-    RW_break TK_semicolon      {$$ = new Break(@1.first_line, @1.first_column)} |
+    RW_break TK_semicolon      {$$ = new Break(@1.first_line, @1.first_column)   } |
     RW_continue TK_semicolon   {$$ = new Continue(@1.first_line, @1.first_column)} |
     RW_return EXP TK_semicolon |
-    error {errors.push(new Error(this._$.first_line, this._$.first_column + 1, TypeError.SYNTAX, `No se esperaba «${yytext}».`))} ;
+    error {errors.push(new Error(this._$.first_line, this._$.first_column + 1, TypeError.SYNTAX, `No se esperaba «${yytext}»`))} ;
 
 // Declaración de variables
 DECLAREID :
@@ -224,7 +230,7 @@ ASIGNID :
 SELECT :
     RW_select FIELDS RW_from TK_id RW_where EXP |
     RW_select FIELDS RW_from TK_id              |
-    RW_select LIST_IDS                            ;
+    RW_select LIST_IDS                          ;
 
 FIELDS :
     LIST_IDS |
@@ -232,38 +238,54 @@ FIELDS :
 
 // Creación de tablas
 CREATETABLE :
-    RW_create RW_table TK_id TK_lpar ATTRIBUTES TK_rpar ;
+    RW_create RW_table TK_field TK_lpar ATTRIBUTES TK_rpar {$$ = new CreateTable(@1.first_line, @1.first_column, $3, $5[0], $5[1])} ;
 
 ATTRIBUTES :
-    ATTRIBUTES TK_comma ATTRIBUTE |
-    ATTRIBUTE ;
+    ATTRIBUTES TK_comma ATTRIBUTE {$$[0].push($3[0]); $$[1].push($3[1])} |
+    ATTRIBUTE                     {$$ = [[$1[0]], [$1[1]]]                 } ;
 
 ATTRIBUTE :
-    TK_id TYPE ;
+    TK_field TYPE {$$ = [$1, $2]} ;
 
 // Alter table
 ALTERTAB :
     RW_alter RW_table TK_id ACTION ;
 
 ACTION :
-    RW_add TK_id TYPE       |
-    RW_drop RW_column TK_id |
-    RW_rename RW_to TK_id   |
-    RW_rename RW_column TK_id RW_to TK_id ;
+    RW_add TK_field TYPE       |
+    RW_drop RW_column TK_field |
+    RW_rename RW_to TK_field   |
+    RW_rename RW_column TK_field RW_to TK_field ;
 
 // Elimnar tabla
 DROPTAB :
-    RW_drop RW_table TK_id ;
+    RW_drop RW_table TK_field {$$ = new DropTable(@1.first_line, @1.first_column, $3)} ;
 
 // Insertar registros
 INSERTREG :
-    RW_insert RW_into TK_id TK_lpar LIST_IDS TK_rpar RW_values TK_lpar LIST_EXPS TK_rpar ;
+    RW_insert RW_into TK_field TK_lpar LIST_ATTRIBS TK_rpar RW_values TK_lpar LIST_EXPS TK_rpar {$$ = new InsertTable(@1.first_line, @1.first_column, $3, $5, $9)} ;
+
+LIST_ATTRIBS:
+    LIST_ATTRIBS TK_comma TK_field {$$.push($3)} |
+    TK_field                       {$$ = [$1]  } ;
+
+LIST_EXPS :
+    LIST_EXPS TK_comma EXP {$$.push($3)} |
+    EXP                    {$$ = [$1]  } ;
 
 // Obtener valores de tabla
 SELECTREG :
-    RW_select LIST_IDS RW_from TK_id RW_where EXP |
-    RW_select LIST_IDS RW_from TK_id              |
-    RW_select TK_mult RW_from TK_id ;
+    RW_select LIST_IDS RW_from TK_field RW_where EXP |
+    RW_select LIST_IDS RW_from TK_field              |
+    RW_select TK_mult RW_from TK_field ;
+
+LIST_IDS :
+    LIST_IDS TK_comma IDS {$$.push($3)} |
+    IDS                   {$$ = [$1]  } ;
+
+IDS :
+    EXP RW_as TK_field {$$ = [$1, $3]} |
+    EXP                {$$ = [$1, $1]} ;
 
 // Actualizar tabla
 UPDATETAB :
@@ -278,23 +300,11 @@ VALUETAB :
 
 // Truncate
 TRUNCATETAB :
-    RW_truncate RW_table TK_id ;
+    RW_truncate RW_table TK_id {$$ = new TruncateTable(@1.first_line, @1.first_column, $3)} ;
 
 // Eliminar Registros
 DELETETAB :
-    RW_delete RW_from TK_id RW_where TK_id TK_equal EXP ;
-
-LIST_IDS :
-    LIST_IDS TK_comma IDS |
-    IDS                   ;
-
-IDS :
-    EXP RW_as TK_id |
-    EXP             ;
-
-LIST_EXPS :
-    LIST_EXPS TK_comma EXP|
-    EXP ;
+    RW_delete RW_from TK_id RW_where EXP ;
 
 // Estructura IF
 IFSTRUCT :
@@ -304,9 +314,9 @@ IFSTRUCT :
 
 // Estructura CASE simple
 CASESTRUCT_S :
-    RW_case TK_id ENVCASE_S RW_end RW_as TK_id {$$ = new Case(@1.first_line, @1.first_column, $2, $3, undefined, $5)} |
-    RW_case TK_id ENVCASE_S RW_end             {/*$$ = new Case(@1.first_line, @1.first_column, $2, $3, undefined)*/} |
-    RW_case ENVCASE_S RW_end                   {/*$$ = new Case(@1.first_line, @1.first_column, undefined, $2, undefined)*/} ;
+    RW_case TK_id ENVCASE_S RW_end RW_as TK_field {$$ = new Case(@1.first_line, @1.first_column, $2, $3, undefined, $5)} |
+    RW_case TK_id ENVCASE_S RW_end                {/*$$ = new Case(@1.first_line, @1.first_column, $2, $3, undefined)*/} |
+    RW_case ENVCASE_S RW_end                      {/*$$ = new Case(@1.first_line, @1.first_column, undefined, $2, undefined)*/} ;
 
 ENVCASE_S :
     RW_when EXP RW_then INSTRUCTIONS ENVCASE_S {$$ = new When(@1.first_line, @1.first_column, $2, new Block(@1.first_line, @1.first_column, $4))} |
@@ -350,6 +360,7 @@ EXP :
     CAST        {$$ = $1} |
     NATIVEFUC   {$$ = $1} |
     TK_id       {$$ = new AccessID(@1.first_line, @1.first_column, $1)} |
+    TK_field    {} |
     TK_varchar  {$$ = new Primitive(@1.first_line, @1.first_column, $1, Type.VARCHAR)} |
     TK_int      {$$ = new Primitive(@1.first_line, @1.first_column, $1, Type.INT)    } |
     TK_double   {$$ = new Primitive(@1.first_line, @1.first_column, $1, Type.DOUBLE) } |
