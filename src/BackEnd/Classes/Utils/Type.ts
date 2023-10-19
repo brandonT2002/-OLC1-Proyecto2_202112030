@@ -4,6 +4,7 @@ export enum Type {
     DATE,
     VARCHAR,
     BOOLEAN,
-    NULL
+    NULL,
+    TABLE
 }
 export type ReturnType = {value: any, type: Type}

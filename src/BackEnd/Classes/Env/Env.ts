@@ -6,11 +6,13 @@ import { printConsole, errors } from '../Utils/Outs'
 import { symTable } from './SymbolTable';
 import { Symbol } from './Symbol';
 import { SymTab } from "./SymTab";
+import { Field, Table } from '../Objects/Table';
+import { Expression } from '../Abstracts/Expression';
 
 export class Env {
     public ids: Map<string, Symbol> = new Map<string, Symbol>()
-    private functions: Map<string, Function> = new Map<string, Function>()
-    // private tables: Map<string, any> = new Map<string, any>()
+    public functions: Map<string, Function> = new Map<string, Function>()
+    public tables: Map<string, Table>  = new Map<string, Table>()
     constructor(private previous: Env | null,public name: string) {}
 
     public saveID(id: string, value: any, type: Type, line: number, column: number) {
@@ -63,6 +65,74 @@ export class Env {
         else {
             this.setError('Redefinición de función existente', func.line, func.column)
         }
+    }
+
+    public saveTable(id: string, table: Table, line: number, column: number) {
+        let env: Env = this
+        if(!env.tables.has(id.toLowerCase())) {
+            env.tables.set(id.toLowerCase(), table)
+            symTable.push(new SymTab(line, column + 1, false, false, id.toLowerCase(), env.name, Type.TABLE))
+            this.setPrint(`Tabla ${id.toLowerCase()} creada. ${line}:${column + 1}`)
+        }
+        else {
+            this.setError('Redefinición de tabla existente', line, column)
+        }
+    }
+
+    public deletTable(id: string, line: number, column: number): boolean {
+        let env: Env | null = this
+        while(env) {
+            if(env.tables.has(id.toLowerCase())) {
+                env.tables.delete(id.toLowerCase())
+                this.setPrint(`Tabla ${id.toLowerCase()} eliminada. ${line}:${column + 1}`)
+                symTable.pop(id.toLowerCase())
+                return true
+            }
+            env = env.previous
+        }
+        this.setError('Eliminación de tabla inexistente', line, column)
+        return false
+    }
+
+    public truncateTable(id: string, line: number, column: number): boolean {
+        let env: Env | null = this
+        while(env) {
+            if(env.tables.has(id.toLowerCase())) {
+                env.tables.get(id.toLowerCase())?.truncate()
+                this.setPrint(`Registros eliminados de Tabla ${id.toLowerCase()}. ${line}:${column + 1}`)
+                return true
+            }
+            env = env.previous
+        }
+        this.setError('Truncar tabla inexistente', line, column)
+        return false
+    }
+
+    public insertTable(id: string, fields: string[], values: Expression[], line: number, column: number): boolean {
+        let env: Env | null = this
+        while(env) {
+            if(env.tables.has(id.toLowerCase())) {
+                if (env.tables.get(id.toLowerCase())?.validateFields(fields)) {
+                    var newRow: Map<string, any[]> | undefined = env.tables.get(id.toLowerCase())?.getFieldsRow()
+                    var result: ReturnType
+                    for (let i = 0; i < fields.length; i ++) {
+                        result = values[i].execute(this)
+                        newRow?.set(fields[i].toLowerCase(), [result.type, result.value])
+                    }
+                    if (env.tables.get(id.toLowerCase())?.insert(env, newRow, line, column)) {
+                        this.setPrint(`Registro insertado exitosamente en Tabla ${id.toLowerCase()}. ${line}:${column + 1}`)
+                        console.log(env.tables.get(id.toLowerCase())?.fields)
+                        return true
+                    }
+                    return false
+                }
+                this.setError(`Inserta dato en columna inexistente en Tabla ${id.toLowerCase()}`, line, column)
+                return false
+            }
+            env = env.previous
+        }
+        this.setError(`Insertar en tabla inexistente`, line, column)
+        return false
     }
 
     public setPrint(print: string) {

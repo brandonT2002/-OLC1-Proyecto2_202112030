@@ -12,6 +12,14 @@ class SymbolTable {
         }
     }
 
+    public pop(id: string) {
+        for (var i = 0; i < this.symbols.length; i ++) {
+            if (this.symbols[i].id == id) {
+                this.symbols.splice(i, 1)
+            }
+        }
+    }
+
     public validateSymbol(sym: SymTab): boolean {
         for(const i of this.symbols) {
             if(i.hash() == sym.hash()) {

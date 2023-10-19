@@ -4,7 +4,7 @@ export class SymTab {
     public num: number
     constructor(
         private line: number, private column: number, private isVariable: boolean,
-        private isPrimitive: boolean, private id: string, private nameEnv: string,
+        private isPrimitive: boolean, public id: string, private nameEnv: string,
         private type: Type) {
         this.num = 0
     }
@@ -44,6 +44,8 @@ export class SymTab {
                 return "BOOLEAN"
             case Type.DATE:
                 return "DATE"
+            case Type.TABLE:
+                return "TABLE"
             default:
                 return "NULL"
         }
