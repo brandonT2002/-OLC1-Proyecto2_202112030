@@ -67,6 +67,17 @@ export class Env {
         }
     }
 
+    public getFunction(id: string): Function | null {
+        let env: Env | null = this
+        while(env) {
+            if(env.functions.has(id.toLowerCase())) {
+                return env.functions.get(id.toLowerCase())!
+            }
+            env = env.previous
+        }
+        return null
+    }
+
     public saveTable(id: string, table: Table, line: number, column: number) {
         let env: Env = this
         if(!env.tables.has(id.toLowerCase())) {
@@ -121,7 +132,6 @@ export class Env {
                     }
                     if (env.tables.get(id.toLowerCase())?.insert(env, newRow, line, column)) {
                         this.setPrint(`Registro insertado exitosamente en Tabla ${id.toLowerCase()}. ${line}:${column + 1}`)
-                        console.log(env.tables.get(id.toLowerCase())?.fields)
                         return true
                     }
                     return false

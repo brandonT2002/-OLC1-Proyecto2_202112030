@@ -145,6 +145,7 @@ los números como si fuera de un solo dígito, para evitar ambigüedades y demá
     const { DropTable } = require('../Classes/Instructions/DropTable')
     const { TruncateTable } = require('../Classes/Instructions/TruncateTable')
     const { InsertTable } = require('../Classes/Instructions/InsertTable')
+    const { Function } = require('../Classes/Instructions/Function')
     // Expresiones
     const { Primitive } = require('../Classes/Expressions/Primitive')
     const { AccessID } = require('../Classes/Expressions/AccessID')
@@ -158,6 +159,9 @@ los números como si fuera de un solo dígito, para evitar ambigüedades y demá
     const { Round } = require('../Classes/Expressions/Round')
     const { Len } = require('../Classes/Expressions/Len')
     const { Truncate } = require('../Classes/Expressions/Truncate')
+    const { Parameter } = require('../Classes/Expressions/Parameter')
+    const { CallFunction } = require('../Classes/Expressions/CallFunction')
+    const { Return } = require('../Classes/Expressions/Return')
 %}
 
 // precedencia de operadores
@@ -206,7 +210,7 @@ INSTRUCTION :
     PRINT TK_semicolon         {$$ = $1} |
     RW_break TK_semicolon      {$$ = new Break(@1.first_line, @1.first_column)   } |
     RW_continue TK_semicolon   {$$ = new Continue(@1.first_line, @1.first_column)} |
-    RW_return EXP TK_semicolon |
+    RW_return EXP TK_semicolon {$$ = new Return(@1.first_line, @1.first_column, $2)}|
     error {errors.push(new Error(this._$.first_line, this._$.first_column + 1, TypeError.SYNTAX, `No se esperaba «${yytext}»`))} ;
 
 // Declaración de variables
@@ -335,14 +339,18 @@ WHILESTRUCT :
 FORSTRUCT :
     RW_for TK_id RW_in EXP TK_dot EXP ENCAP RW_loop {$$ = new For(@1.first_line, @1.first_column, $2, $4, $6, $7)};
 
-// Funciones
+// Funciones y Métodos
 FUNCDEC :
-    RW_create RW_function TK_id TK_lpar DECLIDS TK_rpar RW_returns TYPE ENCAP ;
+    RW_create RW_function TK_field TK_lpar PARAMS TK_rpar RW_returns TYPE ENCAP {$$ = new Function(@1.first_line, @1.first_column, $3, $5, $9, $8)} |
+    RW_create RW_procedure TK_id PARAMS RW_as ENCAP |
+    RW_create RW_procedure TK_id PARAMS ENCAP ;
 
-// Metodos
-METODDEC :
-    RW_create RW_procedure TK_id DECLIDS RW_as ENCAP |
-    RW_create RW_procedure TK_id DECLIDS ENCAP ;
+PARAMS :
+    PARAMS TK_comma PARAM {$$.push($3)} |
+    PARAM                 {$$ = [$1]  } ;
+
+PARAM :
+    TK_id TYPE {$$ = new Parameter(@1.first_line, @1.first_column, $1, $2)} ;
 
 // Encapsulamiento de Sentencias
 ENCAP :
@@ -350,8 +358,12 @@ ENCAP :
 
 // Llamada a funciones y métodos
 CALLFUNC :
-    SELECT TK_id TK_lpar LIST_IDS TK_rpar |
-    RW_set TK_id TK_equal TK_id TK_lpar LIST_IDS TK_rpar ;
+    TK_field TK_lpar ARGS TK_rpar {$$ = new CallFunction(@1.first_line, @1.first_column, $1, $3)} |
+    TK_field TK_lpar TK_rpar      {$$ = new CallFunction(@1.first_line, @1.first_column, $1, [])} ;
+
+ARGS :
+    ARGS TK_comma EXP {$$.push($3)} |
+    EXP               {$$ = [$1]  } ;
 
 EXP : 
     ARITHMETICS {$$ = $1} |
@@ -359,6 +371,7 @@ EXP :
     LOGICS      {$$ = $1} |
     CAST        {$$ = $1} |
     NATIVEFUC   {$$ = $1} |
+    CALLFUNC    {$$ = $1} |
     TK_id       {$$ = new AccessID(@1.first_line, @1.first_column, $1)} |
     TK_field    {} |
     TK_varchar  {$$ = new Primitive(@1.first_line, @1.first_column, $1, Type.VARCHAR)} |
