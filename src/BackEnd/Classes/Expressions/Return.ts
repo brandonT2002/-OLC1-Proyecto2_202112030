@@ -10,9 +10,9 @@ export class Return extends Expression {
     public execute(env: Env): ReturnType {
         if(this.exp) {
             let value: ReturnType = this.exp.execute(env)
-            return {value: value.value,type: value.type}
+            return {value: value.value, type: value.type}
         }
-        return {value: this.typeExp,type: Type.NULL}
+        return {value: this.typeExp, type: Type.NULL}
     }
     public ast(ast: AST): ReturnAST {
         const id = ast.getNewID()

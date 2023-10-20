@@ -3,6 +3,7 @@ import { Instruction } from '../Abstracts/Instruction';
 import { Env } from '../Env/Env';
 import { TypeInst } from '../Utils/TypeInst';
 import { ReturnType, Type } from '../Utils/Type';
+import { AST, ReturnAST } from '../Env/AST';
 export class InitID extends Instruction {
     constructor(line: number, column: number, private id: string | string[], private type: Type | Type[], private value: Expression | null) {
         super(line,column,TypeInst.INIT_ID)
@@ -21,5 +22,16 @@ export class InitID extends Instruction {
                 env.saveID(this.id[i], 'NULL', this.type[i], this.line, this.column)
             }
         }
+    }
+    public ast(ast: AST): ReturnAST {
+        const id = ast.getNewID()
+        var dot = `node_${id}[label="DECLARACION"];`
+        // let cond: ReturnAST = this.condition.ast(ast)
+        // if(typeof this.id === 'string' && typeof this.type === 'number' && this.value) {
+
+        // }
+        // dot += `\nnode_${id}_cnd -> node_${cond.id};`
+        // dot += `\nnode_${id} -> node_${inst.id};`
+        return {dot: '', id: id}
     }
 }

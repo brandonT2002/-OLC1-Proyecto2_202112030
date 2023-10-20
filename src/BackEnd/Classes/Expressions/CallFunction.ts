@@ -5,6 +5,7 @@ import { SymTab } from "../Env/SymTab";
 import { symTable } from "../Env/SymbolTable";
 import { Function } from "../Instructions/Function";
 import { ReturnType, Type } from "../Utils/Type";
+import { Symbol } from '../Env/Symbol';
 import { TypeExp } from "../Utils/TypeExp";
 import { Parameter } from "./Parameter";
 
@@ -21,10 +22,10 @@ export class CallFunction extends Expression {
                 var param: Parameter
                 for(let i = 0; i < func.parameters.length; i ++) {
                     value = this.args[i].execute(env)
-                    param = func.parameters[i]
+                    param = func.parameters[i]  
                     if(value.type === param.type || param.type === Type.DOUBLE && value.type === Type.INT) {
                         if(!envFunc.ids.has(param.id.toLowerCase())) {
-                            envFunc.saveID(param.id.toLowerCase(), value.value, value.type, func.parameters[i].line, func.parameters[i].column)
+                            envFunc.ids.set(param.id.toLowerCase(), new Symbol(value.value, param.id.toLowerCase(), value.type))
                             symTable.push(new SymTab(param.line, param.column + 1, true, true, param.id.toLowerCase(), env.name, param.type))
                             continue
                         }

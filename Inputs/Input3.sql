@@ -33,4 +33,7 @@ END;
 
 print "llega aquí";
 
-PRINT calcularAreaCirculo(3.1416, 2.0);
+PRINT calcularAreaCirculo(3.1416, 2);
+
+DECLARE @fecha DATE = "07/10/2002";
+print @fecha;

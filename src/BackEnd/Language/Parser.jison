@@ -207,9 +207,10 @@ INSTRUCTION :
     CALLFUNC TK_semicolon      {$$ = $1} |
     ENCAP TK_semicolon         {$$ = $1} |
     PRINT TK_semicolon         {$$ = $1} |
-    RW_break TK_semicolon      {$$ = new Break(@1.first_line, @1.first_column)     } |
-    RW_continue TK_semicolon   {$$ = new Continue(@1.first_line, @1.first_column)  } |
-    RW_return EXP TK_semicolon {$$ = new Return(@1.first_line, @1.first_column, $2)} |
+    RW_break TK_semicolon      {$$ = new Break(@1.first_line, @1.first_column)            } |
+    RW_continue TK_semicolon   {$$ = new Continue(@1.first_line, @1.first_column)         } |
+    RW_return EXP TK_semicolon {$$ = new Return(@1.first_line, @1.first_column, $2)       } |
+    RW_return TK_semicolon     {$$ = new Return(@1.first_line, @1.first_column, undefined)} |
     error {errors.push(new Error(this._$.first_line, this._$.first_column + 1, TypeError.SYNTAX, `No se esperaba «${yytext}»`))} ;
 
 // Declaración de variables
@@ -341,8 +342,11 @@ FORSTRUCT :
 // Funciones y Métodos
 FUNCDEC :
     RW_create RW_function TK_field TK_lpar PARAMS TK_rpar RW_returns TYPE ENCAP {$$ = new Function(@1.first_line, @1.first_column, $3, $5, $9, $8)} |
-    RW_create RW_procedure TK_id PARAMS RW_as ENCAP |
-    RW_create RW_procedure TK_id PARAMS ENCAP ;
+    RW_create RW_function TK_field TK_lpar TK_rpar RW_returns TYPE ENCAP        {$$ = new Function(@1.first_line, @1.first_column, $3, [], $8, $7)} |
+    RW_create RW_procedure TK_field PARAMS RW_as ENCAP                          {$$ = new Function(@1.first_line, @1.first_column, $3, $4, $6, Type.NULL)} |
+    RW_create RW_procedure TK_field RW_as ENCAP                                 {$$ = new Function(@1.first_line, @1.first_column, $3, [], $5, Type.NULL)} |
+    RW_create RW_procedure TK_field PARAMS ENCAP                                {$$ = new Function(@1.first_line, @1.first_column, $3, $4, $5, Type.NULL)} |
+    RW_create RW_procedure TK_field ENCAP                                       {$$ = new Function(@1.first_line, @1.first_column, $3, [], $4, Type.NULL)} ;
 
 PARAMS :
     PARAMS TK_comma PARAM {$$.push($3)} |
