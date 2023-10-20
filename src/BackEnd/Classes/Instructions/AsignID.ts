@@ -14,7 +14,7 @@ export class AsignID extends Instruction {
     }
     public ast(ast: AST): ReturnAST {
         const id = ast.getNewID()
-        var dot = `node_${id}[label="ASIGNACION ID"];`
+        var dot = `node_${id}[label="SET"];`
         let value1: ReturnAST = this.value.ast(ast)
         dot += `\nnode_${id}_id[label="${this.id}"]`
         dot += `\nnode_${id} -> node_${id}_id`

@@ -21,7 +21,7 @@ export class Block extends Instruction {
     }
     public ast(ast: AST): ReturnAST {
         const id = ast.getNewID()
-        var dot = `node_${id}[label="BLOQUE INSTRUCCIONES"];`
+        var dot = `node_${id}[label="BEGIN-END"];`
         let value1: ReturnAST
         for (let i = 0; i < this.instructions.length; i ++) {
             value1 = this.instructions[i].ast(ast)

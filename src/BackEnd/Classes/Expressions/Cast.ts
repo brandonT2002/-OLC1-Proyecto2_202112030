@@ -12,41 +12,40 @@ export class Cast extends Expression {
         let value: ReturnType = this.value.execute(env);
         if (value.type === Type.INT)  {
             if (this.destinyType === Type.DOUBLE) {
-                return {value: value.value, type: Type.DOUBLE}
+                return {value: parseFloat(value.value), type: Type.DOUBLE}
             }
             if (this.destinyType === Type.VARCHAR) {
-                return {value: value.value, type: Type.VARCHAR}
+                return {value: String(value.value), type: Type.VARCHAR}
             }
             env.setError(`No hay casteo de "${this.getType(value.type)}" a "${this.getType(this.destinyType)}"`, this.value.line, this.value.column)
             return {value: 'NULL', type: Type.NULL}
         }
         if (value.type === Type.DOUBLE) {
             if (this.destinyType === Type.INT) {
-                value.value = Math.round(value.value)
-                return {value: value.value, type: Type.INT}
+                return {value: parseInt(value.value), type: Type.INT}
             }
             if (this.destinyType === Type.VARCHAR) { 
-                return {value: value.value, type: Type.VARCHAR}
+                return {value: String(value.value), type: Type.VARCHAR}
             }
             env.setError(`No hay casteo de "${this.getType(value.type)}" a "${this.getType(this.destinyType)}"`, this.value.line, this.value.column)
             return {value: 'NULL', type: Type.NULL}
         }
         if (value.type === Type.DATE) {
             if (this.destinyType === Type.VARCHAR) {
-                return {value: value.value, type: Type.VARCHAR}
+                return {value: String(value.value), type: Type.VARCHAR}
             }
             env.setError(`No hay casteo de "${this.getType(value.type)}" a "${this.getType(this.destinyType)}"`, this.value.line, this.value.column)
             return {value: 'NULL', type: Type.NULL}
         }
         if (value.type === Type.VARCHAR) {
             if (this.destinyType === Type.INT && /^\d+$/.test(value.value)) {
-                return {value: value.value, type: Type.INT}
+                return {value: parseInt(value.value), type: Type.INT}
             }
             if (this.destinyType === Type.DOUBLE && /^\d+(\.\d+)?$/.test(value.value)) {
-                return {value: value.value, type: Type.DOUBLE}
+                return {value: parseFloat(value.value), type: Type.DOUBLE}
             }
-            if (value.value.toLowerCase() === 'true' || value.value.toLowerCase() === 'false') {
-                return {value: value.value, type: Type.BOOLEAN}
+            if (this.destinyType === Type.BOOLEAN) {
+                return {value: value.value.toLowerCase() === 'true', type: Type.BOOLEAN}
             }
             env.setError(`No hay casteo de "${this.getType(value.type)}" a "${this.getType(this.destinyType)}"`, this.value.line, this.value.column)
             return {value: 'NULL', type: Type.NULL}
@@ -77,7 +76,7 @@ export class Cast extends Expression {
         var dot = `node_${id}[label="CAST"];`
         let value1: ReturnAST = this.value.ast(ast)
         dot += '\n' + value1.dot
-        dot += `node_${id}_type[label="${this.getType(this.destinyType)}"];`
+        dot += `\nnode_${id}_type[label="${this.getType(this.destinyType)}"];`
         dot += `\nnode_${id} -> node_${value1.id};`
         dot += `\nnode_${id} -> node_${id}_type;`
         return {dot: dot, id: id}

@@ -357,7 +357,8 @@ PARAM :
 
 // Encapsulamiento de Sentencias
 ENCAP :
-    RW_begin INSTRUCTIONS RW_end {$$ = new Block(@1.first_line, @1.first_column, $2)} ;
+    RW_begin INSTRUCTIONS RW_end {$$ = new Block(@1.first_line, @1.first_column, $2)} |
+    RW_begin RW_end              {$$ = new Block(@1.first_line, @1.first_column, [])} ;
 
 // Llamada a funciones y métodos
 CALLFUNC :

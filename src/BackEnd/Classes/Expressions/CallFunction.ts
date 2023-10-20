@@ -69,13 +69,15 @@ export class CallFunction extends Expression {
     }
     public ast(ast: AST): ReturnAST {
         const id = ast.getNewID()
-        var dot = `node_${id}[label="${this.id}"]`
+        var dot = `node_${id}[label="CALL FUNC"]`
+        dot += `\nnode_${id}_name[label="${this.id}"]`
+        dot += `\nnode_${id} -> node_${id}_name`
         let param: ReturnAST
         if (this.args.length > 0) {
             for (let i = 0; i < this.args.length; i ++) {
                 param = this.args[i].ast(ast)
                 dot += '\n' + param.dot
-                dot += `\nnode_${id} -> node_${param.id}`
+                dot += `\nnode_${id}_name -> node_${param.id}`
             }
         }
         return {dot: dot, id: id}

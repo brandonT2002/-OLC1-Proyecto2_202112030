@@ -2,7 +2,8 @@ import { Request, Response } from "express";
 import { Env } from "../Classes/Env/Env";
 import { symTable } from '../Classes/Env/SymbolTable';
 import { getStringOuts, resetOuts } from '../Classes/Utils/Outs'
-import { AST } from "../Classes/Env/AST";
+import { AST, ReturnAST } from "../Classes/Env/AST";
+import { TypeInst } from "../Classes/Utils/TypeInst";
 
 export class Controller {
     public running(req: Request,res: Response) {
@@ -26,14 +27,31 @@ export class Controller {
                 let instructions = parser.parse(data)
                 let ast: AST = new AST()
                 const global: Env = new Env(null, 'Global')
+                var dotAST: string = 'node_r[label="INSTRUCTIONS"];'
+                var resultAST: ReturnAST
                 for(let instruction of instructions) {
                     try {
-                        instruction.execute(global)
-                        console.log(instruction.ast(ast).dot)
+                        if(instruction.typeInst === TypeInst.INIT_FUNCTION) {
+                            instruction.execute(global)
+                            resultAST = instruction.ast(ast)
+                            dotAST += '\n' + resultAST.dot
+                            dotAST += `\nnode_r -> node_${resultAST.id};`
+                        }
                     }
                     catch (error) {}
                 }
-                
+                for(let instruction of instructions) {
+                    try {
+                        if(instruction.typeInst !== TypeInst.INIT_FUNCTION) {
+                            instruction.execute(global)
+                            resultAST = instruction.ast(ast)
+                            dotAST += '\n' + resultAST.dot
+                            dotAST += `\nnode_r -> node_${resultAST.id};`
+                        }
+                    }
+                    catch (error) {}
+                }
+                console.log(dotAST)
                 var out: string = getStringOuts()
                 console.log()
                 global.printSymTab()

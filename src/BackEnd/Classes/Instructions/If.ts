@@ -38,6 +38,13 @@ export class If extends Instruction {
         dot += `\nnode_${id} -> node_${id}_cnd;`
         dot += `\nnode_${id}_cnd -> node_${cond.id};`
         dot += `\nnode_${id} -> node_${inst.id};`
+        if(this.except) {
+            let except: ReturnAST = this.except.ast(ast)
+            dot += `\nnode_${id}_else[label="ELSE"];`
+            dot += `\nnode_${id} -> node_${id}_else;`
+            dot += '\n' + except.dot
+            dot += `\nnode_${id}_else -> node_${except.id};`
+        }
         return {dot: dot, id: id}
     }
 }

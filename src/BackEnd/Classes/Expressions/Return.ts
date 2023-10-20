@@ -17,9 +17,11 @@ export class Return extends Expression {
     public ast(ast: AST): ReturnAST {
         const id = ast.getNewID()
         var dot = `node_${id}[label="RETURN"];`
-        let value1: ReturnAST = this.exp.ast(ast)
-        dot += '\n' + value1.dot
-        dot += `\nnode_${id} -> node_${value1.id};`
+        if(this.exp) {
+            let value1: ReturnAST = this.exp.ast(ast)
+            dot += '\n' + value1.dot
+            dot += `\nnode_${id} -> node_${value1.id};`
+        }
         return {dot: dot, id: id}
     }
 }

@@ -1,3 +1,5 @@
+hanoi(3, "A", "C", "B");
+
 create procedure hanoi
     @n int,
     @origen varchar,
@@ -12,5 +14,3 @@ begin
     print "Mover disco: "+ cast(@n as varchar) + ", desde: "+ @origen+ " hasta: "+ @destino;
     hanoi(@n - 1, @medio, @destino, @origen);
 end;
-
-hanoi(3, "A", "C", "B");
