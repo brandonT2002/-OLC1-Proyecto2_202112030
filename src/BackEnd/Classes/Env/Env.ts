@@ -6,7 +6,7 @@ import { printConsole, errors } from '../Utils/Outs'
 import { symTable } from './SymbolTable';
 import { Symbol } from './Symbol';
 import { SymTab } from "./SymTab";
-import { Field, Table } from '../Objects/Table';
+import { Table } from '../Objects/Table';
 import { Expression } from '../Abstracts/Expression';
 
 export class Env {
@@ -169,18 +169,21 @@ export class Env {
     }
 
     getTypeOf(type: Type): string {
-        if(type === Type.INT) {
-            return 'INT'
+        switch(type) {
+            case Type.INT:
+                return "INT"
+            case Type.DOUBLE:
+                return "DOUBLE"
+            case Type.VARCHAR:
+                return "VARCHAR"
+            case Type.BOOLEAN:
+                return "BOOLEAN"
+            case Type.DATE:
+                return "DATE"
+            case Type.TABLE:
+                return "TABLE"
+            default:
+                return "NULL"
         }
-        if(type === Type.DOUBLE) {
-            return 'DOUBLE'
-        }
-        if(type === Type.BOOLEAN) {
-            return 'BOOLEAN'
-        }
-        if(type === Type.VARCHAR) {
-            return 'VARCHAR'
-        }
-        return 'NULL'
     }
 }

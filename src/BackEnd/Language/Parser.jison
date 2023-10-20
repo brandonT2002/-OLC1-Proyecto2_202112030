@@ -203,14 +203,13 @@ INSTRUCTION :
     CASESTRUCT_S TK_semicolon  {$$ = $1} |
     WHILESTRUCT TK_semicolon   {$$ = $1} |
     FORSTRUCT TK_semicolon     {$$ = $1} |
-    FUNCDEC TK_semicolon       |
-    METODDEC TK_semicolon      |
+    FUNCDEC TK_semicolon       {$$ = $1} |
+    CALLFUNC TK_semicolon      {$$ = $1} |
     ENCAP TK_semicolon         {$$ = $1} |
-    CALLFUNC TK_semicolon      |
     PRINT TK_semicolon         {$$ = $1} |
-    RW_break TK_semicolon      {$$ = new Break(@1.first_line, @1.first_column)   } |
-    RW_continue TK_semicolon   {$$ = new Continue(@1.first_line, @1.first_column)} |
-    RW_return EXP TK_semicolon {$$ = new Return(@1.first_line, @1.first_column, $2)}|
+    RW_break TK_semicolon      {$$ = new Break(@1.first_line, @1.first_column)     } |
+    RW_continue TK_semicolon   {$$ = new Continue(@1.first_line, @1.first_column)  } |
+    RW_return EXP TK_semicolon {$$ = new Return(@1.first_line, @1.first_column, $2)} |
     error {errors.push(new Error(this._$.first_line, this._$.first_column + 1, TypeError.SYNTAX, `No se esperaba «${yytext}»`))} ;
 
 // Declaración de variables
@@ -232,9 +231,9 @@ ASIGNID :
 
 // Mostrar valor de variables
 SELECT :
-    RW_select FIELDS RW_from TK_id RW_where EXP |
-    RW_select FIELDS RW_from TK_id              |
-    RW_select LIST_IDS                          ;
+    RW_select FIELDS RW_from TK_field RW_where EXP |
+    RW_select FIELDS RW_from TK_field              |
+    RW_select LIST_IDS                             ;
 
 FIELDS :
     LIST_IDS |
@@ -408,12 +407,12 @@ CAST :
 
 // Funciones Nativas
 NATIVEFUC :
-    RW_lower TK_lpar EXP TK_rpar                 {$$ = new Lower(@1.first_line, @1.first_column, $3)}        |
-    RW_upper TK_lpar EXP TK_rpar                 {$$ = new Upper(@1.first_line, @1.first_column, $3)}        |
-    RW_round TK_lpar EXP TK_comma EXP TK_rpar    {$$ = new Round(@1.first_line, @1.first_column, $3, $5)}    |
-    RW_len TK_lpar EXP TK_rpar                   {$$ = new Len(@1.first_line, @1.first_column, $3)}          |
+    RW_lower TK_lpar EXP TK_rpar                 {$$ = new Lower(@1.first_line, @1.first_column, $3)       } |
+    RW_upper TK_lpar EXP TK_rpar                 {$$ = new Upper(@1.first_line, @1.first_column, $3)       } |
+    RW_round TK_lpar EXP TK_comma EXP TK_rpar    {$$ = new Round(@1.first_line, @1.first_column, $3, $5)   } |
+    RW_len TK_lpar EXP TK_rpar                   {$$ = new Len(@1.first_line, @1.first_column, $3)         } |
     RW_truncate TK_lpar EXP TK_comma EXP TK_rpar {$$ = new Truncate(@1.first_line, @1.first_column, $3, $5)} |
-    RW_typeof TK_lpar EXP TK_rpar                {$$ = new TypeOf(@1.first_line, @1.first_column, $3)}       ;
+    RW_typeof TK_lpar EXP TK_rpar                {$$ = new TypeOf(@1.first_line, @1.first_column, $3)      } ;
 
 TYPE :
     RW_int     {$$ = Type.INT    } |

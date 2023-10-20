@@ -1,8 +1,11 @@
 import { Expression } from "../Abstracts/Expression";
 import { Env } from "../Env/Env";
+import { SymTab } from "../Env/SymTab";
+import { symTable } from "../Env/SymbolTable";
 import { Function } from "../Instructions/Function";
 import { ReturnType, Type } from "../Utils/Type";
 import { TypeExp } from "../Utils/TypeExp";
+import { Parameter } from "./Parameter";
 
 export class CallFunction extends Expression {
     constructor(line: number, column: number, private id: string, private args: Expression[]) {
@@ -14,16 +17,21 @@ export class CallFunction extends Expression {
             const envFunc: Env = new Env(env, `Funcion ${this.id.toLowerCase()}`)
             if(func.parameters.length == this.args.length) {
                 var value: ReturnType
-                var param: ReturnType
+                var param: Parameter
                 for(let i = 0; i < func.parameters.length; i ++) {
                     value = this.args[i].execute(env)
-                    param = func.parameters[i].execute(env)
-                    if(value.type === param.type) {
-                        envFunc.saveID(param.value, value.value, value.type, func.parameters[i].line, func.parameters[i].column)
+                    param = func.parameters[i]
+                    if(value.type === param.type || param.type === Type.DOUBLE && value.type === Type.INT) {
+                        if(!envFunc.ids.has(param.id.toLowerCase())) {
+                            envFunc.saveID(param.id.toLowerCase(), value.value, value.type, func.parameters[i].line, func.parameters[i].column)
+                            symTable.push(new SymTab(param.line, param.column + 1, true, true, param.id.toLowerCase(), env.name, param.type))
+                            continue
+                        }
+                        env.setError(`No puede haber parámetros distintos con el mismo nombre`, param.line, param.column)
+                        return
                     }
-                    else {
-                        env.setError(`Error, El Parámetro "${param.value}" no es del tipo "${this.getType(param.type)}", linea ${this.line} columna ${this.column}`, this.line, this.column)
-                    }
+                    env.setError(`Se esperaba un tipo de dato "${this.getType(param.type)}" para el parámetro "${param.id}"`, param.line, param.column)
+                    return
                 }
                 let execute: any = func.block.execute(envFunc)
                 if(execute) {
@@ -32,29 +40,30 @@ export class CallFunction extends Expression {
                     }
                     return execute
                 }
+                return
             }
-            else {
-                env.setError(`Error, La Función "${this.id}" no tiene la cantidad correcta de parámetros, línea ${this.line} columna ${this.column}`, this.line, this.column)
-            }
+            env.setError(`Cantidad errónea de parámetros enviados`, this.line, this.column)
+            return
         }
-        else {
-            env.setError(`Error, La Función "${this.id}" no existe, línea ${this.line} columna ${this.column}`, this.line, this.column)
-        }
+        env.setError(`La Función "${this.id}" no existe, línea ${this.line} columna ${this.column}`, this.line, this.column)
     }
 
-    getType(type: Type): string {
-        if(type === Type.INT) {
-            return 'int'
+    private getType(type: Type): string {
+        switch(type) {
+            case Type.INT:
+                return "INT"
+            case Type.DOUBLE:
+                return "DOUBLE"
+            case Type.VARCHAR:
+                return "VARCHAR"
+            case Type.BOOLEAN:
+                return "BOOLEAN"
+            case Type.DATE:
+                return "DATE"
+            case Type.TABLE:
+                return "TABLE"
+            default:
+                return "NULL"
         }
-        if(type === Type.DOUBLE) {
-            return 'double'
-        }
-        if(type === Type.BOOLEAN) {
-            return 'boolean'
-        }
-        if(type === Type.VARCHAR) {
-            return 'varchar'
-        }
-        return 'NULL'
     }
 }
