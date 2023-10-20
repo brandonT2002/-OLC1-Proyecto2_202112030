@@ -1,4 +1,5 @@
 import { Expression } from "../Abstracts/Expression";
+import { AST, ReturnAST } from "../Env/AST";
 import { Env } from "../Env/Env";
 import { SymTab } from "../Env/SymTab";
 import { symTable } from "../Env/SymbolTable";
@@ -47,7 +48,6 @@ export class CallFunction extends Expression {
         }
         env.setError(`La Función "${this.id}" no existe, línea ${this.line} columna ${this.column}`, this.line, this.column)
     }
-
     private getType(type: Type): string {
         switch(type) {
             case Type.INT:
@@ -65,5 +65,18 @@ export class CallFunction extends Expression {
             default:
                 return "NULL"
         }
+    }
+    public ast(ast: AST): ReturnAST {
+        const id = ast.getNewID()
+        var dot = `node_${id}[label="${this.id}"]`
+        let param: ReturnAST
+        if (this.args.length > 0) {
+            for (let i = 0; i < this.args.length; i ++) {
+                param = this.args[i].ast(ast)
+                dot += '\n' + param.dot
+                dot += `\nnode_${id} -> node_${param.id}`
+            }
+        }
+        return {dot: dot, id: id}
     }
 }

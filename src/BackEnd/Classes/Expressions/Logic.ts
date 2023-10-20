@@ -1,4 +1,5 @@
 import { Expression } from "../Abstracts/Expression";
+import { AST, ReturnAST } from "../Env/AST";
 import { Env } from "../Env/Env";
 import { ReturnType, Type } from "../Utils/Type";
 import { TypeExp } from "../Utils/TypeExp";
@@ -36,5 +37,19 @@ export class Logic extends Expression {
         let value: ReturnType = this.exp2.execute(env)
         this.type = Type.BOOLEAN
         return {value: !value.value, type: this.type}
+    }
+    public ast(ast: AST): ReturnAST {
+        const id = ast.getNewID()
+        var dot = `node_${id}[label="${this.sign}"];`
+        let value1: ReturnAST
+        if (this.exp1 != undefined) {
+            value1 = this.exp1.ast(ast)
+            dot += '\n' + value1.dot
+            dot += `\nnode_${id} -> node_${value1.id};`
+        }
+        let value2: ReturnAST = this.exp2.ast(ast)
+        dot += '\n' + value2.dot
+        dot += `\nnode_${id} -> node_${value2.id};`
+        return {dot: dot, id: id}
     }
 }

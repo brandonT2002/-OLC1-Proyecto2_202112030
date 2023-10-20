@@ -1,4 +1,5 @@
 import { Expression } from "../Abstracts/Expression";
+import { AST, ReturnAST } from "../Env/AST";
 import { Env } from "../Env/Env";
 import { ReturnType, Type } from "../Utils/Type";
 import { TypeExp } from "../Utils/TypeExp";
@@ -70,5 +71,15 @@ export class Cast extends Expression {
             default:
                 return "NULL"
         }
+    }
+    public ast(ast: AST): ReturnAST {
+        const id = ast.getNewID()
+        var dot = `node_${id}[label="CAST"];`
+        let value1: ReturnAST = this.value.ast(ast)
+        dot += '\n' + value1.dot
+        dot += `node_${id}_type[label="${this.getType(this.destinyType)}"];`
+        dot += `\nnode_${id} -> node_${value1.id};`
+        dot += `\nnode_${id} -> node_${id}_type;`
+        return {dot: dot, id: id}
     }
 }

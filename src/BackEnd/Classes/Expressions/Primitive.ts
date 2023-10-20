@@ -2,6 +2,7 @@ import { Expression } from "../Abstracts/Expression";
 import { TypeExp } from "../Utils/TypeExp";
 import { ReturnType, Type } from "../Utils/Type";
 import { Env } from '../Env/Env';
+import { AST, ReturnAST } from "../Env/AST";
 export class Primitive extends Expression {
     constructor(line: number, column: number, public value: any, public type: Type) {
         super(line, column, TypeExp.PRIMITIVE)
@@ -24,5 +25,10 @@ export class Primitive extends Expression {
                 this.value = this.value.replace(/\\\\/g, '\\')
                 return {value: this.value, type: this.type}
         }
+    }
+    public ast(ast: AST): ReturnAST {
+        const id = ast.getNewID()
+        var dot = `node_${id}[label="${this.value}"];`
+        return {dot: dot, id: id}
     }
 }

@@ -1,5 +1,6 @@
 import { Expression } from "../Abstracts/Expression";
 import { Instruction } from "../Abstracts/Instruction";
+import { AST, ReturnAST } from "../Env/AST";
 import { Env } from "../Env/Env";
 import { ReturnType, Type } from "../Utils/Type";
 import { TypeInst } from "../Utils/TypeInst";
@@ -38,5 +39,8 @@ export class For extends Instruction {
             return
         }
         env.setError("Iterador sin declarar", this.line, this.column)
+    }
+    public ast(ast: AST): ReturnAST {
+        return {dot: '', id: 0}
     }
 }

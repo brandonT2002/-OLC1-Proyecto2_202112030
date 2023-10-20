@@ -1,5 +1,6 @@
 import { Expression } from "../Abstracts/Expression";
 import { Instruction } from "../Abstracts/Instruction";
+import { AST, ReturnAST } from "../Env/AST";
 import { Env } from "../Env/Env";
 import { ReturnType } from "../Utils/Type";
 import { TypeInst } from "../Utils/TypeInst";
@@ -21,5 +22,8 @@ export class When extends Instruction {
             let result: ReturnType = this.result.execute(envWhen)
             return result
         }
+    }
+    public ast(ast: AST): ReturnAST {
+        return {dot: '', id: 0}
     }
 }

@@ -1,4 +1,5 @@
 import { Expression } from "../Abstracts/Expression";
+import { AST, ReturnAST } from "../Env/AST";
 import { Env } from "../Env/Env";
 import { ReturnType, Type } from "../Utils/Type";
 import { TypeExp } from "../Utils/TypeExp";
@@ -126,5 +127,16 @@ export class Relational extends Expression {
         }
         env.setError("Los tipos no son válidos para operaciones relacionales", this.exp2.line, this.exp2.column)
         return {value: 'NULL', type: Type.NULL}
+    }
+    public ast(ast: AST): ReturnAST {
+        const id = ast.getNewID()
+        var dot = `node_${id}[label="${this.sign}"];`
+        let value1: ReturnAST = this.exp1.ast(ast)
+        dot += '\n' + value1.dot
+        dot += `\nnode_${id} -> node_${value1.id};`
+        let value2: ReturnAST = this.exp2.ast(ast)
+        dot += '\n' + value2.dot
+        dot += `\nnode_${id} -> node_${value2.id};`
+        return {dot: dot, id: id}
     }
 }

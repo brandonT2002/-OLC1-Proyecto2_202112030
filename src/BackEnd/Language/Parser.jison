@@ -16,7 +16,7 @@ FIELD       (\_)*[a-zA-Z][a-zA-Z0-9\_]*
 STRING      \"({CONTENT}*)\"
 INTEGER     [0-9]+\b
 DOUBLE       [0-9]+\.[0-9]+\b
-DATE        \'\d\d\d\d\-\d\d\-\d\d\'
+DATE        \"\d\d\/\d\d\/\d\d\d\d\"
 COMMENTS    \-\-([^\r\n]*)?
 COMMENTM    [/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]
 
@@ -91,10 +91,10 @@ COMMENTM    [/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]
 //EXPRESIONES
 {ID}            {return 'TK_id'}
 {FIELD}         {return 'TK_field'}
+{DATE}          {yytext = yytext.substr(1,yyleng - 2); return 'TK_date'}
 {STRING}        {yytext = yytext.substr(1,yyleng - 2); return 'TK_varchar'}
 {DOUBLE}        {return 'TK_double'}
 {INTEGER}       {return 'TK_int'}
-{DATE}          {return 'TK_date'}
 // SIGNOS DE AGRUPACION Y FINALIZACION
 '('             {return 'TK_lpar'}
 ')'             {return 'TK_rpar'}

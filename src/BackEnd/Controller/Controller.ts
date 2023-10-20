@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { Env } from "../Classes/Env/Env";
 import { symTable } from '../Classes/Env/SymbolTable';
 import { getStringOuts, resetOuts } from '../Classes/Utils/Outs'
+import { AST } from "../Classes/Env/AST";
 
 export class Controller {
     public running(req: Request,res: Response) {
@@ -22,11 +23,13 @@ export class Controller {
             else {
                 resetOuts()
                 symTable.splice()
-                let ast = parser.parse(data)
+                let instructions = parser.parse(data)
+                let ast: AST = new AST()
                 const global: Env = new Env(null, 'Global')
-                for(let instruction of ast) {
+                for(let instruction of instructions) {
                     try {
                         instruction.execute(global)
+                        console.log(instruction.ast(ast).dot)
                     }
                     catch (error) {}
                 }
