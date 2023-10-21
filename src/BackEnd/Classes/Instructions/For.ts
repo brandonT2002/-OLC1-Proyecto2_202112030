@@ -41,6 +41,19 @@ export class For extends Instruction {
         env.setError("Iterador sin declarar", this.line, this.column)
     }
     public ast(ast: AST): ReturnAST {
-        return {dot: '', id: 0}
+        const id = ast.getNewID()
+        var dot = `node_${id}[label="FOR"];`
+        dot += `\nnode_${id}_lim[label="RANGE"]`
+        let limInf: ReturnAST = this.limInf.ast(ast)
+        let limSup: ReturnAST = this.limSup.ast(ast)
+        dot += '\n' + limInf.dot
+        dot += '\n' + limSup.dot
+        dot += `\nnode_${id}_lim -> node_${limInf.id};`
+        dot += `\nnode_${id}_lim -> node_${limSup.id};`
+        let inst: ReturnAST = this.block.ast(ast)
+        dot += '\n' + inst.dot
+        dot += `\nnode_${id} -> node_${inst.id};`
+        dot += `\nnode_${id} -> node_${id}_lim;`
+        return {dot: dot, id: id}
     }
 }
