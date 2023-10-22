@@ -11,6 +11,10 @@ export class TruncateTable extends Instruction {
         env.truncateTable(this.id, this.line, this.column)
     }
     public ast(ast: AST): ReturnAST {
-        return {dot: '', id: 0}
+        const id = ast.getNewID()
+        var dot = `node_${id}[label="TRUNCATE"];`
+        dot += `\nnode_${id}_truncate[label="${this.id}"]`
+        dot += `\nnode_${id} -> node_${id}_truncate;`
+        return {dot: dot, id: id}
     }
 }

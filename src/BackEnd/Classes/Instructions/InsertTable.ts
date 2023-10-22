@@ -20,6 +20,24 @@ export class InsertTable extends Instruction {
         env.setError('Inserta menos valores de los esperados', this.line, this.column)
     }
     public ast(ast: AST): ReturnAST {
-        return {dot: '', id: 0}
+        const id = ast.getNewID()
+        var dot = `node_${id}[label="INSERT"];`
+        dot += `\nnode_${id}_table[label="${this.name}"];`
+        dot += `\nnode_${id}_fields[label="FIELDS"];`
+        for (let i = 0; i < this.fields.length; i ++) {
+            dot += `\nnode_${id}_field_${i}[label="${this.fields[i]}"];`
+            dot += `\nnode_${id}_fields -> \nnode_${id}_field_${i};`
+        }
+        dot += `\nnode_${id}_values[label="VALORES"];`
+        var value: ReturnAST 
+        for (let i = 0; i < this.values.length; i ++) {
+            value = this.values[i].ast(ast)
+            dot += '\n' + value.dot
+            dot += `\nnode_${id}_values -> node_${value.id};`
+        }
+        dot += `\nnode_${id}_table -> node_${id}_fields;`
+        dot += `\nnode_${id}_table -> node_${id}_values;`
+        dot += `\nnode_${id} -> node_${id}_table`
+        return {dot: dot, id: id}
     }
 }

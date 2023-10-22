@@ -14,6 +14,16 @@ export class CreateTable extends Instruction {
         env.saveTable(this.name, table, this.line, this.column)
     }
     public ast(ast: AST): ReturnAST {
-        return {dot: '', id: 0}
+        const id = ast.getNewID()
+        var dot = `node_${id}[label="TABLE"];`
+        dot += `\nnode_${id}_name[label="${this.name}"]`
+        dot += `\nnode_${id}_fields[label="CAMPOS"]`
+        for (let i = 0; i < this.nameFields.length; i ++) {
+            dot += `\nnode_${id}_field_${i}[label=${this.nameFields[i]}]`
+            dot += `\nnode_${id}_fields -> node_${id}_field_${i};`
+        }
+        dot += `\nnode_${id} -> node_${id}_name;`
+        dot += `\nnode_${id} -> node_${id}_fields;`
+        return {dot: dot, id: id}
     }
 }

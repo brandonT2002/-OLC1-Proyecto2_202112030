@@ -28,6 +28,16 @@ export class While extends Instruction {
         }
     }
     public ast(ast: AST): ReturnAST {
-        return {dot: '', id: 0}
+        const id = ast.getNewID()
+        var dot = `node_${id}[label="   WHILE"];`
+        dot += `\nnode_${id}_cond[label="CONDICION"]`
+        let cond: ReturnAST = this.condition.ast(ast)
+        dot += '\n' + cond.dot
+        dot += `\nnode_${id}_cond -> node_${cond.id};`
+        let inst: ReturnAST = this.block.ast(ast)
+        dot += '\n' + inst.dot
+        dot += `\nnode_${id} -> node_${inst.id};`
+        dot += `\nnode_${id} -> node_${id}_cond;`
+        return {dot: dot, id: id}
     }
 }

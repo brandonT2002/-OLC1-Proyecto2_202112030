@@ -11,6 +11,10 @@ export class DropTable extends Instruction {
         env.deletTable(this.id, this.line, this.column)
     }
     public ast(ast: AST): ReturnAST {
-        return {dot: '', id: 0}
+        const id = ast.getNewID()
+        var dot = `node_${id}[label="DROP"];`
+        dot += `\nnode_${id}_drop[label="${this.id}"]`
+        dot += `\nnode_${id} -> node_${id}_drop;`
+        return {dot: dot, id: id}
     }
 }
