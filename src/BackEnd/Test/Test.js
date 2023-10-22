@@ -5,5 +5,5 @@ fs.readFile('../../../Inputs/Input.sql',(err,data) => {
     let string = data.toString()
     console.log(string,'\n')
     parser.parse(string)
-    console.log('FINISH PARSER')
+    // console.log(instructions)
 })
