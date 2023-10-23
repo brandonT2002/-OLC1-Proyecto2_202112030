@@ -41,16 +41,7 @@ h1,h2,h3,h4{
     font-family: var(--text);
 }
 h1{
-    font-size: 4.8rem;
-}
-h2{
-    font-size: 4rem;
-}
-h3{
-    font-size: 3.2rem;
-}
-h4{
-    font-size: 2.8rem;
+    font-size: 2.5rem;
 }
 .header{
     background-size: cover;
@@ -86,6 +77,13 @@ h4{
     text-align: center;
     font-size: 1.5rem;
     color: var(--white);
+}
+/* utilidades */
+.no-margin{
+    margin: 0;
+}
+.center-text{
+    text-align: center;
 }
 /* options menu */
 ul{
@@ -126,6 +124,26 @@ li ul li a{
 li ul li a:hover{
     background-color: #171e27;
 }
+/* Logo */
+.logo{
+    color: var(--white);
+}
+.logo__name{
+    font-weight: 400;
+}
+.logo__bold{
+    font-weight: 600;
+}
+@media (max-width: 410px) {
+    .logo__name{
+        font-weight: 400;
+        font-size: 3rem;
+    }
+    .logo__bold{
+        font-weight: 600;
+        font-size: 3rem;
+    }
+}
 /*container compile*/
 .containerCompile{
     display: flex;
@@ -161,26 +179,19 @@ li ul li a:hover{
 .columns {
     display: grid;
     grid-template-columns: repeat(2,1fr);
-    column-gap: 0rem;
 }
-.panel1{
-    margin: 0rem .5rem 0 1rem;
+@media (max-width: 1081px) {
+    .columns {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+}
+.panel{
+    margin: 0 2rem 0 2rem;
     padding: .1rem;
     line-height: 1.4;
-    font-size: 11pt;
-    width: 89.5rem;
+    font-size: 10pt;
     background-color: rgb(48, 54, 61);
-}
-.panel2{
-    margin: 0rem 1rem 0 .5rem;
-    padding: .1rem;
-    line-height: 1.4;
-    font-size: 11pt;
-    width: 89.5rem;
-    background-color: rgb(48, 54, 61);
-}
-#editor{
-    height: 100%;
 }
 /* modal */
 .modalmask {

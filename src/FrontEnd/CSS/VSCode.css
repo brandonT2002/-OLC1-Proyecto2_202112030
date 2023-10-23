@@ -44,29 +44,3 @@
     background-color: rgb(48, 54, 61) !important;
     color: rgb(48, 54, 61) !important;
 }
-
-/*Scroll*/
-/* Estilo del scroll principal */
-/* Estilo del scrollbar vertical en CodeMirror */
-.CodeMirror-vscrollbar {
-    width: 10px;
-    background-color: #2C3139; /* Color de fondo del scrollbar */
-}
-
-/* Estilo del thumb del scrollbar vertical en CodeMirror */
-.CodeMirror-vscrollbar::-webkit-scrollbar-thumb {
-    background-color: #505968; /* Color del thumb del scrollbar */
-    border-radius: 2px; /* Radio de borde del thumb */
-}
-
-/* Estilo del scrollbar horizontal en CodeMirror */
-.CodeMirror-hscrollbar {
-    height: 10px;
-    background-color: #2C3139; /* Color de fondo del scrollbar */
-}
-
-/* Estilo del thumb del scrollbar horizontal en CodeMirror */
-.CodeMirror-hscrollbar::-webkit-scrollbar-thumb {
-    background-color: #505968; /* Color del thumb del scrollbar */
-    border-radius: 2px; /* Radio de borde del thumb */
-}

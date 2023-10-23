@@ -1,5 +1,5 @@
 var editor = CodeMirror(document.getElementById("editor"), {
-    mode: "text/x-java",
+    mode: "text/x-mysql",
     lineNumbers: true,
     styleActiveLine: true,
     indentUnit: 4,

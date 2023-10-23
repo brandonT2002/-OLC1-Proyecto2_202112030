@@ -9,9 +9,8 @@
     <link rel="stylesheet" href="./codemirror/lib/codemirror.css">
     <script src="./codemirror/lib/codemirror.js"></script>
     <script src="./codemirror/lib/codemirror.js"></script>
-    <script src="./codemirror/mode/clike/clike.js"></script>
+    <script src="./codemirror/mode/sql/sql.js"></script>
     <link rel="stylesheet" href="./codemirror/lib/codemirror.css"/>
-    <script src="./codemirror/mode/javascript/javascript.js"></script>              <!-- MODO   -->
     <link href="CSS/VSCode.css" rel="stylesheet" />       <!-- TEMA   -->
     <!-- CODEMIRROR ADDONS -->
     <script src="./codemirror/addon/edit/closebrackets.js"></script>
@@ -30,6 +29,9 @@
         <div class="container">
             <div class="bar">
                 <nav class="navigation">
+                    <a href="#" class="logo">
+                        <h1 class="logo__name no-margin center-text">Query<span class="logo__bold">Crypter</span></h1>
+                    </a>
                     <li>
                         <a href="#" class="navigation__link">Archivo</a>
                         <ul>
@@ -70,9 +72,9 @@
             <div>d</div>
         </div>
     </div>
-    <div class="columns">
-        <div id="editor" class="panel1"></div>
-        <div id="console" class="panel2"></div>
+    <div class="container columns">
+        <div id="editor" class="panel"></div>
+        <div id="console" class="panel"></div>
     </div>
     <script src="https://d3js.org/d3.v5.min.js"></script>
     <script src="https://unpkg.com/@hpcc-js/wasm@0.3.11/dist/index.min.js"></script>
