@@ -130,7 +130,7 @@ export class Relational extends Expression {
     }
     public ast(ast: AST): ReturnAST {
         const id = ast.getNewID()
-        var dot = `node_${id}[label="${this.sign}"];`
+        var dot = `node_${id}[label="${this.sign}" color="white" fontcolor="white"];`
         let value1: ReturnAST = this.exp1.ast(ast)
         dot += '\n' + value1.dot
         dot += `\nnode_${id} -> node_${value1.id};`

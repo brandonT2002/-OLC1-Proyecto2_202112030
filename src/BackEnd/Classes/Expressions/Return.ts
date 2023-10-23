@@ -16,7 +16,7 @@ export class Return extends Expression {
     }
     public ast(ast: AST): ReturnAST {
         const id = ast.getNewID()
-        var dot = `node_${id}[label="RETURN"];`
+        var dot = `node_${id}[label="RETURN" color="white" fontcolor="white"];`
         if(this.exp) {
             let value1: ReturnAST = this.exp.ast(ast)
             dot += '\n' + value1.dot

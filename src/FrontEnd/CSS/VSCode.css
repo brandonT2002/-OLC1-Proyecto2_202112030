@@ -1,0 +1,46 @@
+.cm-s-VSCode  { font-family: Consolas, Menlo, Monaco, 'Lucida Console', 'Liberation Mono', 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', 'Courier New', monospace, serif;}
+.cm-s-VSCode.CodeMirror { background: rgb(13, 17, 23); color: #ffffff; z-index: 0; } 
+
+.cm-s-VSCode span.cm-meta { color: rgb(255, 166, 87); }
+.cm-s-VSCode span.cm-number { color: rgb(121, 192, 255); }
+.cm-s-VSCode span.cm-keyword { color: rgb(255, 123, 114); }  
+.cm-s-VSCode span.cm-def { color: rgb(210, 168, 255); }
+.cm-s-VSCode span.cm-variable { color: rgb(121, 192, 255); }
+.cm-s-VSCode span.cm-variable-2 { color: rgb(201, 209, 217); }
+.cm-s-VSCode span.cm-variable-3 { color: rgb(201, 209, 217); }
+.cm-s-VSCode span.cm-type { color: rgb(201, 209, 217); }
+.cm-s-VSCode span.cm-property { color: rgb(201, 209, 217); }
+.cm-s-VSCode span.cm-operator { color: rgb(201, 209, 217); }
+.cm-s-VSCode span.cm-string { color: rgb(165, 214, 255); }
+.cm-s-VSCode span.cm-string-2 { color: rgb(165, 214, 255); }
+.cm-s-VSCode span.cm-comment { color: rgb(139, 148, 158); } 
+.cm-s-VSCode span.cm-link { color: rgb(139, 148, 158); }
+.cm-s-VSCode span.cm-atom { color: rgb(255, 123, 114); }
+.cm-s-VSCode span.cm-error { color: #BC3F3C; }
+.cm-s-VSCode span.cm-tag { color: rgb(139, 148, 158); font-weight: bold; font-style: italic; text-decoration: underline; }
+.cm-s-VSCode span.cm-attribute { color: rgb(210, 168, 255); }
+.cm-s-VSCode span.cm-qualifier { color: rgb(210, 168, 255); }
+.cm-s-VSCode span.cm-bracket { color: #BC3F3C; }
+.cm-s-VSCode span.cm-builtin { color: rgb(255, 166, 87); }
+.cm-s-VSCode span.cm-special { color: rgb(255, 166, 87); }
+
+.cm-s-VSCode .CodeMirror-cursor { border-left: 1px solid rgb(255, 255, 255); }  
+.cm-s-VSCode .CodeMirror-activeline-background { background: rgb(48, 54, 61); } 
+.cm-s-VSCode .CodeMirror-gutters { background: rgb(13, 17, 23); border-right: 1px solid rgb(13, 17, 23); } 
+.cm-s-VSCode .CodeMirror-guttermarker { color: rgb(48, 54, 61); }  
+.cm-s-VSCode .CodeMirror-guttermarker-subtle { color: rgb(48, 54, 61); }  
+.cm-s-VSCode .CodeMirrir-linenumber { color: rgb(48, 54, 61); } 
+.cm-s-VSCode .CodeMirror-matchingbracket { background-color: #3B514D; color: #fff !important; font-weight: bold; } 
+
+.cm-s-VSCode div.CodeMirror-selected { background: rgb(30, 66, 115); }  
+
+.CodeMirror-hints.VSCode {
+    font-family: Menlo, Monaco, Consolas, 'Courier New', monospace;
+    color: rgb(48, 54, 61);
+    background-color: rgb(48, 54, 61) !important;
+}
+
+.CodeMirror-hints.VSCode .CodeMirror-hint-active {
+    background-color: rgb(48, 54, 61) !important;
+    color: rgb(48, 54, 61) !important;
+}

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- ================================= CODEMIRROR =========================== -->
+    <link rel="stylesheet" href="./codemirror/lib/codemirror.css">
+    <script src="./codemirror/lib/codemirror.js"></script>
+    <script src="./codemirror/lib/codemirror.js"></script>
+    <script src="./codemirror/mode/sql/sql.js"></script>
+    <link rel="stylesheet" href="./codemirror/lib/codemirror.css"/>
+    <link href="CSS/VSCode.css" rel="stylesheet" />       <!-- TEMA   -->
+    <!-- CODEMIRROR ADDONS -->
+    <script src="./codemirror/addon/edit/closebrackets.js"></script>
+    <script src="./codemirror/addon/selection/active-line.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/viz.js/1.7.0/viz.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/style.css">
+    <title>QueryCrypter</title>
+    <link rel="icon" type="image/png" href="Img/cubo1.png">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="bar">
+                <nav class="navigation">
+                    <a href="#" class="logo">
+                        <h1 class="logo__name no-margin center-text">Query<span class="logo__bold">Crypter</span></h1>
+                    </a>
+                    <li>
+                        <a href="#" class="navigation__link">Archivo</a>
+                        <ul>
+                            <li><a href="#" onclick="">Nuevo Archivo</a></li>
+                            <li><a href="#" onclick="openFile()">Abrir Archivo</a></li>
+                            <li><a href="#" onclick="saveFile()">Guardar Archivo</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#" class="navigation__link">Reportes</a>
+                        <ul>
+                            <li><a id="" href="#modal" onclick="getErrors()">Errores</a></li>
+                            <li><a id="" href="#modal" onclick="graphAST()">Generar Arbol</a></li>
+                            <li><a id="" href="#modal" onclick="getSymbolsTable()">Tabla de Simbolos</a></li>
+                        </ul>
+                    </li>
+                </nav>
+            </div>
+        </div>
+    </header>
+    <div class="container">
+        <div id="modal" class="modalmask">
+            <form action="" autocomplete="off">
+                <div class="modalbox movedown">
+                    <a href="#close" title="Close" class="close" onclick="resetGraph()">&times;</a>
+                    <div id="report" class="report"></div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="container containerCompile">
+        <button type="button" class="button" onclick="analyze()">Run</button>
+    </div>
+    <div id="tags" class="container containerTags">
+        <div class="tmp">
+            <div>d</div>
+        </div>
+    </div>
+    <div class="container columns">
+        <div id="editor" class="panel"></div>
+        <div id="console" class="panel"></div>
+    </div>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://unpkg.com/@hpcc-js/wasm@0.3.11/dist/index.min.js"></script>
+    <script src="https://unpkg.com/d3-graphviz@3.0.5/build/d3-graphviz.js"></script>
+    <script src="js/script.js"></script>
+    <script src="js/headers.js"></script>
+    <script src="js/functions.js"></script>
+    <script src="js/file.js"></script>
+    <script src="js/tags.js"></script>
+</body>
+</html>
