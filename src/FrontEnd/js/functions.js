@@ -12,14 +12,10 @@ function analyze() {
 }
 let graphviz
 function graphAST() {
-    fetch(`${path}/interpreter/getAST`,{
-        method: 'POST',
-        headers,
-        body: `{"code":"${getCode()}"}`
-    })
+    fetch(`${path}/interpreter/getAST`)
     .then(response => response.json())
     .then(response => {
-        graphviz = d3.select('#report').graphviz().scale(0.6).height(document.getElementById('report').clientHeight).width(890*1.9).renderDot(response.ast)
+        graphviz = d3.select('#report').graphviz().scale(1).height(550*1).width(document.getElementById('report').clientWidth).renderDot(response.ast)
     })
     .catch(error => {})
 }

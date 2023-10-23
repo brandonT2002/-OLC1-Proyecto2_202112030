@@ -29,8 +29,8 @@ export class While extends Instruction {
     }
     public ast(ast: AST): ReturnAST {
         const id = ast.getNewID()
-        var dot = `node_${id}[label="   WHILE"];`
-        dot += `\nnode_${id}_cond[label="CONDICION"]`
+        var dot = `node_${id}[label="WHILE" color="white" fontcolor="white"];`
+        dot += `\nnode_${id}_cond[label="CONDICION" color="white" fontcolor="white"]`
         let cond: ReturnAST = this.condition.ast(ast)
         dot += '\n' + cond.dot
         dot += `\nnode_${id}_cond -> node_${cond.id};`

@@ -43,9 +43,9 @@
                     <li>
                         <a href="#" class="navigation__link">Reportes</a>
                         <ul>
-                            <li><a href="#modal" onclick="getErrors()">Errores</a></li>
-                            <li><a href="#modal" onclick="graphAST()">Generar Arbol</a></li>
-                            <li><a href="#modal" onclick="getSymbolsTable()">Tabla de Simbolos</a></li>
+                            <li><a id="" href="#modal" onclick="getErrors()">Errores</a></li>
+                            <li><a id="" href="#modal" onclick="graphAST()">Generar Arbol</a></li>
+                            <li><a id="" href="#modal" onclick="getSymbolsTable()">Tabla de Simbolos</a></li>
                         </ul>
                     </li>
                 </nav>
@@ -63,9 +63,7 @@
         </div>
     </div>
     <div class="container containerCompile">
-        <button type="button" class="button" onclick="analyze()">
-            <img src="icons/player.svg" alt="">
-        </button>
+        <button type="button" class="button" onclick="analyze()">Run</button>
     </div>
     <div id="tags" class="container containerTags">
         <div class="tmp">

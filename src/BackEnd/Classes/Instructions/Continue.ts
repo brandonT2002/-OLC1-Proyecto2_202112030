@@ -12,7 +12,7 @@ export class Continue extends Instruction {
     }
     public ast(ast: AST): ReturnAST {
         const id = ast.getNewID()
-        var dot = `node_${id}[label="CONTINUE"];`
+        var dot = `node_${id}[label="CONTINUE" color="white" fontcolor="white"];`
         return {dot: dot, id: id}
     }
 }

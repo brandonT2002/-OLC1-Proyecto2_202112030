@@ -69,8 +69,8 @@ export class CallFunction extends Expression {
     }
     public ast(ast: AST): ReturnAST {
         const id = ast.getNewID()
-        var dot = `node_${id}[label="CALL FUNC"]`
-        dot += `\nnode_${id}_name[label="${this.id}"]`
+        var dot = `node_${id}[label="CALL FUNC" color="white" fontcolor="white"]`
+        dot += `\nnode_${id}_name[label="${this.id}" color="white" fontcolor="white"]`
         dot += `\nnode_${id} -> node_${id}_name`
         let param: ReturnAST
         if (this.args.length > 0) {

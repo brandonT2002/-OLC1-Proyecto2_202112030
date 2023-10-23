@@ -17,7 +17,7 @@ export class Len extends Expression {
     }
     public ast(ast: AST): ReturnAST {
         const id = ast.getNewID()
-        var dot = `node_${id}[label="LEN"];`
+        var dot = `node_${id}[label="LEN" color="white" fontcolor="white"];`
         let value1: ReturnAST = this.exp.ast(ast)
         dot += '\n' + value1.dot
         dot += `\nnode_${id} -> node_${value1.id};`

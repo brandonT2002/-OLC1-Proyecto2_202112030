@@ -5,7 +5,10 @@ import { getStringOuts, resetOuts } from '../Classes/Utils/Outs'
 import { AST, ReturnAST } from "../Classes/Env/AST";
 import { TypeInst } from "../Classes/Utils/TypeInst";
 
+var res_dotAST: string = ''
+
 export class Controller {
+
     public running(req: Request,res: Response) {
         res.send('Interpreter is running!!!')
     }
@@ -70,15 +73,36 @@ export class Controller {
         try {
             resetOuts()
             symTable.splice()
-            let ast = parser.parse(code)
+            let instructions = parser.parse(code)
+            let ast: AST = new AST()
             const global: Env = new Env(null, 'Global')
-            for(let instruction of ast) {
+            var dotAST: string =  'digraph G{\nedge[dir=none color="white"];\nbgcolor = "#0D1117";'
+            dotAST += '\nnode_r[label="INSTRUCTIONS" color="white" fontcolor="white"];'
+            var resultAST: ReturnAST
+            for(let instruction of instructions) {
                 try {
-                    instruction.execute(global)
+                    if(instruction.typeInst === TypeInst.INIT_FUNCTION) {
+                        instruction.execute(global)
+                        resultAST = instruction.ast(ast)
+                        dotAST += '\n' + resultAST.dot
+                        dotAST += `\nnode_r -> node_${resultAST.id};`
+                    }
                 }
                 catch (error) {}
             }
-
+            for(let instruction of instructions) {
+                try {
+                    if(instruction.typeInst !== TypeInst.INIT_FUNCTION) {
+                        instruction.execute(global)
+                        resultAST = instruction.ast(ast)
+                        dotAST += '\n' + resultAST.dot
+                        dotAST += `\nnode_r -> node_${resultAST.id};`
+                    }
+                }
+                catch (error) {}
+            }
+            dotAST += '}'
+            res_dotAST = dotAST
             res.json({
                 console: getStringOuts()
             })
@@ -91,10 +115,10 @@ export class Controller {
         }
     }
     public getAST(req: Request,res: Response) {
-        let code = req.body.code
-        let parser = require('../AST/Parser')
         try {
-            
+            res.json({
+                ast: res_dotAST
+            })
         }
         catch (error) {
             res.json({

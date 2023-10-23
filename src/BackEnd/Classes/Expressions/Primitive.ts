@@ -28,7 +28,7 @@ export class Primitive extends Expression {
     }
     public ast(ast: AST): ReturnAST {
         const id = ast.getNewID()
-        var dot = `node_${id}[label="${this.value}"];`
+        var dot = `node_${id}[label="${this.value}" color="white" fontcolor="white"];`
         return {dot: dot, id: id}
     }
 }
