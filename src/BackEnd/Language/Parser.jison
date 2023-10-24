@@ -318,14 +318,27 @@ IFSTRUCT :
 
 // Estructura CASE simple
 CASESTRUCT_S :
-    RW_case TK_id ENVCASE_S RW_end RW_as TK_field {$$ = new Case(@1.first_line, @1.first_column, $2, $3, undefined, $5)} |
-    RW_case TK_id ENVCASE_S RW_end                {/*$$ = new Case(@1.first_line, @1.first_column, $2, $3, undefined)*/} |
-    RW_case ENVCASE_S RW_end                      {/*$$ = new Case(@1.first_line, @1.first_column, undefined, $2, undefined)*/} ;
+    RW_case EXP WHENSELSE RW_end RW_as TK_field   {$$ = new Case(@1.first_line, @1.first_column, $2, $3[0], $3[1], $6)       } |
+    RW_case EXP WHENSELSE RW_end RW_as TK_varchar {$$ = new Case(@1.first_line, @1.first_column, $2, $3[0], $3[1], $6)       } |
+    RW_case EXP WHENSELSE RW_end                  {$$ = new Case(@1.first_line, @1.first_column, $2, $3[0], $3[1], undefined)} |
+    RW_case WHENSELSE RW_end RW_as TK_field       {$$ = new Case(@1.first_line, @1.first_column, undefined, $2[0], $2[1], $5)       } |
+    RW_case WHENSELSE RW_end RW_as TK_varchar     {$$ = new Case(@1.first_line, @1.first_column, undefined, $2[0], $2[1], $5)       } |
+    RW_case WHENSELSE RW_end                      {$$ = new Case(@1.first_line, @1.first_column, undefined, $2[0], $2[1], undefined)} ;
 
-ENVCASE_S :
-    RW_when EXP RW_then INSTRUCTIONS ENVCASE_S {$$ = new When(@1.first_line, @1.first_column, $2, new Block(@1.first_line, @1.first_column, $4))} |
-    RW_when EXP RW_then INSTRUCTIONS           {$$ = new When(@1.first_line, @1.first_column, $2, new Block(@1.first_line, @1.first_column, $4))} |
-    RW_else INSTRUCTIONS                       {$$ = new Block(@1.first_line, @1.first_column, $2)} ;
+WHENSELSE :
+    WHENS ELSE {$$ = [$1, $2]} |
+    WHENS      {$$ = [$1, undefined]} |
+    ELSE       {$$ = [undefined, $1]} ;
+
+WHENS :
+    WHENS WHEN {$$.push($2)} |
+    WHEN       {$$ = [$1]  } ;
+
+WHEN :
+    RW_when EXP RW_then EXP {$$ = new When(@1.first_line, @1.first_column, $2, $4)} ;
+
+ELSE :
+    RW_else EXP             {$$ = $2} ;
 
 // PRINT
 PRINT :

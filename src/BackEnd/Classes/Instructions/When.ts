@@ -15,15 +15,35 @@ export class When extends Instruction {
     }
     public execute (env: Env): ReturnType | any {
         const envWhen: Env = new Env(env, `${env.name} when`)
-        let whenE: ReturnType = this.whenEvaluate
         let when_: ReturnType = this.when_.execute(envWhen)
-        envWhen.name = `${envWhen.name} ${when_.value}`
-        if (when_.value === whenE.value) {
-            let result: ReturnType = this.result.execute(envWhen)
-            return result
+        if(this.whenEvaluate) {
+            let whenE: ReturnType = this.whenEvaluate
+            envWhen.name = `${envWhen.name} ${when_.value}`
+            if (when_.value === whenE.value) {
+                let result: ReturnType = this.result.execute(envWhen)
+                return result
+            }
+        }
+        else {
+            let condition: ReturnType = this.when_.execute(env)
+            if (condition.value) {
+                return this.result.execute(env)
+            }
         }
     }
     public ast(ast: AST): ReturnAST {
-        return {dot: '', id: 0}
+        const id = ast.getNewID()
+        var dot = `node_${id}[label="WHEN" color="white" fontcolor="white"];`
+        dot += `node_${id}_cond[label="CONDICION" color="white" fontcolor="white"];`
+        dot += `node_${id}_result[label="RESULT" color="white" fontcolor="white"];`
+        let cond: ReturnAST = this.when_.ast(ast)
+        let result: ReturnAST = this.result.ast(ast)
+        dot += '\n' + cond.dot
+        dot += '\n' + result.dot
+        dot += `\nnode_${id}_cond -> node_${cond.id};`
+        dot += `\nnode_${id}_result -> node_${result.id};`
+        dot += `\nnode_${id} -> node_${id}_cond;`
+        dot += `\nnode_${id} -> node_${id}_result;`
+        return {dot: dot, id: id}
     }
 }

@@ -126,13 +126,22 @@ li ul li a:hover{
 }
 /* Logo */
 .logo{
+    display: flex;
+    align-items: center;
     color: var(--white);
 }
 .logo__name{
     font-weight: 400;
+    margin-left: 10px;
 }
 .logo__bold{
     font-weight: 600;
+}
+/* Estilo para la imagen junto al logo */
+.logo img {
+    margin: auto;
+    max-width: 2.5rem;
+    height: auto;
 }
 @media (max-width: 410px) {
     .logo__name{
@@ -144,6 +153,7 @@ li ul li a:hover{
         font-size: 3rem;
     }
 }
+
 /*container compile*/
 .containerCompile{
     display: flex;
