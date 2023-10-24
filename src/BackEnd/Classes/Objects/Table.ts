@@ -22,9 +22,11 @@ export class Field {
 export class Table {
     public fields: Map<string, Field> = new Map<string, Field>()
     private rows: number = 0;
-    constructor(public name: string, nameFields: string[], typeFields: Type[]) {
+    private name: string = ''
+    constructor(name: string, nameFields: string[], typeFields: Type[]) {
         for (var i = 0; i < nameFields.length; i ++) {
             this.fields.set(nameFields[i].toLowerCase(), new Field(typeFields[i], [], nameFields[i].length)) 
+            this.name = name
         }
     }
 
@@ -62,6 +64,30 @@ export class Table {
     public truncate() {
         for (const [_, field] of this.fields) {
             field.slice()
+        }
+    }
+
+    public addColumn(newColumn: string, type: Type) {
+        this.fields.set(newColumn.toLowerCase(), new Field(type, [], newColumn.length ))
+        for (let i = 0; i < this.rows; i ++) {
+            this.fields.get(newColumn.toLowerCase())?.values.push(new Data(Type.NULL, 'NULL'))
+            this.fields.get(newColumn.toLowerCase())?.updateLength(4)
+        }
+    }
+
+    public dropColumn(column: string) {
+        this.fields.delete(column.toLowerCase())
+    }
+
+    public renameTo(newId: string) {
+        this.name = newId.toLowerCase()
+    }
+
+    public renameCOlumn(currentColumn: string, newColumn: string) {
+        var field = this.fields.get(currentColumn.toLowerCase())
+        if (field) {
+            this.fields.set(newColumn, field)
+            this.fields.delete(currentColumn.toLowerCase())
         }
     }
 

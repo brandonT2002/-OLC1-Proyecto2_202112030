@@ -146,6 +146,7 @@ los números como si fuera de un solo dígito, para evitar ambigüedades y demá
     const { TruncateTable } = require('../Classes/Instructions/TruncateTable')
     const { InsertTable } = require('../Classes/Instructions/InsertTable')
     const { Function } = require('../Classes/Instructions/Function')
+    const { AlterTable } = require('../Classes/Instructions/AlterTable')
     // Expresiones
     const { Primitive } = require('../Classes/Expressions/Primitive')
     const { AccessID } = require('../Classes/Expressions/AccessID')
@@ -190,7 +191,7 @@ INSTRUCTIONS :
 
 INSTRUCTION :
     CREATETABLE TK_semicolon   {$$ = $1} |
-    ALTERTAB TK_semicolon      |
+    ALTERTAB TK_semicolon      {$$ = $1} |
     DROPTAB TK_semicolon       {$$ = $1} |
     INSERTREG TK_semicolon     {$$ = $1} |
     UPDATETAB TK_semicolon     |
@@ -240,6 +241,10 @@ FIELDS :
     LIST_IDS |
     TK_mult  ;
 
+LIST_IDS :
+    LIST_IDS TK_comma IDS {$$.push($3)} |
+    IDS                   {$$ = [$1]  } ;
+
 // Creación de tablas
 CREATETABLE :
     RW_create RW_table TK_field TK_lpar ATTRIBUTES TK_rpar {$$ = new CreateTable(@1.first_line, @1.first_column, $3, $5[0], $5[1])} ;
@@ -253,13 +258,13 @@ ATTRIBUTE :
 
 // Alter table
 ALTERTAB :
-    RW_alter RW_table TK_id ACTION ;
+    RW_alter RW_table TK_field ACTION {$$ = new AlterTable(@1.first_line, @1.first_column, $3, $4[0], $4[1], $4[2], $4[3])};
 
 ACTION :
-    RW_add TK_field TYPE       |
-    RW_drop RW_column TK_field |
-    RW_rename RW_to TK_field   |
-    RW_rename RW_column TK_field RW_to TK_field ;
+    RW_add TK_field TYPE                        {$$ = [$1, $2, undefined, $3]            } |
+    RW_drop RW_column TK_field                  {$$ = [$1, $3, undefined, undefined]     } |
+    RW_rename RW_to TK_field                    {$$ = [$1 + $2, $3, undefined, undefined]} |
+    RW_rename RW_column TK_field RW_to TK_field {$$ = [$1 + $2, $3, $5, undefined]       } ;
 
 // Elimnar tabla
 DROPTAB :
@@ -276,16 +281,6 @@ LIST_ATTRIBS:
 LIST_EXPS :
     LIST_EXPS TK_comma EXP {$$.push($3)} |
     EXP                    {$$ = [$1]  } ;
-
-// Obtener valores de tabla
-SELECTREG :
-    RW_select LIST_IDS RW_from TK_field RW_where EXP |
-    RW_select LIST_IDS RW_from TK_field              |
-    RW_select TK_mult RW_from TK_field ;
-
-LIST_IDS :
-    LIST_IDS TK_comma IDS {$$.push($3)} |
-    IDS                   {$$ = [$1]  } ;
 
 IDS :
     EXP RW_as TK_field {$$ = [$1, $3]} |

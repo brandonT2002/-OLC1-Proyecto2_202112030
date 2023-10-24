@@ -145,6 +145,85 @@ export class Env {
         return false
     }
 
+    public addColumn(id: string, newColumn: string, type: Type, line: number, column: number):boolean {
+        let env: Env = this
+        while(env) {
+            if(env.tables.has(id.toLowerCase())) {
+                if(!env.tables.get(id.toLowerCase())?.fields.has(newColumn.toLowerCase())) {
+                    env.tables.get(id.toLowerCase())?.addColumn(newColumn, type)
+                    console.log(env.tables.get(id.toLowerCase())?.select())
+                    this.setPrint(`Columna ${newColumn.toLowerCase()} insertada exitosamente en Tabla ${id.toLowerCase()}. ${line}:${column + 1}`)
+                    return true
+                }
+                this.setError(`Ya hay una columna ${newColumn.toLowerCase()} en Tabla ${id.toLowerCase()}`, line, column)
+                return false
+            }
+            env = env.previous!
+        }
+        this.setError(`Alterar tabla inexistente`, line, column)
+        return false
+    }
+    
+    public dropColumn(id: string, dropColumn: string, line: number, column: number): boolean {
+        let env: Env = this
+        while(env) {
+            if (env.tables.has(id.toLowerCase())) {
+                if(env.tables.get(id.toLowerCase())?.fields.has(dropColumn.toLowerCase())) {
+                    // si existe, hay que eliminarlo
+                    env.tables.get(id.toLowerCase())?.dropColumn(dropColumn)
+                    console.log(env.tables.get(id.toLowerCase())?.select())
+                    this.setPrint(`Columna ${dropColumn.toLowerCase()} eliminada exitosamente de la Tabla ${id.toLowerCase()}. ${line}:${column + 1}`)
+                    return true
+                }
+                this.setError(`La columna ${dropColumn.toLowerCase()} no existe en Tabla ${id.toLowerCase()}`, line, column)
+                return false
+            }
+            env = env.previous!
+        }
+        this.setError(`Alterar tabla inexistente`, line, column)
+        return false
+    }
+    
+    public renameTo(id: string, newId: string, line: number, column: number): boolean {
+        let env: Env = this
+        while(env) {
+            if (env.tables.has(id.toLowerCase())) {
+                let table = env.tables.get(id.toLowerCase())
+                if (table) {
+                    table.renameTo(newId.toLowerCase())
+                    env.tables.set(newId.toLowerCase(), table)
+                    env.tables.delete(id.toLowerCase())
+                    console.log(env.tables.get(newId.toLowerCase())?.select())
+                    this.setPrint(`Tabla ${id.toLowerCase()} renombrada como ${newId.toLowerCase()}. ${line}:${column + 1}`)
+                    return true
+                }
+            }
+            env = env.previous!
+        }
+        this.setError(`La Tabla ${id.toLowerCase()} no existe`, line, column)
+        return false
+    }
+
+    public renameColumn(id: string, currentColumn: string, newColumn: string, line: number, column: number):boolean {
+        let env: Env = this
+        while(env) {
+            if (env.tables.has(id.toLowerCase())) {
+                if (env.tables.get(id.toLowerCase())?.fields.has(currentColumn.toLowerCase())) {
+                    // si existe, hay que modificarlo
+                    env.tables.get(id.toLowerCase())?.renameCOlumn(currentColumn.toLowerCase(), newColumn.toLowerCase())
+                    console.log(env.tables.get(id.toLowerCase())?.select())
+                    this.setPrint(`Columna ${currentColumn.toLowerCase()} actualizada exitosamente a ${newColumn.toLowerCase()}. ${line}:${column + 1}`)
+                    return true
+                }
+                this.setError(`La columna ${currentColumn.toLowerCase()} no existe en Tabla ${id.toLowerCase()}`, line, column)
+                return false
+            }
+            env = env.previous!
+        }
+        this.setError(`Alterar tabla inexistente`, line, column)
+        return false
+    }
+
     public setPrint(print: string) {
         printConsole.push(print)
     }
