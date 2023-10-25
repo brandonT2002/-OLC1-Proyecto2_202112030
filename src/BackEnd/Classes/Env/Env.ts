@@ -42,7 +42,7 @@ export class Env {
         while (env) {
             if (env.ids.has(id.toLowerCase())) {
                 let symbol: Symbol = env.ids.get(id.toLowerCase())!
-                if (symbol.type === value.type || symbol.type === Type.DOUBLE && value.type === Type.INT) {
+                if (symbol.type === value.type || symbol.type === Type.DOUBLE && value.type === Type.INT || value.type === Type.NULL) {
                     symbol.value = value.value;
                     env.ids.set(id.toLowerCase(), symbol)
                     return true
@@ -83,7 +83,7 @@ export class Env {
         if(!env.tables.has(id.toLowerCase())) {
             env.tables.set(id.toLowerCase(), table)
             symTable.push(new SymTab(line, column + 1, false, false, id.toLowerCase(), env.name, Type.TABLE))
-            this.setPrint(`Tabla ${id.toLowerCase()} creada. ${line}:${column + 1}`)
+            this.setPrint(`Tabla '${id.toLowerCase()}' creada. ${line}:${column + 1}`)
         }
         else {
             this.setError('Redefinición de tabla existente', line, column)
@@ -95,7 +95,7 @@ export class Env {
         while(env) {
             if(env.tables.has(id.toLowerCase())) {
                 env.tables.delete(id.toLowerCase())
-                this.setPrint(`Tabla ${id.toLowerCase()} eliminada. ${line}:${column + 1}`)
+                this.setPrint(`Tabla '${id.toLowerCase()}' eliminada. ${line}:${column + 1}`)
                 symTable.pop(id.toLowerCase())
                 return true
             }
@@ -110,7 +110,7 @@ export class Env {
         while(env) {
             if(env.tables.has(id.toLowerCase())) {
                 env.tables.get(id.toLowerCase())?.truncate()
-                this.setPrint(`Registros eliminados de Tabla ${id.toLowerCase()}. ${line}:${column + 1}`)
+                this.setPrint(`Registros eliminados de Tabla '${id.toLowerCase()}'. ${line}:${column + 1}`)
                 return true
             }
             env = env.previous
@@ -131,12 +131,12 @@ export class Env {
                         newRow?.set(fields[i].toLowerCase(), [result.type, result.value])
                     }
                     if (env.tables.get(id.toLowerCase())?.insert(env, newRow, line, column)) {
-                        this.setPrint(`Registro insertado exitosamente en Tabla ${id.toLowerCase()}. ${line}:${column + 1}`)
+                        this.setPrint(`Registro insertado exitosamente en Tabla '${id.toLowerCase()}'. ${line}:${column + 1}`)
                         return true
                     }
                     return false
                 }
-                this.setError(`Inserta dato en columna inexistente en Tabla ${id.toLowerCase()}`, line, column)
+                this.setError(`Inserta dato en columna inexistente en Tabla '${id.toLowerCase()}'`, line, column)
                 return false
             }
             env = env.previous
@@ -151,11 +151,10 @@ export class Env {
             if(env.tables.has(id.toLowerCase())) {
                 if(!env.tables.get(id.toLowerCase())?.fields.has(newColumn.toLowerCase())) {
                     env.tables.get(id.toLowerCase())?.addColumn(newColumn, type)
-                    console.log(env.tables.get(id.toLowerCase())?.select())
-                    this.setPrint(`Columna ${newColumn.toLowerCase()} insertada exitosamente en Tabla ${id.toLowerCase()}. ${line}:${column + 1}`)
+                    this.setPrint(`Columna '${newColumn.toLowerCase()}' insertada exitosamente en Tabla '${id.toLowerCase()}'. ${line}:${column + 1}`)
                     return true
                 }
-                this.setError(`Ya hay una columna ${newColumn.toLowerCase()} en Tabla ${id.toLowerCase()}`, line, column)
+                this.setError(`Ya hay una columna '${newColumn.toLowerCase()}' en Tabla '${id.toLowerCase()}'`, line, column)
                 return false
             }
             env = env.previous!
@@ -171,11 +170,10 @@ export class Env {
                 if(env.tables.get(id.toLowerCase())?.fields.has(dropColumn.toLowerCase())) {
                     // si existe, hay que eliminarlo
                     env.tables.get(id.toLowerCase())?.dropColumn(dropColumn)
-                    console.log(env.tables.get(id.toLowerCase())?.select())
-                    this.setPrint(`Columna ${dropColumn.toLowerCase()} eliminada exitosamente de la Tabla ${id.toLowerCase()}. ${line}:${column + 1}`)
+                    this.setPrint(`Columna '${dropColumn.toLowerCase()}' eliminada exitosamente de la Tabla '${id.toLowerCase()}'. ${line}:${column + 1}`)
                     return true
                 }
-                this.setError(`La columna ${dropColumn.toLowerCase()} no existe en Tabla ${id.toLowerCase()}`, line, column)
+                this.setError(`La columna '${dropColumn.toLowerCase()}' no existe en Tabla '${id.toLowerCase()}'`, line, column)
                 return false
             }
             env = env.previous!
@@ -193,14 +191,13 @@ export class Env {
                     table.renameTo(newId.toLowerCase())
                     env.tables.set(newId.toLowerCase(), table)
                     env.tables.delete(id.toLowerCase())
-                    console.log(env.tables.get(newId.toLowerCase())?.select())
-                    this.setPrint(`Tabla ${id.toLowerCase()} renombrada como ${newId.toLowerCase()}. ${line}:${column + 1}`)
+                    this.setPrint(`Tabla '${id.toLowerCase()}' renombrada como '${newId.toLowerCase()}'. ${line}:${column + 1}`)
                     return true
                 }
             }
             env = env.previous!
         }
-        this.setError(`La Tabla ${id.toLowerCase()} no existe`, line, column)
+        this.setError(`La Tabla '${id.toLowerCase()}' no existe`, line, column)
         return false
     }
 
@@ -211,11 +208,10 @@ export class Env {
                 if (env.tables.get(id.toLowerCase())?.fields.has(currentColumn.toLowerCase())) {
                     // si existe, hay que modificarlo
                     env.tables.get(id.toLowerCase())?.renameCOlumn(currentColumn.toLowerCase(), newColumn.toLowerCase())
-                    console.log(env.tables.get(id.toLowerCase())?.select())
-                    this.setPrint(`Columna ${currentColumn.toLowerCase()} actualizada exitosamente a ${newColumn.toLowerCase()}. ${line}:${column + 1}`)
+                    this.setPrint(`Columna '${currentColumn.toLowerCase()}' actualizada exitosamente a '${newColumn.toLowerCase()}'. ${line}:${column + 1}`)
                     return true
                 }
-                this.setError(`La columna ${currentColumn.toLowerCase()} no existe en Tabla ${id.toLowerCase()}`, line, column)
+                this.setError(`La columna '${currentColumn.toLowerCase()}' no existe en Tabla '${id.toLowerCase()}'`, line, column)
                 return false
             }
             env = env.previous!
@@ -229,7 +225,7 @@ export class Env {
         while(env) {
             if (env.tables.has(id.toLowerCase())) {
                 env.tables.get(id.toLowerCase())?.deleteWhere(condition, this)
-                console.log(env.tables.get(id.toLowerCase())?.select())
+                this.setPrint(`Eliminación en Tabla '${id.toLowerCase()}'. ${line}:${column + 1}`)
                 return
             }
             env = env.previous
@@ -237,18 +233,32 @@ export class Env {
         this.setError(`Eliminar registro en tabla inexistente`, line, column)
         return false
     }
-    
+
     public updateTable(id: string, fields: string[], values: Expression[], condition: Expression, line: number, column: number) {
         let env: Env | null = this
         while(env) {
             if (env.tables.has(id.toLowerCase())) {
                 env.tables.get(id.toLowerCase())?.updateWhere(condition, fields, values, this)
-                console.log(env.tables.get(id.toLowerCase())?.select())
-                return
+                return true
             }
             env = env.previous
         }
         this.setError(`Actualizar registro en tabla inexistente`, line, column)
+        return false
+    }
+
+    public selectTable(id: string, fields: any[][] | string, condition: Expression, line: number, column: number) {
+        let env: Env | null = this
+        while(env) {
+            if (env.tables.has(id.toLowerCase())) {
+                var table: string | undefined = env.tables.get(id.toLowerCase())?.select(fields, condition, this)
+                this.setPrint(`Selección en Tabla '${id.toLowerCase()}'. ${line}:${column + 1}`)
+                env.setPrint(table ? table : '')
+                return true
+            }
+            env = env.previous
+        }
+        this.setError(`Selección en tabla inexistente`, line, column)
         return false
     }
 

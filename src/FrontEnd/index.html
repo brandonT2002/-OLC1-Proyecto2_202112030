@@ -44,9 +44,10 @@
                     <li>
                         <a href="#" class="navigation__link">Reportes</a>
                         <ul>
-                            <li><a id="" href="#modal" onclick="getErrors()">Errores</a></li>
-                            <li><a id="" href="#modal" onclick="graphAST()">Generar Arbol</a></li>
-                            <li><a id="" href="#modal" onclick="getSymbolsTable()">Tabla de Simbolos</a></li>
+                            <li><a id="" href="#modal1" onclick="getErrors()">Errores</a></li>
+                            <li><a id="" href="#modal2" onclick="graphAST()">Generar Arbol</a></li>
+                            <li><a id="" href="#modal3" onclick="getSymbolsTable()">Tabla de Simbolos</a></li>
+                            <li><a id="" href="#modal4" onclick="getTokens()">Tokens</a></li>
                         </ul>
                     </li>
                 </nav>
@@ -54,10 +55,64 @@
         </div>
     </header>
     <div class="container">
-        <div id="modal" class="modalmask">
+        <div id="modal1" class="modalmask">
+            <form action="" autocomplete="off">
+                <div class="modalbox movedown">
+                    <h1 class="center-text">Reporte de Errores</h1>
+                    <table id="errors-report">
+                        <tr>
+                            <th id="noBooks" class="center-text">
+                                No hay Errores
+                            </th>
+                        </tr>
+                    </table>
+                    <a href="#close" title="Close" class="close">&times;</a>
+                    <div id="report" class="report"></div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="container">
+        <div id="modal2" class="modalmask">
             <form action="" autocomplete="off">
                 <div class="modalbox movedown">
                     <a href="#close" title="Close" class="close" onclick="resetGraph()">&times;</a>
+                    <div id="report" class="report"></div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="container">
+        <div id="modal3" class="modalmask">
+            <form action="" autocomplete="off">
+                <div class="modalbox movedown">
+                    <h1 class="center-text">Tabla de Símbolos</h1>
+                    <table id="symb-report">
+                        <tr>
+                            <th id="noBooks" class="center-text">
+                                No hay Simbolos
+                            </th>
+                        </tr>
+                    </table>
+                    <a href="#close" title="Close" class="close">&times;</a>
+                    <div id="report" class="report"></div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="container">
+        <div id="modal4" class="modalmask">
+            <form action="" autocomplete="off">
+                <div class="modalbox movedown">
+                    <h1 class="center-text">Tabla de Tokens</h1>
+                    <table id="tokens-report">
+                        <tr>
+                            <th id="noBooks" class="center-text">
+                                No hay Simbolos
+                            </th>
+                        </tr>
+                    </table>
+                    <a href="#close" title="Close" class="close">&times;</a>
                     <div id="report" class="report"></div>
                 </div>
             </form>

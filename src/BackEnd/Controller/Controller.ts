@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { Env } from "../Classes/Env/Env";
 import { symTable } from '../Classes/Env/SymbolTable';
-import { getStringOuts, resetOuts } from '../Classes/Utils/Outs'
+import { getStringOuts, resetOuts, getErrors, getTokens } from '../Classes/Utils/Outs'
 import { AST, ReturnAST } from "../Classes/Env/AST";
 import { TypeInst } from "../Classes/Utils/TypeInst";
 
@@ -108,7 +108,6 @@ export class Controller {
             })
         }
         catch (error) {
-            console.log(error)
             res.json({
                 console: error
             })
@@ -128,7 +127,9 @@ export class Controller {
     }
     public getSymbolsTable(req: Request,res: Response) {
         try {
-            
+            res.json({
+                table: symTable.symbols
+            })
         }
         catch (error) {
             res.json({
@@ -138,11 +139,25 @@ export class Controller {
     }
     public getErrors(req: Request,res: Response) {
         try {
-            
+            res.json({
+                errors: getErrors()
+            })
         }
         catch (error) {
             res.json({
                 errors: error
+            })
+        }
+    }
+    public getTokens(req: Request,res: Response) {
+        try {
+            res.json({
+                tok: getTokens()
+            })
+        }
+        catch (error) {
+            res.json({
+                tok: error
             })
         }
     }

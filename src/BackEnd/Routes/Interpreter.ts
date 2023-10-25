@@ -8,4 +8,5 @@ router.post('/parserFile',interpreter.parserFile)
 router.get('/getAST',interpreter.getAST)
 router.get('/getSymbolsTable',interpreter.getSymbolsTable)
 router.get('/getErrors',interpreter.getErrors)
+router.get('/getTokens',interpreter.getTokens)
 export default router

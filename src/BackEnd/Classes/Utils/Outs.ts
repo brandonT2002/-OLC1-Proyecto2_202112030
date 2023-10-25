@@ -1,7 +1,9 @@
 import { Error } from './Error'
+import { Token } from './Token'
 
 export var printConsole: string[] = []
 export var errors: Error[] = []
+export var tokens: Token[] = []
 
 export function getStringOuts(): string {
     var out = ''
@@ -18,7 +20,6 @@ export function getStringOuts(): string {
 			out += "↳ ERRORES\n"
 		}
 		for(var i = 0; i < errors.length; i ++) {
-			errors[i].number = i + 1
 			out += errors[i].toString()
 			if(i < errors.length - 1) {
 				out += "\n"
@@ -28,7 +29,16 @@ export function getStringOuts(): string {
     return out
 }
 
+export function getErrors() {
+	return errors;
+}
+
+export function getTokens() {
+	return tokens;
+}
+
 export function resetOuts() {
 	printConsole.splice(0, printConsole.length)
 	errors.splice(0, errors.length)
+	tokens.splice(0, tokens.length)
 }

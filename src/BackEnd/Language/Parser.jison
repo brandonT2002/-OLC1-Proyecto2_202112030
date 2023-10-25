@@ -1,7 +1,8 @@
 %{
     // imports
-    let { errors } = require ('../Classes/Utils/Outs')
+    let { errors, tokens } = require ('../Classes/Utils/Outs')
     const { Error } = require ('../Classes/Utils/Error')
+    const { Token } = require ('../Classes/Utils/Token')
     const { TypeError } = require ('../Classes/Utils/TypeError')
 %}
 
@@ -28,92 +29,92 @@ COMMENTM    [/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]
 {UNUSED}        {}
 // tokens
 // EJECUCION DDL
-'BEGIN'         {return 'RW_begin'}
-'END'           {return 'RW_end'}
-'SELECT'        {return 'RW_select'}
-'FROM'          {return 'RW_from'}
-'WHERE'         {return 'RW_where'}
-'DECLARE'       {return 'RW_declare'}
-'DEFAULT'       {return 'RW_default'}
-'SET'           {return 'RW_set'}
-'CREATE'        {return 'RW_create'}
-'TABLE'         {return 'RW_table'}
-'ALTER'         {return 'RW_alter'}
-'ADD'           {return 'RW_add'}
-'DROP'          {return 'RW_drop'}
-'COLUMN'        {return 'RW_column'}
-'RENAME'        {return 'RW_rename'}
-'TO'            {return 'RW_to'}
-'INSERT'        {return 'RW_insert'}
-'INTO'          {return 'RW_into'}
-'VALUES'        {return 'RW_values'}
-'AS'            {return 'RW_as'}
-'UPDATE'        {return 'RW_update'}
-'TRUNCATE'      {return 'RW_truncate'}
-'DELETE'        {return 'RW_delete'}
-'CAST'          {return 'RW_cast'}
-'THEN'          {return 'RW_then'}
-'WHEN'          {return 'RW_when'}
+'BEGIN'         {tokens.push(new Token(yylloc.first_line, yylloc.first_column, yytext, 'RW_begin'));      return 'RW_begin'}
+'END'           {tokens.push(new Token(yylloc.first_line, yylloc.first_column, yytext, 'RW_end'));        return 'RW_end'}
+'SELECT'        {tokens.push(new Token(yylloc.first_line, yylloc.first_column, yytext, 'RW_select'));     return 'RW_select'}
+'FROM'          {tokens.push(new Token(yylloc.first_line, yylloc.first_column, yytext, 'RW_from'));       return 'RW_from'}
+'WHERE'         {tokens.push(new Token(yylloc.first_line, yylloc.first_column, yytext, 'RW_where'));      return 'RW_where'}
+'DECLARE'       {tokens.push(new Token(yylloc.first_line, yylloc.first_column, yytext, 'RW_declare'));    return 'RW_declare'}
+'DEFAULT'       {tokens.push(new Token(yylloc.first_line, yylloc.first_column, yytext, 'RW_default'));    return 'RW_default'}
+'SET'           {tokens.push(new Token(yylloc.first_line, yylloc.first_column, yytext, 'RW_set'));        return 'RW_set'}
+'CREATE'        {tokens.push(new Token(yylloc.first_line, yylloc.first_column, yytext, 'RW_create'));     return 'RW_create'}
+'TABLE'         {tokens.push(new Token(yylloc.first_line, yylloc.first_column, yytext, 'RW_table'));      return 'RW_table'}
+'ALTER'         {tokens.push(new Token(yylloc.first_line, yylloc.first_column, yytext, 'RW_alter'));      return 'RW_alter'}
+'ADD'           {tokens.push(new Token(yylloc.first_line, yylloc.first_column, yytext, 'RW_add'));        return 'RW_add'}
+'DROP'          {tokens.push(new Token(yylloc.first_line, yylloc.first_column, yytext, 'RW_drop'));       return 'RW_drop'}
+'COLUMN'        {tokens.push(new Token(yylloc.first_line, yylloc.first_column, yytext, 'RW_column'));     return 'RW_column'}
+'RENAME'        {tokens.push(new Token(yylloc.first_line, yylloc.first_column, yytext, 'RW_rename'));     return 'RW_rename'}
+'TO'            {tokens.push(new Token(yylloc.first_line, yylloc.first_column, yytext, 'RW_to'));         return 'RW_to'}
+'INSERT'        {tokens.push(new Token(yylloc.first_line, yylloc.first_column, yytext, 'RW_insert'));     return 'RW_insert'}
+'INTO'          {tokens.push(new Token(yylloc.first_line, yylloc.first_column, yytext, 'RW_into'));       return 'RW_into'}
+'VALUES'        {tokens.push(new Token(yylloc.first_line, yylloc.first_column, yytext, 'RW_values'));     return 'RW_values'}
+'AS'            {tokens.push(new Token(yylloc.first_line, yylloc.first_column, yytext, 'RW_as'));         return 'RW_as'}
+'UPDATE'        {tokens.push(new Token(yylloc.first_line, yylloc.first_column, yytext, 'RW_update'));     return 'RW_update'}
+'TRUNCATE'      {tokens.push(new Token(yylloc.first_line, yylloc.first_column, yytext, 'RW_truncate'));   return 'RW_truncate'}
+'DELETE'        {tokens.push(new Token(yylloc.first_line, yylloc.first_column, yytext, 'RW_delete'));     return 'RW_delete'}
+'CAST'          {tokens.push(new Token(yylloc.first_line, yylloc.first_column, yytext, 'RW_cast'));       return 'RW_cast'}
+'THEN'          {tokens.push(new Token(yylloc.first_line, yylloc.first_column, yytext, 'RW_then'));       return 'RW_then'}
+'WHEN'          {tokens.push(new Token(yylloc.first_line, yylloc.first_column, yytext, 'RW_when'));       return 'RW_when'}
 // EJECUCION DML
-'IF'            {return 'RW_if'}
-'ELSE'          {return 'RW_else'}
-'CASE'          {return 'RW_case'}
-'WHILE'         {return 'RW_while'}
-'FOR'           {return 'RW_for'}
-'IN'            {return 'RW_in'}
-'LOOP'          {return 'RW_loop'}
-'BREAK'         {return 'RW_break'}
-'CONTINUE'      {return 'RW_continue'}
-'FUNCTION'      {return 'RW_function'}
-'RETURNS'       {return 'RW_returns'}
-'RETURN'        {return 'RW_return'}
-'PROCEDURE'     {return 'RW_procedure'}
-'PRINT'         {return 'RW_print'}
-'LOWER'         {return 'RW_lower'}
-'UPPER'         {return 'RW_upper'}
-'ROUND'         {return 'RW_round'}
-'LEN'           {return 'RW_len'}
-'TRUNCATE'      {return 'RW_truncate'}
-'TYPEOF'        {return 'RW_typeof'}
+'IF'            {tokens.push(new Token(yylloc.first_line, yylloc.first_column, yytext, 'RW_if'));         return 'RW_if'}
+'ELSE'          {tokens.push(new Token(yylloc.first_line, yylloc.first_column, yytext, 'RW_else'));       return 'RW_else'}
+'CASE'          {tokens.push(new Token(yylloc.first_line, yylloc.first_column, yytext, 'RW_case'));       return 'RW_case'}
+'WHILE'         {tokens.push(new Token(yylloc.first_line, yylloc.first_column, yytext, 'RW_while'));      return 'RW_while'}
+'FOR'           {tokens.push(new Token(yylloc.first_line, yylloc.first_column, yytext, 'RW_for'));        return 'RW_for'}
+'IN'            {tokens.push(new Token(yylloc.first_line, yylloc.first_column, yytext, 'RW_in'));         return 'RW_in'}
+'LOOP'          {tokens.push(new Token(yylloc.first_line, yylloc.first_column, yytext, 'RW_loop'));       return 'RW_loop'}
+'BREAK'         {tokens.push(new Token(yylloc.first_line, yylloc.first_column, yytext, 'RW_break'));      return 'RW_break'}
+'CONTINUE'      {tokens.push(new Token(yylloc.first_line, yylloc.first_column, yytext, 'RW_continue'));   return 'RW_continue'}
+'FUNCTION'      {tokens.push(new Token(yylloc.first_line, yylloc.first_column, yytext, 'RW_function'));   return 'RW_function'}
+'RETURNS'       {tokens.push(new Token(yylloc.first_line, yylloc.first_column, yytext, 'RW_returns'));    return 'RW_returns'}
+'RETURN'        {tokens.push(new Token(yylloc.first_line, yylloc.first_column, yytext, 'RW_return'));     return 'RW_return'}
+'PROCEDURE'     {tokens.push(new Token(yylloc.first_line, yylloc.first_column, yytext, 'RW_procedure'));  return 'RW_procedure'}
+'PRINT'         {tokens.push(new Token(yylloc.first_line, yylloc.first_column, yytext, 'RW_print'));      return 'RW_print'}
+'LOWER'         {tokens.push(new Token(yylloc.first_line, yylloc.first_column, yytext, 'RW_lower'));      return 'RW_lower'}
+'UPPER'         {tokens.push(new Token(yylloc.first_line, yylloc.first_column, yytext, 'RW_upper'));      return 'RW_upper'}
+'ROUND'         {tokens.push(new Token(yylloc.first_line, yylloc.first_column, yytext, 'RW_round'));      return 'RW_round'}
+'LEN'           {tokens.push(new Token(yylloc.first_line, yylloc.first_column, yytext, 'RW_len'));        return 'RW_len'}
+'TRUNCATE'      {tokens.push(new Token(yylloc.first_line, yylloc.first_column, yytext, 'RW_truncate'));   return 'RW_truncate'}
+'TYPEOF'        {tokens.push(new Token(yylloc.first_line, yylloc.first_column, yytext, 'RW_typeof'));     return 'RW_typeof'}
 // TIPOS DE DATOS
-'INT'           {return 'RW_int'}
-'DOUBLE'        {return 'RW_double'}
-'DATE'          {return 'RW_date'}
-'VARCHAR'       {return 'RW_varchar'}
-'BOOLEAN'       {return 'RW_boolean'}
-'TRUE'          {return 'RW_true'}
-'FALSE'         {return 'RW_false'}
-'NULL'          {return 'RW_null'}
+'INT'           {tokens.push(new Token(yylloc.first_line, yylloc.first_column, yytext, 'RW_int'));        return 'RW_int'}
+'DOUBLE'        {tokens.push(new Token(yylloc.first_line, yylloc.first_column, yytext, 'RW_double'));     return 'RW_double'}
+'DATE'          {tokens.push(new Token(yylloc.first_line, yylloc.first_column, yytext, 'RW_date'));       return 'RW_date'}
+'VARCHAR'       {tokens.push(new Token(yylloc.first_line, yylloc.first_column, yytext, 'RW_varchar'));    return 'RW_varchar'}
+'BOOLEAN'       {tokens.push(new Token(yylloc.first_line, yylloc.first_column, yytext, 'RW_boolean'));    return 'RW_boolean'}
+'TRUE'          {tokens.push(new Token(yylloc.first_line, yylloc.first_column, yytext, 'RW_true'));       return 'RW_true'}
+'FALSE'         {tokens.push(new Token(yylloc.first_line, yylloc.first_column, yytext, 'RW_false'));      return 'RW_false'}
+'NULL'          {tokens.push(new Token(yylloc.first_line, yylloc.first_column, yytext, 'RW_null'));       return 'RW_null'}
 // OPERADORES LOGICOS
-'AND'           {return 'RW_and'}
-'OR'            {return 'RW_or'}
-'NOT'           {return 'RW_not'}
+'AND'           {tokens.push(new Token(yylloc.first_line, yylloc.first_column, yytext, 'RW_and'));        return 'RW_and'}
+'OR'            {tokens.push(new Token(yylloc.first_line, yylloc.first_column, yytext, 'RW_or'));         return 'RW_or'}
+'NOT'           {tokens.push(new Token(yylloc.first_line, yylloc.first_column, yytext, 'RW_not'));        return 'RW_not'}
 //EXPRESIONES
-{ID}            {return 'TK_id'}
-{FIELD}         {return 'TK_field'}
-{DATE}          {yytext = yytext.substr(1,yyleng - 2); return 'TK_date'}
-{STRING}        {yytext = yytext.substr(1,yyleng - 2); return 'TK_varchar'}
-{DOUBLE}        {return 'TK_double'}
-{INTEGER}       {return 'TK_int'}
+{ID}            {tokens.push(new Token(yylloc.first_line, yylloc.first_column, yytext, 'TK_id'));         return 'TK_id'}
+{FIELD}         {tokens.push(new Token(yylloc.first_line, yylloc.first_column, yytext, 'TK_field'));      return 'TK_field'}
+{DATE}          {tokens.push(new Token(yylloc.first_line, yylloc.first_column, yytext, 'TK_date'));       yytext = yytext.substr(1,yyleng - 2);   return 'TK_date'}
+{STRING}        {tokens.push(new Token(yylloc.first_line, yylloc.first_column, yytext, 'TK_varchar'));    yytext = yytext.substr(1,yyleng - 2);   return 'TK_varchar'}
+{DOUBLE}        {tokens.push(new Token(yylloc.first_line, yylloc.first_column, yytext, 'TK_double'));     return 'TK_double'}
+{INTEGER}       {tokens.push(new Token(yylloc.first_line, yylloc.first_column, yytext, 'TK_int'));        return 'TK_int'}
 // SIGNOS DE AGRUPACION Y FINALIZACION
-'('             {return 'TK_lpar'}
-')'             {return 'TK_rpar'}
-';'             {return 'TK_semicolon'}
-','             {return 'TK_comma'}
-'..'            {return 'TK_dot'}
+'('             {tokens.push(new Token(yylloc.first_line, yylloc.first_column, yytext, 'TK_lpar'));       return 'TK_lpar'}
+')'             {tokens.push(new Token(yylloc.first_line, yylloc.first_column, yytext, 'TK_rpar'));       return 'TK_rpar'}
+';'             {tokens.push(new Token(yylloc.first_line, yylloc.first_column, yytext, 'TK_semicolon'));  return 'TK_semicolon'}
+','             {tokens.push(new Token(yylloc.first_line, yylloc.first_column, yytext, 'TK_comma'));      return 'TK_comma'}
+'..'            {tokens.push(new Token(yylloc.first_line, yylloc.first_column, yytext, 'TK_dot'));        return 'TK_dot'}
 // OPERADORES ARITMETICOS
-'+'             {return 'TK_plus'}
-'-'             {return 'TK_minus'}
-'*'             {return 'TK_mult'}
-'/'             {return 'TK_div'}
-'%'             {return 'TK_mod'}
+'+'             {tokens.push(new Token(yylloc.first_line, yylloc.first_column, yytext, 'TK_plus'));       return 'TK_plus'}
+'-'             {tokens.push(new Token(yylloc.first_line, yylloc.first_column, yytext, 'TK_minus'));      return 'TK_minus'}
+'*'             {tokens.push(new Token(yylloc.first_line, yylloc.first_column, yytext, 'TK_mult'));       return 'TK_mult'}
+'/'             {tokens.push(new Token(yylloc.first_line, yylloc.first_column, yytext, 'TK_div'));        return 'TK_div'}
+'%'             {tokens.push(new Token(yylloc.first_line, yylloc.first_column, yytext, 'TK_mod'));        return 'TK_mod'}
 // OPERADORES RELACIONALES
-'='             {return 'TK_equal'}
-'!='            {return 'TK_notequal'}
-'<='            {return 'TK_lessequal'}
-'>='            {return 'TK_greatequal'}
-'<'             {return 'TK_less'}
-'>'             {return 'TK_great'}
+'='             {tokens.push(new Token(yylloc.first_line, yylloc.first_column, yytext, 'TK_equal'));      return 'TK_equal'}
+'!='            {tokens.push(new Token(yylloc.first_line, yylloc.first_column, yytext, 'TK_notequal'));   return 'TK_notequal'}
+'<='            {tokens.push(new Token(yylloc.first_line, yylloc.first_column, yytext, 'TK_lessequal'));  return 'TK_lessequal'}
+'>='            {tokens.push(new Token(yylloc.first_line, yylloc.first_column, yytext, 'TK_greatequal')); return 'TK_greatequal'}
+'<'             {tokens.push(new Token(yylloc.first_line, yylloc.first_column, yytext, 'TK_less'));       return 'TK_less'}
+'>'             {tokens.push(new Token(yylloc.first_line, yylloc.first_column, yytext, 'TK_great'));      return 'TK_great'}
 //
 .               {errors.push(new Error(yylloc.first_line, yylloc.first_column + 1, TypeError.LEXICAL, `Caracter no reconocido. «${yytext}»`))}
 <<EOF>>         {return 'EOF'}
@@ -131,6 +132,7 @@ los números como si fuera de un solo dígito, para evitar ambigüedades y demá
     const { Type } = require('../Classes/Utils/Type')
     // Instrucciones
     const { Print } = require('../Classes/Instructions/Print')
+    const { Select_prt } = require('../Classes/Instructions/Select_prt')
     const { InitID } = require('../Classes/Instructions/InitID')
     const { AsignID } = require('../Classes/Instructions/AsignID')
     const { If } = require('../Classes/Instructions/If')
@@ -148,6 +150,8 @@ los números como si fuera de un solo dígito, para evitar ambigüedades y demá
     const { Function } = require('../Classes/Instructions/Function')
     const { AlterTable } = require('../Classes/Instructions/AlterTable')
     const { DeleteTable } = require('../Classes/Instructions/DeleteTable')
+    const { UpdateTable } = require('../Classes/Instructions/UpdateTable')
+    const { Select } = require('../Classes/Instructions/Select')
     // Expresiones
     const { Primitive } = require('../Classes/Expressions/Primitive')
     const { AccessID } = require('../Classes/Expressions/AccessID')
@@ -196,10 +200,10 @@ INSTRUCTION :
     ALTERTAB TK_semicolon      {$$ = $1} |
     DROPTAB TK_semicolon       {$$ = $1} |
     INSERTREG TK_semicolon     {$$ = $1} |
-    UPDATETAB TK_semicolon     |
+    UPDATETAB TK_semicolon     {$$ = $1} |
     TRUNCATETAB TK_semicolon   {$$ = $1} |
     DELETETAB TK_semicolon     {$$ = $1} |
-    SELECT TK_semicolon        |
+    SELECT TK_semicolon        {$$ = $1} |
     DECLAREID TK_semicolon     {$$ = $1} |
     ASIGNID TK_semicolon       {$$ = $1} |
     IFSTRUCT TK_semicolon      {$$ = $1} |
@@ -235,17 +239,22 @@ ASIGNID :
 
 // Mostrar valor de variables
 SELECT :
-    RW_select FIELDS RW_from TK_field RW_where EXP |
-    RW_select FIELDS RW_from TK_field              |
-    RW_select LIST_IDS                             ;
+    RW_select FIELDS RW_from TK_field RW_where EXP {$$ = new Select(@1.first_line, @1.first_column, $4, $2, $6)       } |
+    RW_select FIELDS RW_from TK_field              {$$ = new Select(@1.first_line, @1.first_column, $4, $2, undefined)} |
+    RW_select LIST_IDS                             {$$ = new Select_prt(@1.first_line, @1.first_column, $2)} ;
 
 FIELDS :
-    LIST_IDS |
-    TK_mult  ;
+    LIST_IDS {$$ = $1} |
+    TK_mult  {$$ = $1} ;
 
 LIST_IDS :
     LIST_IDS TK_comma IDS {$$.push($3)} |
     IDS                   {$$ = [$1]  } ;
+
+IDS :
+    EXP RW_as TK_varchar {$$ = [$1, $3]} |
+    EXP RW_as TK_field   {$$ = [$1, $3]} |
+    EXP                  {$$ = [$1, '']} ;
 
 // Creación de tablas
 CREATETABLE :
@@ -284,24 +293,20 @@ LIST_EXPS :
     LIST_EXPS TK_comma EXP {$$.push($3)} |
     EXP                    {$$ = [$1]  } ;
 
-IDS :
-    EXP RW_as TK_field {$$ = [$1, $3]} |
-    EXP                {$$ = [$1, $1]} ;
-
 // Actualizar tabla
 UPDATETAB :
-    RW_update TK_id RW_set VALUESTAB RW_where TK_id TK_equal EXP ;
+    RW_update TK_field RW_set VALUESTAB RW_where EXP {$$ = new UpdateTable(@1.first_line, @1.first_column, $2, $4[0], $4[1], $6)} ;
 
 VALUESTAB :
-    VALUESTAB TK_comma VALUETAB |
-    VALUETAB ;
+    VALUESTAB TK_comma VALUETAB {$$[0].push($3[0]); $$[1].push($3[1])} |
+    VALUETAB                    {$$ = [[$1[0]], [$1[1]]]             } ;
 
 VALUETAB :
-    TK_id TK_equal EXP ;
+    TK_field TK_equal EXP {$$ = [$1, $3]} ;
 
 // Truncate
 TRUNCATETAB :
-    RW_truncate RW_table TK_id {$$ = new TruncateTable(@1.first_line, @1.first_column, $3)} ;
+    RW_truncate RW_table TK_field {$$ = new TruncateTable(@1.first_line, @1.first_column, $3)} ;
 
 // Eliminar Registros
 DELETETAB :
@@ -394,6 +399,7 @@ EXP :
     TK_date     {$$ = new Primitive(@1.first_line, @1.first_column, $1, Type.DATE)   } |
     RW_true     {$$ = new Primitive(@1.first_line, @1.first_column, $1, Type.BOOLEAN)} |
     RW_false    {$$ = new Primitive(@1.first_line, @1.first_column, $1, Type.BOOLEAN)} |
+    RW_null     {$$ = new Primitive(@1.first_line, @1.first_column, $1, Type.NULL)} |
     TK_lpar EXP TK_rpar {$$ = $2} ;
 
 ARITHMETICS :

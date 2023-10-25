@@ -27,8 +27,8 @@ export class CallFunction extends Expression {
                     param = func.parameters[i]  
                     if(value.type === param.type || param.type === Type.DOUBLE && value.type === Type.INT) {
                         if(!envFunc.ids.has(param.id.toLowerCase())) {
-                            envFunc.ids.set(param.id.toLowerCase(), new Symbol(value.value, param.id.toLowerCase(), value.type))
-                            symTable.push(new SymTab(param.line, param.column + 1, true, true, param.id.toLowerCase(), env.name, param.type))
+                            envFunc.ids.set(param.id.toLowerCase(), new Symbol(value.value, param.id.toLowerCase(), param.type))
+                            symTable.push(new SymTab(param.line, param.column + 1, true, true, param.id.toLowerCase(), envFunc.name, param.type))
                             continue
                         }
                         env.setError(`No puede haber parámetros distintos con el mismo nombre`, param.line, param.column)

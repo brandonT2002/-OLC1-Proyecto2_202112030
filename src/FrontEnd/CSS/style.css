@@ -266,6 +266,8 @@ li ul li a:hover{
     -moz-transition: all 500ms ease-in;
     transition: all 500ms ease-in;
     z-index: 100000000000000000;
+    overflow: auto;
+    height: 55rem;
 }
 /*Movimientos*/
 .movedown {
@@ -339,4 +341,49 @@ li ul li a:hover{
     background-color: transparent;
     border-radius: 2rem 2rem 0 0;
     padding: 0.5rem 0 0.5rem 0;
+}
+/* table */
+.container-table{
+    width: 90%;
+    color: var(--white);
+    padding: 2rem;
+    padding-bottom: 9rem;
+}
+table {
+    border-radius: .6rem;
+    border-collapse: collapse;
+    font-family: var(--fontHeading);
+    width: 100%;
+}
+th, td {
+    text-align: left;
+    padding: 8px;
+}
+tr:nth-child(even){
+    background-color: var(--secondary);
+    padding: 4rem;
+}
+th {
+    background-color: #0D1117;
+    color: var(--white);
+}
+tr:hover{
+    background-color: #bdcdd623;
+}
+/* SCROLL */
+/* Barra de desplazamiento */
+.modalbox::-webkit-scrollbar {
+    width: 12px;
+    background-color: var(--bar);
+}
+
+/* Manija (botón) de la barra de desplazamiento */
+.modalbox::-webkit-scrollbar-thumb {
+    background-color: #bdcdd623;
+    border-radius: 6px;
+}
+
+/* Estilo al pasar el mouse por encima de la manija de la barra de desplazamiento */
+.modalbox::-webkit-scrollbar-thumb:hover {
+    background-color: #bdcdd623;
 }
