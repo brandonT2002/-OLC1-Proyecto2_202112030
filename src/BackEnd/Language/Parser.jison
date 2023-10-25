@@ -262,7 +262,7 @@ CREATETABLE :
 
 ATTRIBUTES :
     ATTRIBUTES TK_comma ATTRIBUTE {$$[0].push($3[0]); $$[1].push($3[1])} |
-    ATTRIBUTE                     {$$ = [[$1[0]], [$1[1]]]                 } ;
+    ATTRIBUTE                     {$$ = [[$1[0]], [$1[1]]]             } ;
 
 ATTRIBUTE :
     TK_field TYPE {$$ = [$1, $2]} ;
