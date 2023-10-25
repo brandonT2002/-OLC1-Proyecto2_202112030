@@ -15,6 +15,13 @@ export class DeleteTable extends Instruction {
         }
     }
     public ast(ast: AST): ReturnAST {
-        return {dot: '', id: 1}
+        var id = ast.getNewID()
+        var dot = `node_${id}[label="DELETE" color="white" fontcolor="white"];`
+        dot += `\nnode_${id}_tableName[label="${this.id}" color="white" fontcolor="white"];`
+        dot += `\nnode_${id} -> node_${id}_tableName;`
+        var condition = this.condition.ast(ast)
+        dot += `\n${condition.dot}`
+        dot += `\nnode_${id} -> node_${condition.id};`
+        return {dot: dot, id: id}
     }
 }

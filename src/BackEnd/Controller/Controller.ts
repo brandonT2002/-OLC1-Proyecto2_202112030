@@ -76,7 +76,7 @@ export class Controller {
             let instructions = parser.parse(code)
             let ast: AST = new AST()
             const global: Env = new Env(null, 'Global')
-            var dotAST: string =  'digraph G{\nedge[dir=none color="white"];\nbgcolor = "#0D1117";'
+            var dotAST: string =  'digraph G{\nnode[color="white" fontcolor="white"];\nedge[dir=none color="white"];\nbgcolor = "#0D1117";'
             dotAST += '\nnode_r[label="INSTRUCTIONS" color="white" fontcolor="white"];'
             var resultAST: ReturnAST
             for(let instruction of instructions) {
@@ -101,7 +101,7 @@ export class Controller {
                 }
                 catch (error) {}
             }
-            dotAST += '}'
+            dotAST += '\n}'
             res_dotAST = dotAST
             res.json({
                 console: getStringOuts()

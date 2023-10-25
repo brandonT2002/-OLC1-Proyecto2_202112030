@@ -15,9 +15,9 @@ function graphAST() {
     fetch(`${path}/interpreter/getAST`)
         .then(response => response.json())
         .then(response => {
-            graphviz = d3.select('#report').graphviz().scale(1).height(550 * 1).width(document.getElementById('report').clientWidth).renderDot(response.ast)
+            graphviz = d3.select('#reportAST').graphviz().scale(1).width(document.getElementById('reportAST').clientWidth).renderDot(response.ast)
         })
-        .catch(error => { })
+        .catch(error => {console.log(error)})
 }
 function getSymbolsTable() {
     fetch(`${path}/interpreter/getSymbolsTable`)

@@ -28,6 +28,8 @@ export class Field extends Expression {
         return {value: this.id, type: Type.NULL}
     }
     public ast(ast: AST): ReturnAST {
-        return {dot: '', id: -1}
+        const id = ast.getNewID()
+        var dot = `node_${id}[label="${this.id}" color="white" fontcolor="white"];`
+        return {dot: dot, id: id}
     }
 }

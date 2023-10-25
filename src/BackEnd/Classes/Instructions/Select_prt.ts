@@ -21,6 +21,23 @@ export class Select_prt extends Instruction {
         }
     }
     public ast(ast: AST): ReturnAST {
-        return {dot: '', id: 1}
+        var id = ast.getNewID()
+        var dot = `node_${id}[label="SELECT" color="white" fontcolor="white"];`
+        var value: ReturnAST
+        for (let i = 0; i < this.expression.length; i ++) {
+            value = this.expression[i][0].ast(ast)
+            if(this.expression[i][1] !== '') {
+                dot += `\nnode_${id}_AS${i}[label="AS" color="white" fontcolor="white"];`
+                dot += `\nnode_${id} -> node_${id}_AS${i};`
+                dot += `\n${value.dot}`
+                dot += `\nnode_${id}_AS${i} -> node_${value.id};`
+                dot += `\nnode_${id}_ASTXT${i}[label="${this.expression[i][1]}"];`
+                dot += `\nnode_${id}_AS${i} -> node_${id}_ASTXT${i};`
+            } else {
+                dot += `\n${value.dot}`
+                dot += `\nnode_${id} -> node_${value.id};`
+            }
+        }
+        return {dot: dot, id: id}
     }
 }
