@@ -1,15 +1,26 @@
-DECLARE @nota INT;
-SET @nota = 75;
+create table Cliente (
+    ID int,
+    Nombre Varchar,
+    NIT varchar,
+    Estado varchar
+);
 
-CASE @nota
-    WHEN 100 THEN "SOBRESALIENTE"
-    WHEN 99 THEN "MUY BUENO"
-    WHEN 98 THEN "BUENO"
-    ELSE "PENDEJO"
-END AS "Parcial 1";
+create table producto (
+    id int,
+    nombre Varchar,
+    precio double
+);
 
-CASE 
-    WHEN @nota > 85 THEN "EXCELENTE"
-    WHEN @nota >= 61 AND @nota <= 85 THEN "APROBADO"
-    ELSE "PENDEJO"
-END AS "Nota Final";
+-- drop table cliente;
+
+-- truncate table cliente;
+
+insert into Cliente(id, nombre, nit, estado) values(10, "Brandon", "987546123", "activo");
+insert into Cliente(id, nombre, estado) values(18, "Andy", "activo");
+insert into Cliente(id, nombre, estado) values(20, "Jefferson", "inactivo");
+insert into Cliente(id, nombre, estado) values(20, "pako", "activo");
+
+insert into Producto(id, nombre, precio) values(1, "Dorito", 4.0);
+insert into Producto(id, nombre, precio) values(1, "Galleta Chiki", 3.75);
+
+DELETE FROM Clientes WHERE Nombre = "Brandon";

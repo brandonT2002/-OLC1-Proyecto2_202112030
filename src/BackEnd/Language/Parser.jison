@@ -147,9 +147,11 @@ los números como si fuera de un solo dígito, para evitar ambigüedades y demá
     const { InsertTable } = require('../Classes/Instructions/InsertTable')
     const { Function } = require('../Classes/Instructions/Function')
     const { AlterTable } = require('../Classes/Instructions/AlterTable')
+    const { DeleteTable } = require('../Classes/Instructions/DeleteTable')
     // Expresiones
     const { Primitive } = require('../Classes/Expressions/Primitive')
     const { AccessID } = require('../Classes/Expressions/AccessID')
+    const { Field } = require('../Classes/Expressions/Field')
     const { Arithmetic } = require('../Classes/Expressions/Arithmetic')
     const { Relational } = require('../Classes/Expressions/Relational')
     const { Logic } = require('../Classes/Expressions/Logic')
@@ -196,7 +198,7 @@ INSTRUCTION :
     INSERTREG TK_semicolon     {$$ = $1} |
     UPDATETAB TK_semicolon     |
     TRUNCATETAB TK_semicolon   {$$ = $1} |
-    DELETETAB TK_semicolon     |
+    DELETETAB TK_semicolon     {$$ = $1} |
     SELECT TK_semicolon        |
     DECLAREID TK_semicolon     {$$ = $1} |
     ASIGNID TK_semicolon       {$$ = $1} |
@@ -303,7 +305,7 @@ TRUNCATETAB :
 
 // Eliminar Registros
 DELETETAB :
-    RW_delete RW_from TK_id RW_where EXP ;
+    RW_delete RW_from TK_field RW_where EXP {$$ = new DeleteTable(@1.first_line, @1.first_column, $3, $5)} ;
 
 // Estructura IF
 IFSTRUCT :
@@ -385,7 +387,7 @@ EXP :
     NATIVEFUC   {$$ = $1} |
     CALLFUNC    {$$ = $1} |
     TK_id       {$$ = new AccessID(@1.first_line, @1.first_column, $1)} |
-    TK_field    {} |
+    TK_field    {$$ = new Field(@1.first_line, @1.first_column, $1)   } |
     TK_varchar  {$$ = new Primitive(@1.first_line, @1.first_column, $1, Type.VARCHAR)} |
     TK_int      {$$ = new Primitive(@1.first_line, @1.first_column, $1, Type.INT)    } |
     TK_double   {$$ = new Primitive(@1.first_line, @1.first_column, $1, Type.DOUBLE) } |

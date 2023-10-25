@@ -1,12 +1,17 @@
+import { Expression } from "../Abstracts/Expression"
 import { Env } from "../Env/Env"
-import { Type } from "../Utils/Type"
+import { Type, ReturnType } from "../Utils/Type"
 
 export class Data {
     constructor (public type: Type, public value: any) {}
+    
+    public getData(): ReturnType {
+        return {value: this.value, type: this.type}
+    }
 }
 
 export class Field {
-    constructor (public type: Type, public values: Array<any>, public length: number) {}
+    constructor (public type: Type, public values: Array<Data>, public length: number) {}
 
     public slice() {
         this.values.slice(0)
@@ -26,8 +31,8 @@ export class Table {
     constructor(name: string, nameFields: string[], typeFields: Type[]) {
         for (var i = 0; i < nameFields.length; i ++) {
             this.fields.set(nameFields[i].toLowerCase(), new Field(typeFields[i], [], nameFields[i].length)) 
-            this.name = name
         }
+        this.name = name
     }
 
     public insert (env: Env, fields: Map<string, any[]> | undefined, line: number, column: number): boolean {
@@ -88,6 +93,40 @@ export class Table {
         if (field) {
             this.fields.set(newColumn, field)
             this.fields.delete(currentColumn.toLowerCase())
+        }
+    }
+
+    private createTmpFields(): Map<string, Field> {
+        var newFields: Map<string, Field> = new Map<string, Field>()
+        for (const [nameField, field] of this.fields) {
+            newFields.set(nameField, new Field(field.type, [], nameField.length)) 
+        }
+        return newFields
+    }
+
+    public deleteWhere(condition: Expression, env: Env) {
+        var tmpFields: Map<string, Field>
+        var resultFields: Map<string, Field> = this.createTmpFields()
+        var result: ReturnType
+        var newRows: number = 0
+        for(var i = 0; i < this.rows; i ++) {
+            tmpFields = this.createTmpFields()
+            for (const [nameField, field] of this.fields) {
+                tmpFields.get(nameField)?.values.push(new Data(field.values[i].type, field.values[i].value))
+            }
+            condition.setField(tmpFields)
+            result = condition.execute(env)
+            if(result.type === Type.BOOLEAN && result.value.toString() === "false") {
+                for (const [nameField, field] of tmpFields) {
+                    resultFields.get(nameField)?.values.push(new Data(field.values[0].type, field.values[0].value))
+                    resultFields.get(nameField)?.updateLength(`${field.values[0].value}`.length)
+                }
+                newRows ++
+            }
+        }
+        this.fields = resultFields
+        if(newRows != this.rows) {
+            this.rows = newRows
         }
     }
 

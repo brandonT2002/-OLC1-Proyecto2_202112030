@@ -1,6 +1,7 @@
 import { Expression } from "../Abstracts/Expression";
 import { AST, ReturnAST } from "../Env/AST";
 import { Env } from "../Env/Env";
+import { Field } from "../Objects/Table";
 import { ReturnType, Type } from "../Utils/Type";
 import { TypeExp } from "../Utils/TypeExp";
 
@@ -8,6 +9,12 @@ export class Logic extends Expression {
     private type: Type = Type.NULL
     constructor(line: number, column: number, public exp1: Expression, public sign: string, public exp2: Expression) {
         super(line, column, TypeExp.LOGIC_OP)
+    }
+    public setField(field: Map<string, Field>) {
+        if(this.exp1) {
+            this.exp1.setField(field)
+        }
+        this.exp2.setField(field)
     }
     public execute(env: Env): ReturnType {
         switch(this.sign.toUpperCase()) {

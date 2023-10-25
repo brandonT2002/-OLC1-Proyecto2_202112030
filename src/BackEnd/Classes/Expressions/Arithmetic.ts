@@ -4,11 +4,18 @@ import { ReturnType, Type } from "../Utils/Type";
 import { TypeExp } from "../Utils/TypeExp";
 import { plus, minus, mult, div, mod } from "../Utils/DomineOp";
 import { AST, ReturnAST } from "../Env/AST";
+import { Field} from "../Objects/Table";
 
 export class Arithmetic extends Expression {
     private type: Type = Type.NULL
     constructor(line: number,column: number,public exp1: Expression,public sign: string,public exp2: Expression) {
         super(line, column, TypeExp.ARITHMETIC_OP);
+    }
+    public setField(field: Map<string, Field>) {
+        if(this.exp1) {
+            this.exp1.setField(field)
+        }
+        this.exp2.setField(field)
     }
     public execute(env: Env): ReturnType {
         switch (this.sign) {

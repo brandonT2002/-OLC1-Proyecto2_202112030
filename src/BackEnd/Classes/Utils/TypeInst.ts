@@ -16,4 +16,5 @@ export enum TypeInst {
     TRUNCATE_TABLE = "TRUNCATE_TABLE",
     INSERT_TABLE   = "INSERT_TABLE",
     ALTER_TABLE    = "ALTER_TABLE",
+    DELETE_TABLE    = "DELETE_TABLE",
 }

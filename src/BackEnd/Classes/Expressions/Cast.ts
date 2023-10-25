@@ -3,11 +3,13 @@ import { AST, ReturnAST } from "../Env/AST";
 import { Env } from "../Env/Env";
 import { ReturnType, Type } from "../Utils/Type";
 import { TypeExp } from "../Utils/TypeExp";
+import { Field } from "../Objects/Table";
 
 export class Cast extends Expression {
     constructor (line: number, column: number, private value: Expression, private destinyType: Type) {
         super(line, column, TypeExp.CAST);
     }
+    public setField(_: Map<string, Field>) {}
     public execute (env: Env): ReturnType {
         let value: ReturnType = this.value.execute(env);
         if (value.type === Type.INT)  {

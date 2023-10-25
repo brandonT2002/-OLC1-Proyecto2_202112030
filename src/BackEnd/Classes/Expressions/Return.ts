@@ -3,10 +3,13 @@ import { Env } from '../Env/Env';
 import { TypeExp } from '../Utils/TypeExp';
 import { ReturnType, Type } from '../Utils/Type';
 import { AST, ReturnAST } from '../Env/AST';
+import { Field } from "../Objects/Table";
+
 export class Return extends Expression {
     constructor(line: number, column: number, private exp: Expression) {
         super(line, column, TypeExp.RETURN)
     }
+    public setField(_: Map<string, Field>) {}
     public execute(env: Env): ReturnType {
         if(this.exp) {
             let value: ReturnType = this.exp.execute(env)

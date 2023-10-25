@@ -8,11 +8,13 @@ import { ReturnType, Type } from "../Utils/Type";
 import { Symbol } from '../Env/Symbol';
 import { TypeExp } from "../Utils/TypeExp";
 import { Parameter } from "./Parameter";
+import { Field } from "../Objects/Table";
 
 export class CallFunction extends Expression {
     constructor(line: number, column: number, private id: string, private args: Expression[]) {
         super(line, column, TypeExp.CALL_FUNC)
     }
+    public setField(_: Map<string, Field>) {}
     public execute(env: Env): ReturnType | any {
         const func: Function | null = env.getFunction(this.id)
         if(func) {

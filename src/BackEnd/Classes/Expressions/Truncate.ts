@@ -3,11 +3,13 @@ import { AST, ReturnAST } from "../Env/AST";
 import { Env } from "../Env/Env";
 import { ReturnType, Type } from "../Utils/Type";
 import { TypeExp } from "../Utils/TypeExp";
+import { Field } from "../Objects/Table";
 
 export class Truncate extends Expression {
     constructor (line: number, column: number, private exp: Expression, private truncate: Expression) {
         super(line, column, TypeExp.NATIVE_FUNC)
     }
+    public setField(_: Map<string, Field>) {}
     public execute (env: Env): ReturnType {
         let value_: string
         let value: ReturnType = this.exp.execute(env)

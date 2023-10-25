@@ -8,5 +8,6 @@ export enum TypeExp {
     CAST          = "CAST",
     PARAMETER     = "PARAMETER",
     CALL_FUNC     = "CALL_FUNC",
-    RETURN        = "RETURN"
+    RETURN        = "RETURN",
+    FIELD         = "FIELD"
 }

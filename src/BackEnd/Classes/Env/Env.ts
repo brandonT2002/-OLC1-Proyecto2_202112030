@@ -90,7 +90,7 @@ export class Env {
         }
     }
 
-    public deletTable(id: string, line: number, column: number): boolean {
+    public dropTable(id: string, line: number, column: number): boolean {
         let env: Env | null = this
         while(env) {
             if(env.tables.has(id.toLowerCase())) {
@@ -221,6 +221,20 @@ export class Env {
             env = env.previous!
         }
         this.setError(`Alterar tabla inexistente`, line, column)
+        return false
+    }
+
+    public deleteTable(id: string, condition: Expression, line: number, column: number) {
+        let env: Env | null = this
+        while(env) {
+            if (env.tables.has(id.toLowerCase())) {
+                env.tables.get(id.toLowerCase())?.deleteWhere(condition, env)
+                console.log(env.tables.get(id.toLowerCase())?.select())
+                return
+            }
+            env = env.previous
+        }
+        this.setError(`Eliminar registro en tabla inexistente`, line, column)
         return false
     }
 

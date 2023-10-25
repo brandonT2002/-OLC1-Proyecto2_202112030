@@ -3,11 +3,14 @@ import { TypeExp } from "../Utils/TypeExp";
 import { ReturnType, Type } from "../Utils/Type";
 import { Env } from '../Env/Env';
 import { AST, ReturnAST } from "../Env/AST";
+import { Field } from "../Objects/Table";
+
 export class Primitive extends Expression {
     constructor(line: number, column: number, public value: any, public type: Type) {
         super(line, column, TypeExp.PRIMITIVE)
     }
-    public execute(env: Env): ReturnType {
+    public setField(_: Map<string, Field>) {}
+    public execute(_: Env): ReturnType {
         switch(this.type) {
             case Type.INT:
                 return {value: parseInt(this.value), type: this.type}
