@@ -13,7 +13,6 @@ export class DeleteTable extends Instruction {
             env.deleteTable(this.id, this.condition, this.line, this.column)
             return
         }
-        //
     }
     public ast(ast: AST): ReturnAST {
         return {dot: '', id: 1}

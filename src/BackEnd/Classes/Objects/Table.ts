@@ -5,6 +5,10 @@ import { Type, ReturnType } from "../Utils/Type"
 export class Data {
     constructor (public type: Type, public value: any) {}
     
+    public update(value: any) {
+        this.value = value
+    }
+
     public getData(): ReturnType {
         return {value: this.value, type: this.type}
     }
@@ -50,7 +54,7 @@ export class Table {
     public validate(env: Env, fields: Map<string, any[]>, line: number, column: number): boolean {
         for (const [nameField, field] of fields) {
             if (this.fields.get(nameField)?.type !== field[0]) {
-                env.setError(`No coincide el tipo de dato para la columna ${nameField} en la Tabla ${this.name}`, line, column)
+                env.setError(`No coincide el tipo de dato para la columna '${nameField}' en la Tabla ${this.name}`, line, column)
                 return false
             }
         }
@@ -127,6 +131,36 @@ export class Table {
         this.fields = resultFields
         if(newRows != this.rows) {
             this.rows = newRows
+        }
+    }
+
+    public updateWhere(condition: Expression, fields: string[] ,values: Expression[], env: Env) {
+        var tmpFields: Map<string, Field>
+        var result: ReturnType
+        var newValue: ReturnType
+        for (var i = 0; i < this.rows; i++) {
+            tmpFields = this.createTmpFields()
+            for (const [nameField, field] of this.fields) {
+                tmpFields.get(nameField)?.values.push(new Data(field.values[i].type, field.values[i].value))
+            }
+            condition.setField(tmpFields)
+            result = condition.execute(env)
+            if(result.type === Type.BOOLEAN && result.value.toString() === "true") {
+                for (var j = 0; j < fields.length; j ++) {
+                    if(this.fields.has(fields[j].toLowerCase())) {
+                        newValue = values[j].execute(env)
+                        if(newValue.type === this.fields.get(fields[j].toLowerCase())?.type) {
+                            this.fields.get(fields[j].toLowerCase())?.values[i].update(newValue.value)
+                            this.fields.get(fields[j].toLowerCase())?.updateLength(`${newValue.value}`.length)
+                            continue
+                        }
+                        env.setError(`No coincide el tipo de dato para la columna '${fields[j].toLowerCase()}' en la Tabla ${this.name}`, values[j].line, values[j].column)
+                        return
+                    }
+                    env.setError(`No existe el campo '${fields[j].toLowerCase()}' en Tabla ${this.name}`, values[j].line, values[j].column)
+                    return
+                }
+            }
         }
     }
 

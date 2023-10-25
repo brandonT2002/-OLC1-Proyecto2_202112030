@@ -228,13 +228,27 @@ export class Env {
         let env: Env | null = this
         while(env) {
             if (env.tables.has(id.toLowerCase())) {
-                env.tables.get(id.toLowerCase())?.deleteWhere(condition, env)
+                env.tables.get(id.toLowerCase())?.deleteWhere(condition, this)
                 console.log(env.tables.get(id.toLowerCase())?.select())
                 return
             }
             env = env.previous
         }
         this.setError(`Eliminar registro en tabla inexistente`, line, column)
+        return false
+    }
+    
+    public updateTable(id: string, fields: string[], values: Expression[], condition: Expression, line: number, column: number) {
+        let env: Env | null = this
+        while(env) {
+            if (env.tables.has(id.toLowerCase())) {
+                env.tables.get(id.toLowerCase())?.updateWhere(condition, fields, values, this)
+                console.log(env.tables.get(id.toLowerCase())?.select())
+                return
+            }
+            env = env.previous
+        }
+        this.setError(`Actualizar registro en tabla inexistente`, line, column)
         return false
     }
 
