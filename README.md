@@ -43,8 +43,6 @@ Brandon Andy Jefferson Tejaxún Pichiyá - 202112030
 
 ## 📌 **Manual Técnico**
 
-### 1. **StatPY**
-
 1. **Análisis Léxico**
 
     |Descripción|Patrón|Expresión Regular|Ejemplo|Nombre de Token|
