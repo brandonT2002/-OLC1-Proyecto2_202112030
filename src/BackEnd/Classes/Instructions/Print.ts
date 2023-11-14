@@ -4,8 +4,8 @@ import { TypeInst } from '../Utils/TypeInst';
 import { Env } from '../Env/Env';
 import { AST, ReturnAST } from '../Env/AST';
 export class Print extends Instruction {
-    constructor(line: number,column: number,private expression: Expression) {
-        super(line,column,TypeInst.PRINT)
+    constructor(line: number, column: number, private expression: Expression) {
+        super(line, column, TypeInst.PRINT)
     }
     public execute(env: Env) {
         let value = this.expression ? this.expression.execute(env) : null

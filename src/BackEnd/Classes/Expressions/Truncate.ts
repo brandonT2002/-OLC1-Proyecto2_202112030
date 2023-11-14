@@ -16,7 +16,7 @@ export class Truncate extends Expression {
         let trunc: ReturnType = this.truncate.execute(env)
         if (value.type === Type.DOUBLE) {
             value_ = value.value.toString()
-            return {value: this.trucateDigit(value_, trunc.value), type: Type.VARCHAR}
+            return {value: this.trucateDigit(value_, trunc.value), type: Type.INT}
         }
         return {value: 'NULL', type: Type.NULL}
     }

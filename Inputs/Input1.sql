@@ -1,5 +1,5 @@
 -- Este es un comentario de una línea
-SELECT * FROM users WHERE name = 'John Doe';
+SELECT * FROM users WHERE name = "John Doe";
 
 /*
 Este es un comentario
@@ -11,8 +11,8 @@ SET @variable_name = value;
 DECLARE @nombre VARCHAR, @edad INT;
 -- Declara una variable de tipo `INT` con un valor predeterminado de 10
 DECLARE @edad INT DEFAULT 10;
--- Asigna el valor 'Juan Pérez' a la variable @nombre
-SET @nombre = 'Juan Perez';
+-- Asigna el valor "Juan Pérez" a la variable @nombre
+SET @nombre = "Juan Perez";
 -- Asigna el valor 25 a la variable @edad
 SET @edad = 25;
 -- Imprime el valor de la variable @nombre
@@ -20,8 +20,7 @@ SELECT @nombre;
 -- Imprime el valor de la variable @edad
 SELECT @edad;
 
-CREATE TABLE Clientes
-(
+CREATE TABLE Clientes (
 ID_Cliente INT,
 Nombre VARCHAR,
 CorreoElectronico VARCHAR
@@ -39,11 +38,11 @@ RENAME TO Empleados;
 DROP TABLE Clientes;
 
 INSERT INTO Empleados (CUI, CorreoElectronico)
-VALUES ('159', 'pkg@email.com');
+VALUES ("159", "pkg@email.com");
 
 SELECT Nombre, edad
 FROM Empleados
-WHERE Departamento = 'Ventas';
+WHERE Departamento = "Ventas";
 
 DECLARE @precio1 INT;
 SET @precio1 = 50.00;
@@ -56,12 +55,12 @@ SELECT @precio1 AS valor_precio;
 
 UPDATE Empleados
 SET Salario = 55000
-WHERE Departamento = 'Ventas';
+WHERE Departamento = "Ventas";
 
 TRUNCATE TABLE Empleados;
 
 DELETE FROM Clientes
-WHERE Estado = 'Inactivo';
+WHERE Estado = "Inactivo";
 
 -- ========== CASTEOS ==========
 SELECT CAST(Salario AS VARCHAR) FROM Empleados;
@@ -70,15 +69,14 @@ SELECT CAST(Salario AS VARCHAR) FROM Empleados;
 DECLARE @nota INT;
 SET @nota = 70;
 
-IF @nota >= 61 THEN
-BEGIN
-    PRINT 'Ganó el curso'
+IF @nota >= 61 BEGIN
+    PRINT "Ganó el curso";
 END;
 
 IF @nota >= 61 THEN
-    PRINT 'Ganó el laboratorio';
+    PRINT "Ganó el laboratorio";
 ELSE
-    PRINT 'Perdió el laboratorio';
+    PRINT "Perdió el laboratorio";
 END IF;
 
 -- ========== ESTRUCTURA CASE ==========
@@ -86,9 +84,9 @@ DECLARE @nota INT;
 SET @nota = 70;
 
 CASE nota
-    WHEN nota > 85 THEN 'Excelente'
-    WHEN nota >= 61 AND nota <= 85 THEN 'Aprobado'
-    ELSE 'No aprobado'
+    WHEN nota > 85 THEN "Excelente"
+    WHEN nota >= 61 AND nota <= 85 THEN "Aprobado"
+    ELSE "No aprobado"
 END AS resultado;
 
 -- ========== ESTRUCTURA WHILE ==========
@@ -96,14 +94,14 @@ DECLARE @contador INT = 0;
 
 WHILE @contador < 10
 BEGIN
-    PRINT 'Contador: ' + CAST(@contador AS VARCHAR);
+    PRINT "Contador: " + CAST(@contador AS VARCHAR);
     SET @contador = @contador + 1;
 END;
 
 -- ========== ESTRUCTURA FOR ==========
-FOR contador IN 1..10
+FOR @contador IN 1..10
 BEGIN
-    PRINT 'Contador: ' + CAST(contador AS VARCHAR);
+    PRINT "Contador: " + CAST(@contador AS VARCHAR);
 END LOOP;
 
 -- ========== BREAK Y CONTINUE ==========
@@ -120,15 +118,15 @@ BEGIN
         CONTINUE;
     END IF;
 
-    PRINT 'Contador: ' + CAST(@contador AS VARCHAR);
+    PRINT "Contador: " + CAST(@contador AS VARCHAR);
     SET @contador = @contador + 1;
 END;
 
 -- ========== FUNCIONES ==========
-CREATE FUNCTION CalcularAreaCirctulo(@pi FLOAT, @radio FLOAT)
-RETURNS FLOAT
+CREATE FUNCTION CalcularAreaCirctulo(@pi DOUBLE, @radio DOUBLE)
+RETURNS DOUBLE
 BEGIN
-    DECLARE @area FLOAT;
+    DECLARE @area DOUBLE;
     SET @area = @pi * @radio * @radio;
     RETURN @area;
 END;
@@ -141,23 +139,23 @@ CREATE PROCEDURE SumarNumeros
 AS
 BEGIN
     SET @resultado = @numero1 + @numero2;
-    PRINT 'La suma es: ' + CAST(@resultado AS VARCHAR);
+    PRINT "La suma es: " + CAST(@resultado AS VARCHAR);
 END;
 
 -- ========== LLAMDAS FUNC ==========
-DECLARE @radioCirculo FLOAT = 5.0;
-DECLARE @pi FLOAT = 3.14159265359;
-DECLARE @areaCirculo FLOAT;
+DECLARE @radioCirculo DOUBLE = 5.0;
+DECLARE @pi DOUBLE = 3.14159265359;
+DECLARE @areaCirculo DOUBLE;
 
 SET @areaCirculo = CalcularAreaCirctulo(@pi, @radioCirculo);
 
-PRINT 'eL ÁREA DEL CÍRCULO CON RADIO ' + CAST(@radioCirculo AS VARCHAR) + ' es ' + CAST(@areaCirculo AS VARCHAR);
+PRINT "eL ÁREA DEL CÍRCULO CON RADIO " + CAST(@radioCirculo AS VARCHAR) + " es " + CAST(@areaCirculo AS VARCHAR);
 
 -- ========== FUNCIONES NATIVAS ==========
-PRINT 'Hola mundo :)';
-SELECT LOWER('HOLA MUNDO');
-SELECT UPPER('hola mundo');
+PRINT "Hola mundo :)";
+SELECT LOWER("HOLA MUNDO");
+SELECT UPPER("hola mundo");
 SELECT ROUND(5.678, 2);
-SELECT LEN('Hola mundo');
+SELECT LEN("Hola mundo");
 SELECT TRUNCATE(8.945, 1);
 SELECT TYPEOF(123);

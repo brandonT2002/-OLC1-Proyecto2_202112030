@@ -38,7 +38,7 @@ BEGIN
 	print "Si la figura es un corazón, te aseguro que tendrás un 100 :3";
 END;
 
-figura(10);*/
+figura(10);
 /*
     este es un comentario multilinea
 */

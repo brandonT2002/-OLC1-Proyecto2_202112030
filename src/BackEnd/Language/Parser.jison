@@ -121,11 +121,6 @@ COMMENTM    [/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]
 
 /lex
 
-/*
-Como aclaración en la Práctica 4, en las operaciones a leer de archivos se tomarán
-los números como si fuera de un solo dígito, para evitar ambigüedades y demás cuestiones.
-*/
-
 %{
     // imports
     // Tipos
@@ -340,7 +335,7 @@ WHEN :
     RW_when EXP RW_then EXP {$$ = new When(@1.first_line, @1.first_column, $2, $4)} ;
 
 ELSE :
-    RW_else EXP             {$$ = $2} ;
+    RW_else EXP {$$ = $2} ;
 
 // PRINT
 PRINT :
@@ -389,7 +384,7 @@ EXP :
     RELATIONALS {$$ = $1} |
     LOGICS      {$$ = $1} |
     CAST        {$$ = $1} |
-    NATIVEFUC   {$$ = $1} |
+    NATIVEFUNC  {$$ = $1} |
     CALLFUNC    {$$ = $1} |
     TK_id       {$$ = new AccessID(@1.first_line, @1.first_column, $1)} |
     TK_field    {$$ = new Field(@1.first_line, @1.first_column, $1)   } |
@@ -399,7 +394,7 @@ EXP :
     TK_date     {$$ = new Primitive(@1.first_line, @1.first_column, $1, Type.DATE)   } |
     RW_true     {$$ = new Primitive(@1.first_line, @1.first_column, $1, Type.BOOLEAN)} |
     RW_false    {$$ = new Primitive(@1.first_line, @1.first_column, $1, Type.BOOLEAN)} |
-    RW_null     {$$ = new Primitive(@1.first_line, @1.first_column, $1, Type.NULL)} |
+    RW_null     {$$ = new Primitive(@1.first_line, @1.first_column, $1, Type.NULL)   } |
     TK_lpar EXP TK_rpar {$$ = $2} ;
 
 ARITHMETICS :
@@ -427,7 +422,7 @@ CAST :
     RW_cast TK_lpar EXP RW_as TYPE TK_rpar {$$ = new Cast(@1.first_line, @1.first_column, $3, $5)};
 
 // Funciones Nativas
-NATIVEFUC :
+NATIVEFUNC :
     RW_lower TK_lpar EXP TK_rpar                 {$$ = new Lower(@1.first_line, @1.first_column, $3)       } |
     RW_upper TK_lpar EXP TK_rpar                 {$$ = new Upper(@1.first_line, @1.first_column, $3)       } |
     RW_round TK_lpar EXP TK_comma EXP TK_rpar    {$$ = new Round(@1.first_line, @1.first_column, $3, $5)   } |

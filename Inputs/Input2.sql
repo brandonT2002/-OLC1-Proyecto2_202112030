@@ -54,19 +54,16 @@ END LOOP;
 print"========== ESTRUCTURA SWITCH ==========";
 SET @nota = 70;
 CASE @nota
-    WHEN 70 THEN
-        PRINT "Excelente";
-    WHEN 61 THEN
-        PRINT "Aprobado";
-    ELSE
-        PRINT "No aprobado";
+    WHEN 70 THEN "Excelente"
+    WHEN 61 THEN "Aprobado"
+    ELSE "No aprobado"
 END AS resultado;
 
 PRINT "========== VALUE OF ==========";
 DECLARE @valueINT INT = 75;
 DECLARE @valueDOUBLE DOUBLE = 75.5;
 DECLARE @valueVARCHAR VARCHAR = "Hola Mundo :)";
-DECLARE @valueDATE DATE = '2002-10-07';
+DECLARE @valueDATE DATE = "2002-10-07";
 PRINT TYPEOF(@valueINT);
 PRINT TYPEOF(@valueDOUBLE + 75);
 PRINT TYPEOF(@valueVARCHAR);

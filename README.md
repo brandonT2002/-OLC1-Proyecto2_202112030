@@ -1,4 +1,4 @@
-# **PROYECTO 1 - COMPILADORES 1**
+# **PROYECTO 2 - COMPILADORES 1**
 ### **Query Crypter**
 
 Brandon Andy Jefferson Tejaxún Pichiyá - 202112030
