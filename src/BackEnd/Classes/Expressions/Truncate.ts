@@ -16,7 +16,7 @@ export class Truncate extends Expression {
         let trunc: ReturnType = this.truncate.execute(env)
         if (value.type === Type.DOUBLE) {
             value_ = value.value.toString()
-            return {value: this.trucateDigit(value_, trunc.value), type: Type.INT}
+            return {value: this.trucateDigit(value_, trunc.value), type: Type.DOUBLE}
         }
         return {value: 'NULL', type: Type.NULL}
     }
@@ -31,7 +31,7 @@ export class Truncate extends Expression {
     }
     public ast(ast: AST): ReturnAST {
         const id = ast.getNewID()
-        var dot = `node_${id}[label="TRUNCATE" color="white" fontcolor="white"];`
+        var dot = `node_${id}[label="TRUNCATE"];`
         let value1: ReturnAST = this.exp.ast(ast)
         dot += '\n' + value1.dot
         dot += `\nnode_${id} -> node_${value1.id};`

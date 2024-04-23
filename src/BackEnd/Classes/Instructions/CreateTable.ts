@@ -15,11 +15,11 @@ export class CreateTable extends Instruction {
     }
     public ast(ast: AST): ReturnAST {
         const id = ast.getNewID()
-        var dot = `node_${id}[label="TABLE" color="white" fontcolor="white"];`
-        dot += `\nnode_${id}_name[label="${this.name}" color="white" fontcolor="white"]`
-        dot += `\nnode_${id}_fields[label="CAMPOS" color="white" fontcolor="white"]`
+        var dot = `node_${id}[label="TABLE"];`
+        dot += `\nnode_${id}_name[label="${this.name}"]`
+        dot += `\nnode_${id}_fields[label="CAMPOS"]`
         for (let i = 0; i < this.nameFields.length; i ++) {
-            dot += `\nnode_${id}_field_${i}[label=${this.nameFields[i]} color="white" fontcolor="white"]`
+            dot += `\nnode_${id}_field_${i}[label=${this.nameFields[i]}]`
             dot += `\nnode_${id}_fields -> node_${id}_field_${i};`
         }
         dot += `\nnode_${id} -> node_${id}_name;`

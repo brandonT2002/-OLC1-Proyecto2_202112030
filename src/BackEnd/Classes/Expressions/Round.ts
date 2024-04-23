@@ -20,7 +20,7 @@ export class Round extends Expression {
     }
     public ast(ast: AST): ReturnAST {
         const id = ast.getNewID()
-        var dot = `node_${id}[label="ROUND" color="white" fontcolor="white"];`
+        var dot = `node_${id}[label="ROUND"];`
         let value1: ReturnAST = this.exp.ast(ast)
         dot += '\n' + value1.dot
         dot += `\nnode_${id} -> node_${value1.id};`

@@ -13,7 +13,7 @@ export class Print extends Instruction {
     }
     public ast(ast: AST): ReturnAST {
         const id = ast.getNewID()
-        var dot = `node_${id}[label="PRINT" color="white" fontcolor="white"];`
+        var dot = `node_${id}[label="PRINT"];`
         let value: ReturnAST = this.expression.ast(ast)
         dot += '\n' + value.dot
         dot += `\nnode_${id} -> node_${value.id};`

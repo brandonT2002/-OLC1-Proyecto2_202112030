@@ -29,18 +29,18 @@ export class If extends Instruction {
     }
     public ast(ast: AST): ReturnAST {
         const id = ast.getNewID()
-        var dot = `node_${id}[label="IF" color="white" fontcolor="white"];`
+        var dot = `node_${id}[label="IF"];`
         let cond: ReturnAST = this.condition.ast(ast)
         dot += '\n' + cond.dot
         let inst: ReturnAST = this.block.ast(ast)
         dot += '\n' + inst.dot
-        dot += `\nnode_${id}_cnd[label="CONDICION" color="white" fontcolor="white"];`
+        dot += `\nnode_${id}_cnd[label="CONDICION"];`
         dot += `\nnode_${id} -> node_${id}_cnd;`
         dot += `\nnode_${id}_cnd -> node_${cond.id};`
         dot += `\nnode_${id} -> node_${inst.id};`
         if(this.except) {
             let except: ReturnAST = this.except.ast(ast)
-            dot += `\nnode_${id}_else[label="ELSE" color="white" fontcolor="white"];`
+            dot += `\nnode_${id}_else[label="ELSE"];`
             dot += `\nnode_${id} -> node_${id}_else;`
             dot += '\n' + except.dot
             dot += `\nnode_${id}_else -> node_${except.id};`

@@ -25,11 +25,11 @@ export class InitID extends Instruction {
     }
     public ast(ast: AST): ReturnAST {
         const id = ast.getNewID()
-        var dot = `node_${id}[label="DECLARE" color="white" fontcolor="white"];`
+        var dot = `node_${id}[label="DECLARE"];`
         if(typeof this.id === 'string' && typeof this.type === 'number' && this.value) {
-            dot += `\nnode_${id}_type[label="${this.getType(this.type)}" color="white" fontcolor="white"];`
+            dot += `\nnode_${id}_type[label="${this.getType(this.type)}"];`
             dot += `\nnode_${id} -> node_${id}_type;`
-            dot += `\nnode_${id}_id[label="${this.id}" color="white" fontcolor="white"];`
+            dot += `\nnode_${id}_id[label="${this.id}"];`
             dot += `\nnode_${id}_type -> node_${id}_id;`
             let value: ReturnAST = this.value.ast(ast)
             dot += '\n'+value.dot
@@ -37,9 +37,9 @@ export class InitID extends Instruction {
         }
         else if(typeof this.id === 'object' && typeof this.type === 'object' && !this.value) {
             for(var i = 0; i < this.id.length; i ++) {
-                dot += `\nnode_${id}_type_${i}[label="${this.getType(this.type[i])}" color="white" fontcolor="white"];`
+                dot += `\nnode_${id}_type_${i}[label="${this.getType(this.type[i])}"];`
                 dot += `\nnode_${id} -> node_${id}_type_${i};`
-                dot += `\nnode_${id}_id_${i}[label="${this.id[i]}" color="white" fontcolor="white"];`
+                dot += `\nnode_${id}_id_${i}[label="${this.id[i]}"];`
                 dot += `\nnode_${id}_type_${i} -> node_${id}_id_${i};`
             }
         }

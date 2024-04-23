@@ -14,7 +14,7 @@ export class UpdateTable extends Instruction {
     }
     public ast(ast: AST): ReturnAST {
         var id = ast.getNewID()
-        var dot = `node_${id}[label="UPDATE" color="white" fontcolor="white"];`
+        var dot = `node_${id}[label="UPDATE"];`
         dot += `\nnode_${id}_set[label="SET"];`
         dot += `\nnode_${id} -> node_${id}_set;`
         dot += `\nnode_${id}_condition[label="CONDITION"];`

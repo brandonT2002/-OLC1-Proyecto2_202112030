@@ -2,7 +2,7 @@ import { Expression } from "../Abstracts/Expression";
 import { Instruction } from "../Abstracts/Instruction";
 import { AST, ReturnAST } from "../Env/AST";
 import { Env } from "../Env/Env";
-import { ReturnType, Type } from "../Utils/Type";
+import { ReturnType } from "../Utils/Type";
 import { TypeInst } from "../Utils/TypeInst";
 import { When } from "./When";
 
@@ -45,7 +45,7 @@ export class Case extends Instruction {
     }
     public ast(ast: AST): ReturnAST {
         const id = ast.getNewID()
-        var dot = `node_${id}[label="CASE" color="white" fontcolor="white"];`
+        var dot = `node_${id}[label="CASE"];`
         let arg_: ReturnAST
         let when: ReturnAST
         let default_: ReturnAST
@@ -60,15 +60,15 @@ export class Case extends Instruction {
             dot += `\nnode_${id} -> node_${when.id};`
         }
         if (this.else_) {
-            dot += `node_${id}_else[label="ELSE" color="white" fontcolor="white"];`
+            dot += `node_${id}_else[label="ELSE"];`
             default_ = this.else_.ast(ast)
             dot += '\n' + default_.dot
             dot += `\nnode_${id}_else -> node_${default_.id};`
             dot += `\nnode_${id} -> node_${id}_else;`
         }
         if (this.alias) {
-            dot += `\nnode_${id}_as[label="AS" color="white" fontcolor="white"];`
-            dot += `\nnode_${id}_alias[label="${this.alias}" color="white" fontcolor="white"];`
+            dot += `\nnode_${id}_as[label="AS"];`
+            dot += `\nnode_${id}_alias[label="${this.alias}"];`
             dot += `\nnode_${id}_as -> node_${id}_alias;`
             dot += `\nnode_${id} -> node_${id}_as;`
         }

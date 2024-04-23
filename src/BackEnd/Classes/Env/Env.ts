@@ -239,6 +239,7 @@ export class Env {
         while(env) {
             if (env.tables.has(id.toLowerCase())) {
                 env.tables.get(id.toLowerCase())?.updateWhere(condition, fields, values, this)
+                this.setPrint(`Tabla '${id.toLowerCase()}' actualizada. ${line}:${column}`)
                 return true
             }
             env = env.previous

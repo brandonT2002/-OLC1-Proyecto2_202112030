@@ -16,8 +16,8 @@ export class DeleteTable extends Instruction {
     }
     public ast(ast: AST): ReturnAST {
         var id = ast.getNewID()
-        var dot = `node_${id}[label="DELETE" color="white" fontcolor="white"];`
-        dot += `\nnode_${id}_tableName[label="${this.id}" color="white" fontcolor="white"];`
+        var dot = `node_${id}[label="DELETE"];`
+        dot += `\nnode_${id}_tableName[label="${this.id}"];`
         dot += `\nnode_${id} -> node_${id}_tableName;`
         var condition = this.condition.ast(ast)
         dot += `\n${condition.dot}`

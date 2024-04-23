@@ -26,36 +26,36 @@ export class AlterTable extends Instruction {
     }
     public ast(ast: AST): ReturnAST {
         const id = ast.getNewID()
-        var dot = `node_${id}[label="ALTER TABLE" color="white" fontcolor="white"];`
+        var dot = `node_${id}[label="ALTER TABLE"];`
         switch (this.action.toLowerCase()) {
             case 'add':
-                dot += `\nnode_${id}_action[label="ADD" color="white" fontcolor="white"];`
-                dot += `\nnode_${id}_table[label="${this.id}" color="white" fontcolor="white"];`
-                dot += `\nnode_${id}_field1[label="${this.field1}" color="white" fontcolor="white"];`
-                dot += `\nnode_${id}_type[label="${this.getType(this.type)}" color="white" fontcolor="white"];`
+                dot += `\nnode_${id}_action[label="ADD"];`
+                dot += `\nnode_${id}_table[label="${this.id}"];`
+                dot += `\nnode_${id}_field1[label="${this.field1}"];`
+                dot += `\nnode_${id}_type[label="${this.getType(this.type)}"];`
                 dot += `\nnode_${id}_action -> node_${id}_table;`
                 dot += `\nnode_${id}_action -> node_${id}_field1;`
                 dot += `\nnode_${id}_action -> node_${id}_type;`
                 break
             case 'drop':
-                dot += `node_${id}_action[label="DROP" color="white" fontcolor="white"];`
-                dot += `\nnode_${id}_table[label="${this.id}" color="white" fontcolor="white"];`
-                dot += `\nnode_${id}_field1[label="${this.field1}" color="white" fontcolor="white"];`
+                dot += `node_${id}_action[label="DROP"];`
+                dot += `\nnode_${id}_table[label="${this.id}"];`
+                dot += `\nnode_${id}_field1[label="${this.field1}"];`
                 dot += `\nnode_${id}_action -> node_${id}_table;`
                 dot += `\nnode_${id}_action -> node_${id}_field1;`
                 break
             case 'renameto':
-                dot += `node_${id}_action[label="RENAME TO" color="white" fontcolor="white"];`
-                dot += `\nnode_${id}_table[label="${this.id}" color="white" fontcolor="white"];`
-                dot += `\nnode_${id}_field1[label="${this.field1}" color="white" fontcolor="white"];`
+                dot += `node_${id}_action[label="RENAME TO"];`
+                dot += `\nnode_${id}_table[label="${this.id}"];`
+                dot += `\nnode_${id}_field1[label="${this.field1}"];`
                 dot += `\nnode_${id}_action -> node_${id}_table;`
                 dot += `\nnode_${id}_action -> node_${id}_field1;`
                 break
             case 'renamecolumn':
-                dot += `node_${id}_action[label="RENAME COLUMN" color="white" fontcolor="white"];`
-                dot += `\nnode_${id}_table[label="${this.id}" color="white" fontcolor="white"];`
-                dot += `\nnode_${id}_field1[label="${this.field1}" color="white" fontcolor="white"];`
-                dot += `\nnode_${id}_field2[label="${this.field2}" color="white" fontcolor="white"];`
+                dot += `node_${id}_action[label="RENAME COLUMN"];`
+                dot += `\nnode_${id}_table[label="${this.id}"];`
+                dot += `\nnode_${id}_field1[label="${this.field1}"];`
+                dot += `\nnode_${id}_field2[label="${this.field2}"];`
                 dot += `\nnode_${id}_action -> node_${id}_table;`
                 dot += `\nnode_${id}_action -> node_${id}_field1;`
                 dot += `\nnode_${id}_action -> node_${id}_field2;`

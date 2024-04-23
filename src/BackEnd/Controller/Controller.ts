@@ -1,18 +1,18 @@
-import { Request, Response } from "express";
+import { Request,  Response } from "express";
 import { Env } from "../Classes/Env/Env";
 import { symTable } from '../Classes/Env/SymbolTable';
-import { getStringOuts, resetOuts, getErrors, getTokens } from '../Classes/Utils/Outs'
-import { AST, ReturnAST } from "../Classes/Env/AST";
+import { getStringOuts,  resetOuts,  getErrors,  getTokens } from '../Classes/Utils/Outs'
+import { AST,  ReturnAST } from "../Classes/Env/AST";
 import { TypeInst } from "../Classes/Utils/TypeInst";
 
 var res_dotAST: string = ''
 
 export class Controller {
 
-    public running(req: Request,res: Response) {
+    public running(req: Request, res: Response) {
         res.send('Interpreter is running!!!')
     }
-    public parserFile(req: Request,res: Response) {
+    public parserFile(req: Request, res: Response) {
         let file = req.body.file
         let parser = require('../Language/Parser')
         var fs = require('fs')
@@ -67,7 +67,7 @@ export class Controller {
             }
         })
     }
-    public parser(req: Request,res: Response) {
+    public parser(req: Request, res: Response) {
         let code = req.body.code
         let parser = require('../Language/Parser')
         try {
@@ -77,7 +77,7 @@ export class Controller {
             let ast: AST = new AST()
             const global: Env = new Env(null, 'Global')
             var dotAST: string =  'digraph G{\nnode[color="white" fontcolor="white"];\nedge[dir=none color="white"];\nbgcolor = "#0D1117";'
-            dotAST += '\nnode_r[label="INSTRUCTIONS" color="white" fontcolor="white"];'
+            dotAST += '\nnode_r[label="INSTRUCTIONS"];'
             var resultAST: ReturnAST
             for(let instruction of instructions) {
                 try {
@@ -113,7 +113,7 @@ export class Controller {
             })
         }
     }
-    public getAST(req: Request,res: Response) {
+    public getAST(req: Request, res: Response) {
         try {
             res.json({
                 ast: res_dotAST
@@ -125,7 +125,7 @@ export class Controller {
             })
         }
     }
-    public getSymbolsTable(req: Request,res: Response) {
+    public getSymbolsTable(req: Request, res: Response) {
         try {
             res.json({
                 table: symTable.symbols
@@ -137,7 +137,7 @@ export class Controller {
             })
         }
     }
-    public getErrors(req: Request,res: Response) {
+    public getErrors(req: Request, res: Response) {
         try {
             res.json({
                 errors: getErrors()
@@ -149,7 +149,7 @@ export class Controller {
             })
         }
     }
-    public getTokens(req: Request,res: Response) {
+    public getTokens(req: Request, res: Response) {
         try {
             res.json({
                 tok: getTokens()

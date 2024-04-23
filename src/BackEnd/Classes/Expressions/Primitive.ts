@@ -31,7 +31,7 @@ export class Primitive extends Expression {
     }
     public ast(ast: AST): ReturnAST {
         const id = ast.getNewID()
-        var dot = `node_${id}[label="${this.value}" color="white" fontcolor="white"];`
+        var dot = `node_${id}[label="${this.value}"];`
         return {dot: dot, id: id}
     }
 }

@@ -14,9 +14,9 @@ export class AsignID extends Instruction {
     }
     public ast(ast: AST): ReturnAST {
         const id = ast.getNewID()
-        var dot = `node_${id}[label="SET" color="white" fontcolor="white"];`
+        var dot = `node_${id}[label="SET"];`
         let value1: ReturnAST = this.value.ast(ast)
-        dot += `\nnode_${id}_id[label="${this.id}" color="white" fontcolor="white"]`
+        dot += `\nnode_${id}_id[label="${this.id}"]`
         dot += `\nnode_${id} -> node_${id}_id`
         dot += '\n' + value1.dot
         dot += `\nnode_${id} -> node_${value1.id};`

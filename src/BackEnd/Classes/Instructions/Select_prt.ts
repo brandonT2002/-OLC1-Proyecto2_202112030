@@ -13,21 +13,23 @@ export class Select_prt extends Instruction {
         let value: ReturnType
         for (let i = 0; i < this.expression.length; i ++) {
             value = this.expression[i] ? this.expression[i][0].execute(env) : null
-            if(this.expression[i][1] !== '') {
-                env.setPrint(this.expression[i][1] + ': ' +value.value)
-            } else {
-                env.setPrint(value.value)
+            if(value) {
+                if(this.expression[i][1] !== '') {
+                    env.setPrint(this.expression[i][1] + ': ' +value.value)
+                } else {
+                    env.setPrint(value.value)
+                }
             }
         }
     }
     public ast(ast: AST): ReturnAST {
         var id = ast.getNewID()
-        var dot = `node_${id}[label="SELECT" color="white" fontcolor="white"];`
+        var dot = `node_${id}[label="SELECT"];`
         var value: ReturnAST
         for (let i = 0; i < this.expression.length; i ++) {
             value = this.expression[i][0].ast(ast)
             if(this.expression[i][1] !== '') {
-                dot += `\nnode_${id}_AS${i}[label="AS" color="white" fontcolor="white"];`
+                dot += `\nnode_${id}_AS${i}[label="AS"];`
                 dot += `\nnode_${id} -> node_${id}_AS${i};`
                 dot += `\n${value.dot}`
                 dot += `\nnode_${id}_AS${i} -> node_${value.id};`

@@ -75,10 +75,10 @@ export class Cast extends Expression {
     }
     public ast(ast: AST): ReturnAST {
         const id = ast.getNewID()
-        var dot = `node_${id}[label="CAST" color="white" fontcolor="white"];`
+        var dot = `node_${id}[label="CAST"];`
         let value1: ReturnAST = this.value.ast(ast)
         dot += '\n' + value1.dot
-        dot += `\nnode_${id}_type[label="${this.getType(this.destinyType)}" color="white" fontcolor="white"];`
+        dot += `\nnode_${id}_type[label="${this.getType(this.destinyType)}"];`
         dot += `\nnode_${id} -> node_${value1.id};`
         dot += `\nnode_${id} -> node_${id}_type;`
         return {dot: dot, id: id}

@@ -13,7 +13,7 @@ export class Len extends Expression {
     public execute (env: Env): ReturnType {
         let value: ReturnType = this.exp.execute(env)
         if (value.type === Type.VARCHAR) {
-            return {value: value.value.length, type: Type.VARCHAR}
+            return {value: value.value.length, type: Type.INT}
         }
         return {value: 'NULL', type: Type.NULL}
     }

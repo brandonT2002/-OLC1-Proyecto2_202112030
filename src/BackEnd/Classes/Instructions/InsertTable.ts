@@ -21,14 +21,14 @@ export class InsertTable extends Instruction {
     }
     public ast(ast: AST): ReturnAST {
         const id = ast.getNewID()
-        var dot = `node_${id}[label="INSERT" color="white" fontcolor="white"];`
-        dot += `\nnode_${id}_table[label="${this.name}" color="white" fontcolor="white"];`
-        dot += `\nnode_${id}_fields[label="FIELDS" color="white" fontcolor="white"];`
+        var dot = `node_${id}[label="INSERT"];`
+        dot += `\nnode_${id}_table[label="${this.name}"];`
+        dot += `\nnode_${id}_fields[label="FIELDS"];`
         for (let i = 0; i < this.fields.length; i ++) {
-            dot += `\nnode_${id}_field_${i}[label="${this.fields[i]}" color="white" fontcolor="white"];`
+            dot += `\nnode_${id}_field_${i}[label="${this.fields[i]}"];`
             dot += `\nnode_${id}_fields -> \nnode_${id}_field_${i};`
         }
-        dot += `\nnode_${id}_values[label="VALORES" color="white" fontcolor="white"];`
+        dot += `\nnode_${id}_values[label="VALORES"];`
         var value: ReturnAST 
         for (let i = 0; i < this.values.length; i ++) {
             value = this.values[i].ast(ast)

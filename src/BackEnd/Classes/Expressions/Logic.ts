@@ -47,7 +47,7 @@ export class Logic extends Expression {
     }
     public ast(ast: AST): ReturnAST {
         const id = ast.getNewID()
-        var dot = `node_${id}[label="${this.sign}" color="white" fontcolor="white"];`
+        var dot = `node_${id}[label="${this.sign}"];`
         let value1: ReturnAST
         if (this.exp1 != undefined) {
             value1 = this.exp1.ast(ast)

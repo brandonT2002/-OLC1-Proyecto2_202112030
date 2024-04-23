@@ -33,9 +33,9 @@ export class When extends Instruction {
     }
     public ast(ast: AST): ReturnAST {
         const id = ast.getNewID()
-        var dot = `node_${id}[label="WHEN" color="white" fontcolor="white"];`
-        dot += `node_${id}_cond[label="CONDICION" color="white" fontcolor="white"];`
-        dot += `node_${id}_result[label="RESULT" color="white" fontcolor="white"];`
+        var dot = `node_${id}[label="WHEN"];`
+        dot += `node_${id}_cond[label="CONDICION"];`
+        dot += `node_${id}_result[label="RESULT"];`
         let cond: ReturnAST = this.when_.ast(ast)
         let result: ReturnAST = this.result.ast(ast)
         dot += '\n' + cond.dot

@@ -16,22 +16,22 @@ export class Select extends Instruction {
     }
     public ast(ast: AST): ReturnAST {
         var id = ast.getNewID()
-        var dot = `node_${id}[label="SELECT" color="white" fontcolor="white"];`
-        dot += `\nnode_${id}_id[label="${this.id}" color="white" fontcolor="white"];`
+        var dot = `node_${id}[label="SELECT"];`
+        dot += `\nnode_${id}_id[label="${this.id}"];`
         dot += `\nnode_${id} -> node_${id}_id;`
-        dot += `\nnode_${id}_fields[label="FIELDS" color="white" fontcolor="white"];`
+        dot += `\nnode_${id}_fields[label="FIELDS"];`
         dot += `\nnode_${id}_id -> node_${id}_fields;`
-        dot += `\nnode_${id}_condition[label="CONDITION" color="white" fontcolor="white"];`
+        dot += `\nnode_${id}_condition[label="CONDITION"];`
         dot += `\nnode_${id}_id -> node_${id}_condition;`
         if(typeof(this.fields) === 'string') {
-            dot += `\nnode_${id}_star[label="*" color="white" fontcolor="white"];`
+            dot += `\nnode_${id}_star[label="*"];`
             dot += `\nnode_${id}_fields -> node_${id}_star;`
         } else {
             var value: ReturnAST
             for(var i = 0; i < this.fields.length; i ++) {
                 value = this.fields[i][0].ast(ast)
                 if(this.fields[i][1] !== '') {
-                    dot += `\nnode_${id}_AS${i}[label="AS" color="white" fontcolor="white"];`
+                    dot += `\nnode_${id}_AS${i}[label="AS"];`
                     dot += `\nnode_${id}_fields -> node_${id}_AS${i};`
                     dot += `\n${value.dot};`
                     dot += `\nnode_${id}_AS${i} -> node_${value.id};`

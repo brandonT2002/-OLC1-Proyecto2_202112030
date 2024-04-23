@@ -42,8 +42,8 @@ export class For extends Instruction {
     }
     public ast(ast: AST): ReturnAST {
         const id = ast.getNewID()
-        var dot = `node_${id}[label="FOR" color="white" fontcolor="white"];`
-        dot += `\nnode_${id}_lim[label="RANGE" color="white" fontcolor="white"]`
+        var dot = `node_${id}[label="FOR"];`
+        dot += `\nnode_${id}_lim[label="RANGE"]`
         let limInf: ReturnAST = this.limInf.ast(ast)
         let limSup: ReturnAST = this.limSup.ast(ast)
         dot += '\n' + limInf.dot
